@@ -62,5 +62,5 @@ getBookmarks();
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   let data = getStorage('tagmarker');
-  chrome.runtime.sendMessage({ msg: "tag_data", data });
+  chrome.runtime.sendMessage({ slug: "tag_data", data });
 });
