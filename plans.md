@@ -3,17 +3,20 @@
 ## Tag Storage
 - Set an object in local storage to hold folder and tag objects
 - When a bookmark/tag is added, add that ID to the corresponding tag's bookmarks array and remove for deletion.
-- Have a bookmarks object that uses a bookmark's ID as a key with the data and tag IDs in the value.
+- Have an array of bookmarks objects that have an array of tag IDs in their data.
 
 Example:
 If a bookmark exists in this folder structure:
 
+```
 School
   |- Math
   |-- Homework
   |--- December 1st Assignment
+```
 
 The storage should look like this:
+```
 localStorage.tagmarker.tags = {
   1: {
     bookmarks: [ "123", "554", ... ],
@@ -37,8 +40,10 @@ localStorage.tagmarker.tags = {
     ...
   },
 }
-localStorage.tagmarker.bookmarks = {
-  123: {
+```
+```
+localStorage.tagmarker.bookmarks = [
+  {
     dateAdded: 1329359259993,
     id: "123",
     parentId: "14",
@@ -46,18 +51,20 @@ localStorage.tagmarker.bookmarks = {
     title: "December 1st Assignment",
     url: "www.example.com"
   },
-  554: {
+  {
     id: "554",
     tags: ["2", "1"]
     title: "November 1st Assignment",
     ...
   },
-}
+]
+```
 
 
 
 ## Chrome Bookmark Structure
 ### Folder
+```
 {
   children: (2) [{…}, {…}],
   dateAdded: 1491239049558,
@@ -67,7 +74,9 @@ localStorage.tagmarker.bookmarks = {
   parentId: "1",
   title: "Folder Name",
 }
+```
 ### Bookmark
+```
 {
   dateAdded: 1492097791214,
   id: "1001",
@@ -76,3 +85,4 @@ localStorage.tagmarker.bookmarks = {
   title: "Example Bookmark",
   url: "https://www.example.com",
 }
+```
