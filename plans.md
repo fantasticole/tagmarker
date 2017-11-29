@@ -1,0 +1,78 @@
+# PLANS
+
+## Tag Storage
+- Set an object in local storage to hold folder and tag objects
+- When a bookmark/tag is added, add that ID to the corresponding tag's bookmarks array and remove for deletion.
+- Have a bookmarks object that uses a bookmark's ID as a key with the data and tag IDs in the value.
+
+Example:
+If a bookmark exists in this folder structure:
+
+School
+  |- Math
+  |-- Homework
+  |--- December 1st Assignment
+
+The storage should look like this:
+localStorage.tagmarker.tags = {
+  1: {
+    bookmarks: [ "123", "554", ... ],
+    dateAdded: 1329359260125
+    dateGroupModified: 1481077695941
+    id: "1",
+    parentId: "0",
+    parents: [],
+    title: "Bookmarks Bar",
+  },
+  2: {
+    bookmarks: [ "123", "554", "623", "197" ],
+    id: "2",
+    title: "School",
+    ...
+  },
+  3: {
+    bookmarks: [ "461", "123", "901" ],
+    id: "3",
+    title: "Math",
+    ...
+  },
+}
+localStorage.tagmarker.bookmarks = {
+  123: {
+    dateAdded: 1329359259993,
+    id: "123",
+    parentId: "14",
+    tags: ["2", "1"],
+    title: "December 1st Assignment",
+    url: "www.example.com"
+  },
+  554: {
+    id: "554",
+    tags: ["2", "1"]
+    title: "November 1st Assignment",
+    ...
+  },
+}
+
+
+
+## Chrome Bookmark Structure
+### Folder
+{
+  children: (2) [{…}, {…}],
+  dateAdded: 1491239049558,
+  dateGroupModified: 1496710991662,
+  id: "1234",
+  index: 17,
+  parentId: "1",
+  title: "Folder Name",
+}
+### Bookmark
+{
+  dateAdded: 1492097791214,
+  id: "1001",
+  index: 2,
+  parentId: "1234",
+  title: "Example Bookmark",
+  url: "https://www.example.com",
+}

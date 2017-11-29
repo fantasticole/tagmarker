@@ -6,24 +6,53 @@ function logToConsole (...data) {
 function getBookmarks () {
   chrome.bookmarks.getTree(arr => {
     logToConsole('arr:', arr);
-    let tree = buildBookmarksTree(arr, {});
-    logToConsole('tree:', tree);
+    let data = getBookmarksAndFolders(arr, { bookmarks: {}, tags: {}, });
+    logToConsole('data:', data);
   });
 }
 
-function buildBookmarksTree (bookmarks, tree) {
-  tree['bookmarks'] = [];
+function getBookmarksAndFolders (bookmarks, data) {
   for (x in bookmarks) {
-    if (bookmarks[x].children) {
-      tree[`${bookmarks[x].title}`] = buildBookmarksTree(bookmarks[x].children, {});
-    }
-    else {
-      let bookmark = {[`${bookmarks[x].title}`] : bookmarks[x].url};
+    let { dateAdded, id, parentId, title } = bookmarks[x],
+        // use parent's ID to get all previous parents IDs
+        // if parent's ID is 0 or undefined, set parents as empty array
+        // could hide 1 (Bookmarks Bar) and 2 (Other Bookmarks) as well
+        parents = Number(parentId) ? [ parentId, ...data['tags'][parentId].parents ] : [];
 
-      tree['bookmarks'].push(bookmark);
+    // if the current object has children, it's a folder
+    if (bookmarks[x].children) {
+      // add folder's information to the data's tags object
+      data['tags'][id] = {
+        dateAdded,
+        dateGroupModified: bookmarks[x].dateGroupModified,
+        id,
+        parentId,
+        parents,
+        title,
+        bookmarks: [],
+      }
+      getBookmarksAndFolders(bookmarks[x].children, data);
+    }
+    // otherwise, it's a bookmark
+    else {
+      // add bookmark's information to the data's bookmarks object
+      data['bookmarks'][id] = {
+        dateAdded,
+        id,
+        parentId,
+        // list of every folder the bookmark is a child of
+        tags: parents,
+        title,
+        url: bookmarks[x].url,
+      }
+      // for each parent folder's corresponding tag
+      for (y in parents) {
+        // add bookmark id to its bookmarks folder
+        data['tags'][parents[y]]['bookmarks'].push(id);
+      }
     };
   }
-  return tree;
+  return data;
 }
 
 getBookmarks();
