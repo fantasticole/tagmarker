@@ -86,3 +86,11 @@ localStorage.tagmarker.bookmarks = [
   url: "https://www.example.com",
 }
 ```
+
+
+## To Do
+* Make tags searchable
+  * When one tag is selected, the only other tags that should show should be the ones that overlap.
+* Organize the UI
+* Allow user to add and remove tags
+* Find a place to store new bookmarks

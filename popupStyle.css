@@ -1,8 +1,13 @@
 html {
   color: #2084A4;
-  width: 500px;
+  width: 800px;
   text-align: center;
 }
+
 h1 {
   font-family: Courier;
+}
+
+.tag:nth-child(even) {
+  color: pink;
 }

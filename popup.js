@@ -19,7 +19,8 @@ function renderTags (tagData) {
         p = document.createElement("p");
 
     p.innerHTML = title;
-    p.setAttribute("style", `font-size: ${fontSize}px; line-height: ${fontSize}px`);
+    p.setAttribute("style", `font-size:${fontSize}px;line-height:${fontSize}px`);
+    p.setAttribute("class", "tag");
 
     tagDiv.append(p)
   }
