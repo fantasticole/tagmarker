@@ -5,10 +5,13 @@
   "description": "Bookmark using tags, rather than folders",
   "version": "0.1",
   "background": {
-    "page": "background.html"
+    "scripts": [
+      "background.js"
+    ],
+    "persistent": true
   },
   "browser_action": {
-    "default_icon": "hash_icon.png",
+    "default_icon": "assets/hash_icon.png",
     "default_popup": "popup.html",
     "default_title": "TagMarker"
   },
@@ -17,7 +20,8 @@
       "matches": [
         "<all_urls>"
       ],
-        "js": ["contentScripts.js"]
+      "css": [],
+      "js": ["injected.js"]
     }
   ],
   "permissions": [
