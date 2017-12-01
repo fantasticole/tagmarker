@@ -19,7 +19,7 @@ class App extends Component {
       let tagNames = this.props.tags ? Object.values(this.props.tags) : [];
 
       return (
-        <div>
+        <div className='drawer'>
           <button onClick={() => this.handleCloseDrawer()}>x</button>
           <ul>
             {tagNames.map(tag => (<li key={tag.id}>{tag.title}</li>))}
@@ -28,7 +28,9 @@ class App extends Component {
       );
     }
     return (
-      <button onClick={() => this.handleOpenDrawer()}>Show Tags</button>
+      <div className='drawer'>
+        <button onClick={() => this.handleOpenDrawer()}>Show Tags</button>
+      </div>
     );
   }
 }
