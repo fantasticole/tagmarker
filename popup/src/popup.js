@@ -8,7 +8,7 @@ import logToConsole from '../utils/logToConsole';
 
 const proxyStore =  new Store({
   state: {},
-  portName: 'test'
+  portName: 'tagmarker'
 });
 
 
@@ -18,5 +18,3 @@ render(
   </Provider>
   , document.getElementById('tags')
 );
-
-logToConsole('proxyStore:', proxyStore)

@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
 
-import { count, setBookmarks, setTags } from './reducers';
+import { setBookmarks, setTags, toggleDrawer } from './reducers';
 
 export default combineReducers({
-  count,
   bookmarks: setBookmarks,
+  drawerOpen: toggleDrawer,
   tags: setTags,
 });

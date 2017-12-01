@@ -7,7 +7,7 @@ import { setBookmarks, setTags } from './store/actions';
 const store = createStore(rootReducer, {});
 
 wrapStore(store, {
-  portName: 'test',
+  portName: 'tagmarker',
 });
 
 function getBookmarks () {
