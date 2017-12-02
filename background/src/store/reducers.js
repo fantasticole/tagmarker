@@ -16,7 +16,7 @@ export function setTags (state = {}, action) {
   }
 };
 
-export function toggleDrawer (state = false, action) {
+export function toggleDrawer (state = true, action) {
   switch (action.type) {
     case 'TOGGLE_DRAWER':
       return action.data;

@@ -5,7 +5,7 @@ import { Store } from 'react-chrome-redux';
 
 import App from './components/App';
 
-import './injected.css';
+import './injected.scss';
 
 const anchor = document.createElement('div');
 anchor.id = 'tags';
