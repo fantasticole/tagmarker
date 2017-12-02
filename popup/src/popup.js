@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import { Store } from 'react-chrome-redux';
 
 import App from './components/App';
-import logToConsole from '../utils/logToConsole';
+// import logToConsole from '../utils/logToConsole';
 
 import './popup.css';
 

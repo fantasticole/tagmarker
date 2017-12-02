@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import logToConsole from '../../utils/logToConsole';
+// import logToConsole from '../../utils/logToConsole';
 
 class App extends Component {
   constructor(props) {
@@ -9,9 +9,13 @@ class App extends Component {
   }
 
   handleClick () {
-    let drawerOpen = !this.props.drawerOpen;
+    let drawerOpen = !this.props.drawerOpen,
+        action = drawerOpen ? 'open' : 'close';
 
+    // update the store
     this.props.dispatch({ type: 'TOGGLE_DRAWER', data: drawerOpen });
+    // send update to the background to pass along to the container
+    chrome.runtime.sendMessage({ ref: 'drawer', msg: `${action}_drawer` });
   }
 
   render() {

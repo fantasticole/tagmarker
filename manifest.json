@@ -21,7 +21,7 @@
         "<all_urls>"
       ],
       "css": [],
-      "js": ["injected.js"]
+      "js": ["content/injectIframe.js"]
     }
   ],
   "permissions": [
@@ -29,5 +29,8 @@
     "bookmarks",
     "storage",
     "https://ajax.googleapis.com/"
+  ],
+  "web_accessible_resources": [
+      "content/injected.html"
   ]
 }

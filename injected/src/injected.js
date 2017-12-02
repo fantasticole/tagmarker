@@ -7,18 +7,15 @@ import App from './components/App';
 
 import './injected.scss';
 
-const anchor = document.createElement('div');
-anchor.id = 'tags';
-
-document.body.insertBefore(anchor, document.body.childNodes[0]);
-
 const proxyStore =  new Store({
   state: {},
   portName: 'tagmarker'
 });
 
+
 render(
   <Provider store={ proxyStore }>
     <App/>
   </Provider>
-  , document.getElementById('tags'));
+  , document.getElementById('tags')
+);

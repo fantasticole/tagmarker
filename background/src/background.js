@@ -10,6 +10,17 @@ wrapStore(store, {
   portName: 'tagmarker',
 });
 
+// listen for commands from popup or drawer component to open or close
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  // make sure the message is about the drawer
+  if (request.ref === 'drawer') {
+    // pass the message along
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      chrome.tabs.sendMessage(tabs[0].id, { action: request.msg, ref: 'drawer' });
+    });
+  };
+});
+
 function getBookmarks () {
   // get all bookmarks from chrome
   chrome.bookmarks.getTree(arr => {

@@ -50,6 +50,11 @@ gulp.task('copy-manifest', ['clean'], () => {
     .pipe(gulp.dest('./build'));
 });
 
+gulp.task('copy-content', ['clean'], () => {
+  return gulp.src('content/**/*')
+    .pipe(gulp.dest('./build/content'));
+});
+
 gulp.task('copy-assets', ['clean'], () => {
   return gulp.src('assets/**/*')
     .pipe(gulp.dest('./build/assets'));
@@ -59,7 +64,7 @@ gulp.task('clean', (cb) => {
   rimraf('./build', cb);
 });
 
-gulp.task('build', ['copy-assets', 'copy-manifest', 'popup-js', 'popup-html', 'background-js', 'injected-js']);
+gulp.task('build', ['copy-assets', 'copy-content', 'copy-manifest', 'popup-js', 'popup-html', 'background-js', 'injected-js']);
 
 gulp.task('watch', ['default'], () => {
   gulp.watch('popup/**/*', ['build']);

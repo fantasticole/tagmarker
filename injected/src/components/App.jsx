@@ -11,28 +11,25 @@ class App extends Component {
   }
 
   handleClickTag (id) {
-    let { selectedTags } = this.state;
+    let { selectedTags } = this.state,
+        tagIndex = selectedTags.indexOf(id);
 
-    selectedTags.push(id);
+    tagIndex < 0 ? selectedTags.push(id) : selectedTags.splice(tagIndex, 1);
     this.setState({ selectedTags });
   }
 
   handleCloseDrawer () {
+    // update the store
     this.props.dispatch({ type: 'TOGGLE_DRAWER', data: false });
-  }
-
-  handleOpenDrawer () {
-    this.props.dispatch({ type: 'TOGGLE_DRAWER', data: true });
+    // send update to the background to pass along to the container
+    chrome.runtime.sendMessage({ ref: 'drawer', msg: 'close_drawer' });
   }
 
   render() {
-    let tagNames = this.props.tags ? Object.values(this.props.tags) : [],
-        containerClasses = ['tags-container'];
-
-    if (this.props.drawerOpen) containerClasses.push('open')
+    let tagNames = this.props.tags ? Object.values(this.props.tags) : [];
 
     return (
-      <div className={containerClasses.join(' ')}>
+      <div className='tags-container'>
         <div className='drawer'>
           <button className='drawer-close' onClick={() => this.handleCloseDrawer()}>&raquo;</button>
           <div className='selected-tags'>
