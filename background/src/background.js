@@ -72,6 +72,8 @@ function getBookmarksAndFolders (bookmarks, data) {
       }
     };
   }
+  // remove parent of bookmarks bar/other bookmarks
+  delete data.tags["0"];
   return data;
 }
 

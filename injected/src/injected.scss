@@ -50,29 +50,62 @@
 
 .selected-tags {
   margin-left: 25px;
-  p {
-    display: inline-block;
+  .tag {
     text-transform: uppercase;
-    margin: 5px;
     margin-left: 0;
+    background-color: violet;
+    &:hover {
+      background-color: pink;
+      .tagCount {
+        color: pink;
+      }
+    }
+    .tagCount {
+      color: violet;
+    }
   }
+}
+
+.tagmarker-list {
+  list-style: none;
+  height: calc(50% - 50px);
+  margin: 10px;
+  margin-left: 25px;
+  overflow: scroll;
+  padding-left: 5px;
 }
 
 .tag-list {
-  list-style: none;
-  height: calc(100% - 50px);
-  margin-left: 25px;
-  margin-top: 10px;
-  overflow: scroll;
+  border: 1px solid black;
+  .tag:hover {
+    background-color: violet;
+    .tagCount {
+      color: violet;
+    }
+  }
 }
 
 .tag {
+  display: inline-block;
+  border-radius: 20px;
+  background-color: pink;
+  color: #fff;
+  padding: 3px 5px;
+  margin: 2px;
   &:hover {
-    color: skyblue;
     cursor: pointer;
   }
   &.selected {
-    font-weight: bold;
-    cursor: auto;
+    // font-weight: bold;
+    // cursor: auto;
+    display: none;
   }
+}
+
+.tagCount {
+  background-color: #fff;
+  border-radius: 10px;
+  font-size: 11px;
+  padding: 0px 3px;
+  color: pink;
 }
