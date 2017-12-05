@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+
 import { connect } from 'react-redux';
 
 import MarqueeWrapper from './MarqueeWrapper';
@@ -55,12 +56,10 @@ class BookmarkList extends Component {
               {ifTrue(isActive).render(() => (
                 <div className='bookmark-info'>
                   <div className='bookmark-info__detail'>
-                    <MarqueeWrapper>
-                      <a href={bookmark.url} target='_parent'>{bookmark.title || bookmark.url}</a>
-                    </MarqueeWrapper>
+                    <a className='bookmark-info__link' href={bookmark.url} target='_parent'>{bookmark.title || bookmark.url}</a>
                   </div>
                   <div className='bookmark-info__detail'>
-                    <span className='detail-title'>Date Added:</span> { bookmark.dateAdded }
+                    <span className='detail-title'>Date Added:</span> { new Date(bookmark.dateAdded).toLocaleString() }
                   </div>
                   <div className='bookmark-info__detail'>
                     { this.renderTags(bookmark.tags) }
