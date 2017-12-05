@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 
-import MarqueeWrapper from './MarqueeWrapper';
+import BookmarkList from './BookmarkList';
 import TagList from './TagList';
 
 class Drawer extends Component {
@@ -10,7 +10,7 @@ class Drawer extends Component {
     super(props);
 
     this.state = {
-      highlighted: [],
+      // highlighted: [],
       selectedTags: [],
       selectedBookmarks: [],
     };
@@ -40,13 +40,13 @@ class Drawer extends Component {
     chrome.runtime.sendMessage({ ref: 'drawer', msg: 'close_drawer' });
   }
 
-  handleHighlight (bookmark) {
-    this.setState({ highlighted: bookmark.tags });
-  }
+  // handleHighlight (bookmark) {
+  //   this.setState({ highlighted: bookmark.tags });
+  // }
 
-  handleStopHighlight () {
-    this.setState({ highlighted: [] });
-  }
+  // handleStopHighlight () {
+  //   this.setState({ highlighted: [] });
+  // }
 
   loadBookmarks () {
     if (this.props.bookmarks) {
@@ -74,7 +74,7 @@ class Drawer extends Component {
     }
   }
 
-  render() {
+  render () {
     return (
       <div className='drawer'>
         <div className='actions'>
@@ -84,25 +84,14 @@ class Drawer extends Component {
         <div className='lists'>
           <TagList
             handleClickTag={(id) => this.handleClickTag(id)}
-            highlighted={this.state.highlighted}
+            // highlighted={this.state.highlighted}
             selectedTags={this.state.selectedTags}
             />
-          <ul className='tagmarker-list bookmark-list'>
-            {this.state.selectedBookmarks.map(bookmark => (
-              <li className='bookmark' key={bookmark.id}>
-                <MarqueeWrapper>
-                  <a
-                    href={bookmark.url}
-                    onMouseEnter={() => this.handleHighlight(bookmark)}
-                    onMouseLeave={() => this.handleStopHighlight()}
-                    title={bookmark.title}
-                    >
-                    {bookmark.title}
-                  </a>
-                </MarqueeWrapper>
-              </li>
-            ))}
-          </ul>
+          <BookmarkList
+            // handleHighlight={(bookmark) => this.handleHighlight(bookmark)}
+            // handleStopHighlight={() => this.handleStopHighlight()}
+            selectedBookmarks={this.state.selectedBookmarks}
+            />
         </div>
       </div>
     );

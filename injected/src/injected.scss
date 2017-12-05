@@ -62,16 +62,24 @@
 .tag-list {
   height: 35%;
   padding: 3px;
-  border: 1px solid #ccc;
+  border: 1px solid #bbb;
   flex: 7;
 }
 
 .tag-item {
   display: inline-block;
   max-width: 100%;
+  .tag:hover {
+    cursor: pointer;
+    background-color: violet;
+    .tagCount {
+      color: violet;
+    }
+  }
 }
 
-.tag {
+.tag,
+.bookmark-tag {
   display: inline-block;
   border-radius: 20px;
   background-color: pink;
@@ -79,13 +87,6 @@
   padding: 3px 5px;
   margin: 1px;
   white-space: nowrap;
-  &:hover {
-    cursor: pointer;
-    background-color: violet;
-    .tagCount {
-      color: violet;
-    }
-  }
   &.selected {
     background-color: violet;
     &:hover {
@@ -121,4 +122,66 @@
 
 .bookmark {
   white-space: nowrap;
+  padding-left: 15px;
+  margin: 10px 0;
+  &.active {
+    .show-more {
+      transform: rotate(90deg);
+    }
+  }
+}
+
+.bookmark-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  cursor: pointer;
+  margin: 4px 0;
+  margin-left: -15px;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.show-more {
+  color: #bbb;
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin-right: 2px;
+  transition: transform 0.3s;
+  width: 13px;
+  &:hover {
+    color: skyblue;
+  }
+  &:active,
+  &:focus {
+    background-image: none;
+    outline: 0;
+    -webkit-box-shadow: none;
+            box-shadow: none;
+  }
+}
+
+.bookmark-info {
+  font-size: 12px;
+  overflow: hidden;
+  border-left: 1px dotted #ccc;
+  padding-left: 3px;
+}
+
+.bookmark-info__detail {
+  margin: 4px 0;
+  width: 100%;
+}
+
+.bookmark-tag {
+  padding: 2px 3px;
+  background-color: #aaa;
+}
+
+.detail-title {
+  font-weight: bold;
+  color: #bbb;
+  text-transform: uppercase;
 }
