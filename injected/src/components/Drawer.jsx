@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 
-import Marquee from './Marquee';
+import MarqueeWrapper from './MarqueeWrapper';
+import TagList from './TagList';
 
-class App extends Component {
+class Drawer extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      highlighted: [],
       selectedTags: [],
       selectedBookmarks: [],
     };
@@ -17,13 +20,16 @@ class App extends Component {
     this.loadBookmarks();
   }
 
+  handleAddBookmark () {
+    console.log('add!');
+  }
+
   handleClickTag (id) {
     let { selectedTags } = this.state,
         tagIndex = selectedTags.indexOf(id);
 
     tagIndex < 0 ? selectedTags.push(id) : selectedTags.splice(tagIndex, 1);
     this.setState({ selectedTags });
-    console.log('selectedTags length:', selectedTags.length)
     this.loadBookmarks();
   }
 
@@ -32,6 +38,14 @@ class App extends Component {
     this.props.dispatch({ type: 'TOGGLE_DRAWER', data: false });
     // send update to the background to pass along to the container
     chrome.runtime.sendMessage({ ref: 'drawer', msg: 'close_drawer' });
+  }
+
+  handleHighlight (bookmark) {
+    this.setState({ highlighted: bookmark.tags });
+  }
+
+  handleStopHighlight () {
+    this.setState({ highlighted: [] });
   }
 
   loadBookmarks () {
@@ -61,43 +75,35 @@ class App extends Component {
   }
 
   render() {
-    let tagNames = this.props.tags ? Object.values(this.props.tags) : [],
-        sortedTagNames = tagNames.sort((a, b) => {
-          if (a.title < b.title) return -1;
-          if (a.title > b.title) return 1;
-          return 0;
-        });
-
-    console.log('this.props:', this.props)
     return (
       <div className='drawer'>
-        <button className='drawer-close' onClick={() => this.handleCloseDrawer()}>&raquo;</button>
-        <ul className='tagmarker-list tag-list'>
-          {sortedTagNames.map(tag => {
-            let tagClasses = ['tag'];
-
-            if (this.state.selectedTags.indexOf(tag.id) > -1) {
-              tagClasses.push('selected');
-            }
-            return (
-              <li className='tag-item' key={tag.id} onClick={() => this.handleClickTag(tag.id)}>
-                <Marquee>
-                  <p className={tagClasses.join(' ')}>
-                    {tag.title} <span className='tagCount'>{tag.bookmarks.length}</span>
-                  </p>
-                </Marquee>
+        <div className='actions'>
+          <button className='drawer-close' onClick={() => this.handleCloseDrawer()}>&raquo;</button>
+          <button className='add-bookmark' onClick={() => this.handleAddBookmark()}>+</button>
+        </div>
+        <div className='lists'>
+          <TagList
+            handleClickTag={(id) => this.handleClickTag(id)}
+            highlighted={this.state.highlighted}
+            selectedTags={this.state.selectedTags}
+            />
+          <ul className='tagmarker-list bookmark-list'>
+            {this.state.selectedBookmarks.map(bookmark => (
+              <li className='bookmark' key={bookmark.id}>
+                <MarqueeWrapper>
+                  <a
+                    href={bookmark.url}
+                    onMouseEnter={() => this.handleHighlight(bookmark)}
+                    onMouseLeave={() => this.handleStopHighlight()}
+                    title={bookmark.title}
+                    >
+                    {bookmark.title}
+                  </a>
+                </MarqueeWrapper>
               </li>
-            );
-          })}
-        </ul>
-        <ul className='tagmarker-list bookmark-list'>
-          {this.state.selectedBookmarks.map(bookmark => {
-            let tagNames = bookmark.tags.map(tagId => (this.props.tags[tagId].title))
-            return (<li className='bookmark' key={bookmark.id}>
-              <a href={bookmark.url} title={tagNames.join(', ')}>{bookmark.title}</a>
-            </li>);
-          })}
-        </ul>
+            ))}
+          </ul>
+        </div>
       </div>
     );
   }
@@ -111,4 +117,4 @@ const mapStateToProps = (state) => {
   };
 }
 
-export default connect(mapStateToProps)(App);
+export default connect(mapStateToProps)(Drawer);

@@ -3,7 +3,7 @@ import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import { Store } from 'react-chrome-redux';
 
-import App from './components/App';
+import Drawer from './components/Drawer';
 
 import './injected.scss';
 
@@ -15,7 +15,7 @@ const proxyStore =  new Store({
 
 render(
   <Provider store={ proxyStore }>
-    <App/>
+    <Drawer/>
   </Provider>
   , document.getElementById('tags')
 );

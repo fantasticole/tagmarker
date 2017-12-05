@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
-export default class Marquee extends Component {
+export default class MarqueeWrapper extends Component {
   constructor(props) {
     super(props);
 
