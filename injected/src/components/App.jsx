@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+import Marquee from './Marquee';
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -68,41 +70,34 @@ class App extends Component {
 
     console.log('this.props:', this.props)
     return (
-      <div className='tags-container'>
-        <div className='drawer'>
-          <button className='drawer-close' onClick={() => this.handleCloseDrawer()}>&raquo;</button>
-          <div className='selected-tags'>
-            {this.state.selectedTags.map(tagId => {
-              let tag = this.props.tags[tagId];
-              return (
-                <p className='tag' key={tagId} onClick={() => {this.handleClickTag(tagId)}}>
-                  #{tag.title} <span className='tagCount'>{tag.bookmarks.length}</span>
-                </p>
-                )
-            })}
-          </div>
-          <ul className='tagmarker-list tag-list'>
-            {sortedTagNames.map(tag => {
-              let tagClasses = ['tag'];
+      <div className='drawer'>
+        <button className='drawer-close' onClick={() => this.handleCloseDrawer()}>&raquo;</button>
+        <ul className='tagmarker-list tag-list'>
+          {sortedTagNames.map(tag => {
+            let tagClasses = ['tag'];
 
-              if (this.state.selectedTags.indexOf(tag.id) > -1) {
-                tagClasses.push('selected');
-              }
-              return (
-                <li className={tagClasses.join(' ')} key={tag.id} onClick={() => this.handleClickTag(tag.id)}>
-                  {tag.title} <span className='tagCount'>{tag.bookmarks.length}</span>
-                </li>
-              );
-            })}
-          </ul>
-          <ul className='tagmarker-list bookmark-list'>
-            {this.state.selectedBookmarks.map(bookmark => (
-              <li className='bookmark' key={bookmark.id}>
-                <a href={bookmark.url} title={bookmark.tags.join(' ')}>{bookmark.title}</a>
+            if (this.state.selectedTags.indexOf(tag.id) > -1) {
+              tagClasses.push('selected');
+            }
+            return (
+              <li className='tag-item' key={tag.id} onClick={() => this.handleClickTag(tag.id)}>
+                <Marquee>
+                  <p className={tagClasses.join(' ')}>
+                    {tag.title} <span className='tagCount'>{tag.bookmarks.length}</span>
+                  </p>
+                </Marquee>
               </li>
-            ))}
-          </ul>
-        </div>
+            );
+          })}
+        </ul>
+        <ul className='tagmarker-list bookmark-list'>
+          {this.state.selectedBookmarks.map(bookmark => {
+            let tagNames = bookmark.tags.map(tagId => (this.props.tags[tagId].title))
+            return (<li className='bookmark' key={bookmark.id}>
+              <a href={bookmark.url} title={tagNames.join(', ')}>{bookmark.title}</a>
+            </li>);
+          })}
+        </ul>
       </div>
     );
   }

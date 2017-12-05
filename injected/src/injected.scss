@@ -6,15 +6,6 @@
   font-size: 14px;
 }
 
-.tags-container {
-  position: fixed;
-  width: 0;
-  height: 0;
-  top: 0;
-  left: 0;
-  z-index: 99999999;
-}
-
 .drawer {
   z-index: 1;
   background-color: #fff;
@@ -24,7 +15,7 @@
   height: 100vh;
   width: 300px;
   padding: 10px;
-  padding-top: 25px;
+  padding-top: 45px;
   box-sizing: border-box;
 }
 
@@ -48,11 +39,32 @@
   }
 }
 
-.selected-tags {
-  margin-left: 25px;
-  .tag {
-    text-transform: uppercase;
-    margin-left: 0;
+.tagmarker-list {
+  list-style: none;
+  height: 100%;
+  margin-top: 0;
+  overflow: scroll;
+  width: calc(50% - 5px);
+  display: inline-block;
+  padding-left: 0;
+}
+
+.tag {
+  display: inline-block;
+  border-radius: 20px;
+  background-color: pink;
+  color: #fff;
+  padding: 3px 5px;
+  margin: 1px;
+  white-space: nowrap;
+  &:hover {
+    cursor: pointer;
+    background-color: violet;
+    .tagCount {
+      color: violet;
+    }
+  }
+  &.selected {
     background-color: violet;
     &:hover {
       background-color: pink;
@@ -66,46 +78,26 @@
   }
 }
 
-.tagmarker-list {
-  list-style: none;
-  height: calc(50% - 50px);
-  margin: 10px;
-  margin-left: 25px;
-  overflow: scroll;
-  padding-left: 5px;
-}
-
-.tag-list {
-  border: 1px solid black;
-  .tag:hover {
-    background-color: violet;
-    .tagCount {
-      color: violet;
-    }
-  }
-}
-
-.tag {
-  display: inline-block;
-  border-radius: 20px;
-  background-color: pink;
-  color: #fff;
-  padding: 3px 5px;
-  margin: 2px;
-  &:hover {
-    cursor: pointer;
-  }
-  &.selected {
-    // font-weight: bold;
-    // cursor: auto;
-    display: none;
-  }
-}
-
 .tagCount {
   background-color: #fff;
   border-radius: 10px;
   font-size: 11px;
   padding: 0px 3px;
   color: pink;
+}
+
+.tag-list {
+  margin-right: 10px;
+}
+
+.tag-item {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  &:hover {
+    overflow: visible;
+  }
+}
+
+.bookmark {
+  white-space: nowrap;
 }
