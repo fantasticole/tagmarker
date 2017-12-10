@@ -40,14 +40,6 @@ class Drawer extends Component {
     chrome.runtime.sendMessage({ ref: 'drawer', msg: 'close_drawer' });
   }
 
-  // handleHighlight (bookmark) {
-  //   this.setState({ highlighted: bookmark.tags });
-  // }
-
-  // handleStopHighlight () {
-  //   this.setState({ highlighted: [] });
-  // }
-
   loadBookmarks () {
     if (this.props.bookmarks) {
       let { bookmarks, tags } = this.props,
@@ -84,12 +76,9 @@ class Drawer extends Component {
         <div className='lists'>
           <TagList
             handleClickTag={(id) => this.handleClickTag(id)}
-            // highlighted={this.state.highlighted}
             selectedTags={this.state.selectedTags}
             />
           <BookmarkList
-            // handleHighlight={(bookmark) => this.handleHighlight(bookmark)}
-            // handleStopHighlight={() => this.handleStopHighlight()}
             selectedBookmarks={this.state.selectedBookmarks}
             />
         </div>

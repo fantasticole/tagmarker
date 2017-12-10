@@ -26,10 +26,6 @@ class TagList extends Component {
             tagClasses.push('selected');
           }
 
-          // // add class if tag should be highlighted
-          // if (this.props.highlighted.indexOf(tag.id) > -1) {
-          //   tagClasses.push('highlighted');
-          // }
           return (
             <li
               className='tag-item'

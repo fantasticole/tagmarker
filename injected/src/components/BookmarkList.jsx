@@ -47,8 +47,6 @@ class BookmarkList extends Component {
               <p
                 className='bookmark-title'
                 onClick={() => this.handleClickMore(bookmark.id)}
-                // onMouseEnter={() => this.props.handleHighlight(bookmark)}
-                // onMouseLeave={() => this.props.handleStopHighlight()}
                 >
                 <button className='show-more'>&#10095;</button>
                 {bookmark.title}
