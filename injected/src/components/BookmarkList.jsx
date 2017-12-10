@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import MarqueeWrapper from './MarqueeWrapper';
 
-import ifTrue from '../util/ifTrue';
+import ifTrue from '../utils/ifTrue';
 
 class BookmarkList extends Component {
   constructor(props) {

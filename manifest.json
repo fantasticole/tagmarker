@@ -12,7 +12,6 @@
   },
   "browser_action": {
     "default_icon": "assets/hash_icon.png",
-    "default_popup": "popup.html",
     "default_title": "TagMarker"
   },
   "content_scripts": [
