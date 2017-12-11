@@ -70,8 +70,8 @@ class Drawer extends Component {
     return (
       <div className='drawer'>
         <div className='actions'>
-          <button className='drawer-close' onClick={() => this.handleCloseDrawer()}>&raquo;</button>
-          <button className='add-bookmark' onClick={() => this.handleAddBookmark()}>+</button>
+          <button className='button drawer-close' onClick={() => this.handleCloseDrawer()}>&raquo;</button>
+          <button className='button add-bookmark' onClick={() => this.handleAddBookmark()}>+</button>
         </div>
         <div className='lists'>
           <TagList

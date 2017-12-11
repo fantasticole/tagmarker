@@ -4,9 +4,9 @@ export default function createDatabase (data) {
     window.alert("Your browser doesn't support a stable version of IndexedDB. TagMarker will not be available.");
   }
 
-  var request = window.indexedDB.open('TesterDatabasez', 1);
+  var request = window.indexedDB.open('TesterDatabasezsrd', 1);
 
-  // if there's an error, alert
+  // if there's an error, log it
   request.onerror = (e) => console.log('error:', e);
 
   request.onupgradeneeded = (e) => {
@@ -20,14 +20,22 @@ export default function createDatabase (data) {
 
     objectStore.createIndex('dateAdded', 'dateAdded', { unique: false });
     objectStore.createIndex('parentId', 'parentId', { unique: false });
+    // don't see a use for this just yet
     objectStore.createIndex('tags', 'tags', { unique: false });
     objectStore.createIndex('title', 'title', { unique: false });
-    objectStore.createIndex('url', 'url', { unique: true });
+    // would have thought they'd be uniqe, but I came across
+    // multiple bookmarks with the same url
+    objectStore.createIndex('url', 'url', { unique: false });
 
     objectStore.transaction.oncomplete = (event) => {
       // add each bookmark to the database
       data.bookmarks.forEach((bookmark) => {
-        db.transaction('bookmarks', 'readwrite').objectStore('bookmarks').add(bookmark);
+        let addBookmark = db.transaction('bookmarks', 'readwrite').objectStore('bookmarks').add(bookmark);
+
+        addBookmark.onerror = (e) => {
+          console.log('error with:', bookmark)
+          console.log('e:', e.target.error)
+        }
       });
     }
   }
@@ -40,23 +48,22 @@ export default function createDatabase (data) {
     window.db = db;
     db.onerror = (event) => {
       console.log('event: ' + event);
-      console.log('DB Error: ' + event.target.errorCode);
+      console.log('DB Error: ' + event.target.error);
     }
-    listBookmarks();
   }
+}
 
-  function listBookmarks () {
-    let allBookmarks = [];
+function listBookmarkTitles () {
+  let allBookmarks = [];
 
-    db.transaction('bookmarks').objectStore('bookmarks').openCursor().onsuccess = (event) => {
-      var cursor = event.target.result;
-      if (cursor) {
-        allBookmarks.push(cursor.value.title);
-        // console.log( 'ID ' + cursor.key + ' is ' + cursor.value );
-        cursor.continue();
-      } else {
-        console.log('Got em:', allBookmarks);
-      }
+  db.transaction('bookmarks').objectStore('bookmarks').openCursor().onsuccess = (event) => {
+    var cursor = event.target.result;
+    if (cursor) {
+      allBookmarks.push(cursor.value.title);
+      // console.log( 'ID ' + cursor.key + ' is ' + cursor.value );
+      cursor.continue();
+    } else {
+      console.log('Got em:', allBookmarks);
     }
   }
 }

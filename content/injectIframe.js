@@ -4,7 +4,7 @@ let anchor = document.createElement('div'), // element to attach drawer to
 anchor.id = 'tagmarker-anchor';
 container.id = 'tagmarker-container';
 // remove any div styles and set my own to affix drawer to side
-container.style.cssText = 'all: unset; height: 100vh; width: 300px; position: fixed; right: 0; top: 0; transform: translateX(100%); transition: 0.5s transform ease-in-out;z-index:1000000099;box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);';
+container.style.cssText = 'all: unset; height: 100vh; width: 300px; position: fixed; right: 0; top: 0; transform: translateX(105%); transition: 0.5s transform ease-in-out;z-index:1000000099;box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);';
 
 // append container to anchor and anchor to page
 anchor.appendChild(container);
@@ -19,7 +19,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         frameContainer = document.getElementById('tagmarker-container');
 
     // apply that action to the container
-    frameContainer.style.transform=`translateX(${action === 'open_drawer' ? 0 : 100 }%)`
+    frameContainer.style.transform=`translateX(${action === 'open_drawer' ? 0 : 105 }%)`
   }
 })
 

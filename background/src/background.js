@@ -4,6 +4,7 @@ import { wrapStore } from 'react-chrome-redux';
 
 import { setBookmarks, setTags } from './store/actions';
 
+import createDatabase from './utils/createDatabase';
 import getBookmarksAndFolders from './utils/getBookmarksAndFolders';
 
 const store = createStore(rootReducer, {});
@@ -11,6 +12,13 @@ const store = createStore(rootReducer, {});
 wrapStore(store, {
   portName: 'tagmarker',
 });
+
+// Default store structure:
+// {
+//   bookmarks: [],
+//   drawerOpen: false,
+//   tags: {},
+// }
 
 // open and close drawer on icon click
 chrome.browserAction.onClicked.addListener((tab) => {
@@ -36,14 +44,14 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   };
 });
 
-function getBookmarks () {
-  // get all bookmarks from chrome
-  chrome.bookmarks.getTree(arr => {
-    let data = getBookmarksAndFolders(arr, { bookmarks: [], tags: {}, });
-    // save formatted bookmarks and tags in the store
-    store.dispatch(setBookmarks(data.bookmarks));
-    store.dispatch(setTags(data.tags));
-  });
-}
+// get all bookmarks from chrome
+chrome.bookmarks.getTree(arr => {
+  let data = getBookmarksAndFolders(arr, { bookmarks: [], tags: {}, });
+  // set data as variable on the window for debugging purposes
+  window.bookmarkData = data;
+  // save formatted bookmarks and tags in the store
+  createDatabase(data);
+  store.dispatch(setBookmarks(data.bookmarks));
+  store.dispatch(setTags(data.tags));
+});
 
-getBookmarks();
