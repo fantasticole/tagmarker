@@ -187,33 +187,21 @@
 }
 
 .bookmark-tag {
-  padding: 2px 5px;
+  padding: 2px 5px 1px;
   background-color: #aaa;
+  font-size: 12px;
   &:hover {
     background-color: pink;
-    .bookmark-button {
-      color: pink;
-    }
   }
 }
 
-.bookmark-button {
-  background-color: #fff;
-  padding: 0 3px;
-  border-radius: 10px;
+.bookmark-button i {
   margin-left: 4px;
-  color: #aaa;
+  font-size: 14px;
 }
 
-.add-tag {
-  color: #aaa;
-  border: 1px solid #aaa;
-  padding: 0 3px 1px;
-  border-radius: 10px;
-  &:hover {
-    color: pink;
-    border-color: pink;
-  }
+.bookmark__action-button:not(:last-child) {
+  margin-right: 5px;
 }
 
 .detail-title {

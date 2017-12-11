@@ -6,6 +6,7 @@ import { Store } from 'react-chrome-redux';
 import Drawer from './components/Drawer';
 
 import './injected.scss';
+import 'font-awesome/css/font-awesome.css';
 
 const proxyStore =  new Store({
   state: {},

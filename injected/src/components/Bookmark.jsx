@@ -12,6 +12,7 @@ class Bookmark extends Component {
     super(props);
 
     this.state = {
+      active: false,
       isEditing: false,
     };
   }
@@ -21,7 +22,7 @@ class Bookmark extends Component {
   }
 
   handleClickCancel () {
-    console.log('Cancel!')
+    this.setState({ isEditing: false });
   }
 
   handleClickEdit () {
@@ -40,17 +41,22 @@ class Bookmark extends Component {
     console.log('tag:', tag)
   }
 
+  handleToggleDetails () {
+    this.setState({ active: !this.state.active });
+  }
+
   renderBookmarkActions () {
     if (this.state.isEditing) {
       return (
         <span>
-          <button onClick={() => this.handleClickSave()}>Save &#9881;</button>
-          <button onClick={() => this.handleClickCancel()}>Cancel &times;</button>
+          <button className='button bookmark__action-button add-tag' onClick={() => this.handleAddTag()}>Add Tag <i className='fa fa-plus-circle'/></button>
+          <button className='button bookmark__action-button' onClick={() => this.handleClickSave()}>Save <i className='fa fa-floppy-o'/></button>
+          <button className='button bookmark__action-button' onClick={() => this.handleClickCancel()}>Cancel <i className='fa fa-ban'/></button>
         </span>
       );
     }
     return (
-      <button onClick={() => this.handleClickEdit()}>Edit &#9881;</button>
+      <button className='button' onClick={() => this.handleClickEdit()}>Edit <i className='fa fa-pencil'/></button>
     );
   }
 
@@ -59,12 +65,8 @@ class Bookmark extends Component {
       return (
         <span className='bookmark-tags__editing'>
           {tags.map(tagId => (
-            <span className='bookmark-tag' key={tagId}>
-              {this.props.tags[tagId].title}
-              <button className='button bookmark-button' onClick={() => this.handleDeleteTag(tagId)}>&times;</button>
-            </span>
+            <button className='button bookmark-button bookmark-tag' key={tagId} onClick={() => this.handleDeleteTag(tagId)}>{this.props.tags[tagId].title} <i className='fa fa-times-circle'/></button>
           ))}
-          <button className='button add-tag' onClick={() => this.handleAddTag()}>+</button>
         </span>
       );
     }
@@ -78,21 +80,22 @@ class Bookmark extends Component {
   }
 
   render () {
-    let { bookmark, isActive } = this.props,
+    let { bookmark } = this.props,
+        { active } = this.state,
         bookmarkClasses = ['bookmark'];
 
-    if (isActive) bookmarkClasses.push('active');
+    if (active) bookmarkClasses.push('active');
     
     return (
       <li className={bookmarkClasses.join(' ')} key={bookmark.id} ref={`bookmark-${bookmark.id}`}>
         <p
           className='bookmark-title'
-          onClick={() => this.props.handleClickMore(bookmark.id)}
+          onClick={() => this.handleToggleDetails()}
           >
-          <button className='show-more'>&#10095;</button>
+          <button className='show-more'><i className='fa fa-caret-right'/></button>
           {bookmark.title}
         </p>
-        {ifTrue(isActive).render(() => (
+        {ifTrue(active).render(() => (
           <div className='bookmark-info'>
             <div className='bookmark-info__detail'>
               <a className='bookmark-info__link' href={bookmark.url} target='_parent'>{bookmark.title || bookmark.url}</a>

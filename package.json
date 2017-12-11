@@ -9,6 +9,8 @@
   "author": "Cole Murphy",
   "dependencies": {
     "css-loader": "^0.28.7",
+    "file-loader": "^1.1.5",
+    "font-awesome": "^4.7.0",
     "node-sass": "^4.7.2",
     "react": "^15.5.0",
     "react-chrome-redux": "0.0.7",
