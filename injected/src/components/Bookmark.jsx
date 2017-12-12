@@ -31,7 +31,7 @@ class Bookmark extends Component {
     console.log('add!')
   }
 
-  handleClickCancel () {
+  handleExitEdit () {
     this.setState({ isEditing: false });
   }
 
@@ -43,7 +43,8 @@ class Bookmark extends Component {
     let { bookmark } = this.props,
         { tagsToDelete } = this.state;
 
-    this.props.dispatch(deleteTags(bookmark.id, tagsToDelete));
+    deleteTags(bookmark.id, tagsToDelete);
+    this.handleExitEdit();
   }
 
   handleDeleteTag (tagId) {
@@ -63,12 +64,12 @@ class Bookmark extends Component {
         <span>
           <button className='button bookmark__action-button add-tag' onClick={() => this.handleClickAdd()}>Add Tag <i className='fa fa-plus-circle'/></button>
           <button className='button bookmark__action-button' onClick={() => this.handleClickSave()}>Save <i className='fa fa-floppy-o'/></button>
-          <button className='button bookmark__action-button' onClick={() => this.handleClickCancel()}>Cancel <i className='fa fa-ban'/></button>
+          <button className='button bookmark__action-button' onClick={() => this.handleExitEdit()}>Cancel <i className='fa fa-ban'/></button>
         </span>
       );
     }
     return (
-      <button className='button' onClick={() => this.handleClickEdit()}>Edit <i className='fa fa-pencil'/></button>
+      <button className='button bookmark__action-button' onClick={() => this.handleClickEdit()}>Edit <i className='fa fa-pencil'/></button>
     );
   }
 
@@ -77,7 +78,7 @@ class Bookmark extends Component {
       return (
         <span className='bookmark-tags__editing'>
           {tags.map(tagId => {
-            if (this.state.tagsToDelete.indexOf(tagId) < 0){
+            if (!this.state.tagsToDelete.includes(tagId)){
               return (
                 <button className='button bookmark-button bookmark-tag' key={tagId} onClick={() => this.handleDeleteTag(tagId)}>{this.props.tags[tagId].title} <i className='fa fa-times-circle'/></button>
               );

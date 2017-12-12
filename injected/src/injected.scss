@@ -18,6 +18,15 @@
   box-sizing: border-box;
 }
 
+button:active,
+button:focus {
+  transform: translateY(1px);
+  background-image: none;
+  outline: 0;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+
 .actions {
   top: 5px;
   position: absolute;
@@ -27,13 +36,6 @@
     &:hover {
       color: skyblue;
       cursor: pointer;
-    }
-    &:active,
-    &:focus {
-      background-image: none;
-      outline: 0;
-      -webkit-box-shadow: none;
-              box-shadow: none;
     }
   }
 }
@@ -157,13 +159,6 @@
   transition: transform 0.3s;
   width: 13px;
   cursor: pointer;
-  &:active,
-  &:focus {
-    background-image: none;
-    outline: 0;
-    -webkit-box-shadow: none;
-            box-shadow: none;
-  }
 }
 
 .bookmark-info {
@@ -200,8 +195,17 @@
   font-size: 14px;
 }
 
-.bookmark__action-button:not(:last-child) {
+.bookmark__action-button {
+  border-radius: 0;
+  padding: 1px 4px 2px;
   margin-right: 5px;
+  &:last-child {
+    margin-right: 0;
+  }
+  &:hover {
+    color: #fff;
+    background-color: #000;
+  }
 }
 
 .detail-title {

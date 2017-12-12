@@ -11,10 +11,8 @@ export function deleteTags (bookmarkId, tagIds) {
       // get bookmark object to delete from
       bookmark = bookmarks.find(b => (b.id === bookmarkId)),
       // get bookmark's tags that aren't in the tagIds to be deleted
-      updatedTagList = bookmark.tags.filter(id => (tagIds.indexOf(id) < 0));
+      updatedTagList = bookmark.tags.filter(id => (!tagIds.includes(id)));
 
-  console.log('tagsToDelete:', tagsToDelete);
-  console.log('bookmark:', bookmark);
   // remove the bookmark id from each tag's object
   tagsToDelete.forEach(tag => {
     // get bookmarks for the current tag, minus the one to be deleted
@@ -32,11 +30,9 @@ export function deleteTags (bookmarkId, tagIds) {
 }
 
 export function updateBookmark (bookmark) {
-  console.log('bookmark 2:', bookmark)
   return { type: 'UPDATE_BOOKMARK', bookmark };
 }
 
 export function updateTag (tag) {
-  console.log('tag 2:', tag)
   return { type: 'UPDATE_TAG', tag };
 }

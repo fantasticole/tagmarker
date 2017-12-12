@@ -22,7 +22,7 @@ class TagList extends Component {
           let tagClasses = ['tag'];
 
           // add class if tag is selected
-          if (this.props.selectedTags.indexOf(tag.id) > -1) {
+          if (this.props.selectedTags.includes(tag.id)) {
             tagClasses.push('selected');
           }
 

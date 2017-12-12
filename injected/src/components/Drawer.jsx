@@ -48,7 +48,7 @@ class Drawer extends Component {
             // filter tag's bookmarks array for duplicates
             let additions = tags[id].bookmarks.filter(bookmark => (
               // return item if not already in arr
-              arr.indexOf(bookmark) < 0
+              !arr.includes(bookmark)
             ));
             // add unique ids to arr
             return arr.concat(additions)

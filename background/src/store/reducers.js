@@ -2,13 +2,17 @@ import { combineReducers } from 'redux';
 
 export function bookmarks (state = [], action) {
   console.log('action:', action)
-  console.log('state:', state)
   switch (action.type) {
     case 'SET_BOOKMARKS':
       return action.data;
     case 'UPDATE_BOOKMARK':
-      console.log('UPDATE_BOOKMARK!');
-      return state;
+      // state is array of all bookmarks
+      let updated = state.map((b) => (
+        // find this bookmark and update it
+        b.id === action.bookmark.id ? action.bookmark : b
+      ));
+      // return the whole list
+      return updated;
     default:
       return state;
   }
@@ -19,8 +23,13 @@ export function tags (state = {}, action) {
     case 'SET_TAGS':
       return action.data;
     case 'UPDATE_TAG':
-      console.log('UPDATE_TAG!');
-      return state;
+      // get object holding all of the tags
+      let updated = state;
+
+      // update the one that we're being passed
+      updated[action.tag.id] = action.tag;
+      // return all of the tags
+      return updated;
     // case 'CREATE_TAG':
     default:
       return state;

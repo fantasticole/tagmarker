@@ -2,8 +2,8 @@
 
 ## To Do
 * Delete tag functionality
-  * Remove from array of tags on bookmark in store
-  * Remove bookmark id from tag's bookmarks array in store
+  * ~~Remove from array of tags on bookmark in store~~
+  * ~~Remove bookmark id from tag's bookmarks array in store~~
   * Update db
 * Add tag functionality
   * Create dropdown/autocomplete with existing tags
