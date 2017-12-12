@@ -10,7 +10,6 @@ class Drawer extends Component {
     super(props);
 
     this.state = {
-      // highlighted: [],
       selectedTags: [],
       selectedBookmarks: [],
     };

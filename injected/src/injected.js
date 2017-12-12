@@ -8,7 +8,7 @@ import Drawer from './components/Drawer';
 import './injected.scss';
 import 'font-awesome/css/font-awesome.css';
 
-const proxyStore =  new Store({
+export const proxyStore =  new Store({
   state: {},
   portName: 'tagmarker'
 });

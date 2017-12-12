@@ -1,13 +1,11 @@
 import { createStore } from 'redux';
-import rootReducer from './store';
+import store from './store';
 import { wrapStore } from 'react-chrome-redux';
 
 import { setBookmarks, setTags } from './store/actions';
 
 import createDatabase from './utils/createDatabase';
 import getBookmarksAndFolders from './utils/getBookmarksAndFolders';
-
-const store = createStore(rootReducer, {});
 
 wrapStore(store, {
   portName: 'tagmarker',

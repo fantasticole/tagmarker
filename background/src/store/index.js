@@ -1,9 +1,6 @@
-import { combineReducers } from 'redux';
+import reducers from './reducers';
+import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
 
-import { setBookmarks, setTags, toggleDrawer } from './reducers';
-
-export default combineReducers({
-  bookmarks: setBookmarks,
-  drawerOpen: toggleDrawer,
-  tags: setTags,
-});
+// export default createStore(reducers, {});
+export default createStore(reducers, {}, applyMiddleware(thunk));

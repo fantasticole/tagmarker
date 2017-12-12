@@ -1,9 +1,27 @@
 # PLANS
 
+## To Do
+* Delete tag functionality
+  * Remove from array of tags on bookmark in store
+  * Remove bookmark id from tag's bookmarks array in store
+  * Update db
+* Add tag functionality
+  * Create dropdown/autocomplete with existing tags
+  * Add to array of tags on bookmark in store
+  * Add bookmark id to tag's bookmarks array in store
+  * Update db
+* Edit bookmark name functionality
+  * Update bookmark name in Chrome
+* Add bookmark functionality
+  * Add bookmark to Chrome (where?)
+* Figure out where to store all of this so it persists
+* Make tags searchable
+  * When one tag is selected, the only other tags that should show should be the ones that overlap.
+
 ## Tag Storage
-- Set an object in local storage to hold folder and tag objects
+- Set an object somewhere (IndexedDB?) to hold folder and tag objects
 - When a bookmark/tag is added, add that ID to the corresponding tag's bookmarks array and remove for deletion.
-- Have an array of bookmarks objects that have an array of tag IDs in their data.
+- Have an array of bookmark objects that have an array of tag IDs in their data.
 
 Example:
 If a bookmark exists in this folder structure:
@@ -17,7 +35,7 @@ School
 
 The storage should look like this:
 ```
-localStorage.tagmarker.tags = {
+data.tags = {
   1: {
     bookmarks: [ "123", "554", ... ],
     dateAdded: 1329359260125
@@ -42,12 +60,12 @@ localStorage.tagmarker.tags = {
 }
 ```
 ```
-localStorage.tagmarker.bookmarks = [
+data.bookmarks = [
   {
     dateAdded: 1329359259993,
     id: "123",
     parentId: "14",
-    tags: ["2", "1"],
+    tags: ["3", "2", "1"],
     title: "December 1st Assignment",
     url: "www.example.com"
   },
@@ -86,11 +104,3 @@ localStorage.tagmarker.bookmarks = [
   url: "https://www.example.com",
 }
 ```
-
-
-## To Do
-* Make tags searchable
-  * When one tag is selected, the only other tags that should show should be the ones that overlap.
-* Organize the UI
-* Allow user to add and remove tags
-* Find a place to store new bookmarks

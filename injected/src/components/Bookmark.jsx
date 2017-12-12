@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import MarqueeWrapper from './MarqueeWrapper';
 
 import ifTrue from '../utils/ifTrue';
+import { deleteTags } from '../utils/actions';
 
 class Bookmark extends Component {
   constructor(props) {
@@ -14,10 +15,19 @@ class Bookmark extends Component {
     this.state = {
       active: false,
       isEditing: false,
+      tagsToAdd: [],
+      tagsToDelete: [],
     };
   }
 
-  handleAddTag () {
+  handleAddTag (tagId) {
+    let { tagsToAdd } = this.state;
+
+    tagsToAdd.push(tagId);
+    this.setState({ tagsToAdd });
+  }
+
+  handleClickAdd () {
     console.log('add!')
   }
 
@@ -30,15 +40,17 @@ class Bookmark extends Component {
   }
 
   handleClickSave () {
-    console.log('Save!')
+    let { bookmark } = this.props,
+        { tagsToDelete } = this.state;
+
+    this.props.dispatch(deleteTags(bookmark.id, tagsToDelete));
   }
 
   handleDeleteTag (tagId) {
-    let tag = this.props.tags[tagId];
+    let { tagsToDelete } = this.state;
 
-    // console.log('bookmark:', bookmark)
-    console.log('this:', this)
-    console.log('tag:', tag)
+    tagsToDelete.push(tagId);
+    this.setState({ tagsToDelete });
   }
 
   handleToggleDetails () {
@@ -49,7 +61,7 @@ class Bookmark extends Component {
     if (this.state.isEditing) {
       return (
         <span>
-          <button className='button bookmark__action-button add-tag' onClick={() => this.handleAddTag()}>Add Tag <i className='fa fa-plus-circle'/></button>
+          <button className='button bookmark__action-button add-tag' onClick={() => this.handleClickAdd()}>Add Tag <i className='fa fa-plus-circle'/></button>
           <button className='button bookmark__action-button' onClick={() => this.handleClickSave()}>Save <i className='fa fa-floppy-o'/></button>
           <button className='button bookmark__action-button' onClick={() => this.handleClickCancel()}>Cancel <i className='fa fa-ban'/></button>
         </span>
@@ -64,9 +76,13 @@ class Bookmark extends Component {
     if (this.state.isEditing) {
       return (
         <span className='bookmark-tags__editing'>
-          {tags.map(tagId => (
-            <button className='button bookmark-button bookmark-tag' key={tagId} onClick={() => this.handleDeleteTag(tagId)}>{this.props.tags[tagId].title} <i className='fa fa-times-circle'/></button>
-          ))}
+          {tags.map(tagId => {
+            if (this.state.tagsToDelete.indexOf(tagId) < 0){
+              return (
+                <button className='button bookmark-button bookmark-tag' key={tagId} onClick={() => this.handleDeleteTag(tagId)}>{this.props.tags[tagId].title} <i className='fa fa-times-circle'/></button>
+              );
+            }
+          })}
         </span>
       );
     }
