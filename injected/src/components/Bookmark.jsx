@@ -17,17 +17,24 @@ class Bookmark extends Component {
       active: false,
       isAdding: false,
       isEditing: false,
-      tagsToAdd: [],
-      tagsToDelete: [],
-      value: '',
+      options: [],
+      tags: [...this.props.bookmark.tags],
     };
   }
 
-  handleAddTag (tagId) {
-    let { tagsToAdd } = this.state;
+  handleAddTag (selectedOption) {
+    let { options, tags } = this.state,
+        { value } = selectedOption,
+        index = options.findIndex(o => (o.value === value));
 
-    tagsToAdd.push(tagId);
-    this.setState({ tagsToAdd });
+    tags.push(value);
+    if (index > -1) {
+      options.splice(index, 1);
+      this.setState({ options, tags });
+    }
+    else {
+      this.setState({ tags });
+    }
   }
 
   handleClickAdd () {
@@ -35,12 +42,16 @@ class Bookmark extends Component {
   }
 
   handleClickEdit () {
+    // if we don't already have options, set them
+    if (!this.state.options.length) this.setOptions();
     this.setState({ isEditing: true });
   }
 
   handleClickSave () {
     let { bookmark } = this.props,
-        { tagsToAdd, tagsToDelete } = this.state;
+        { tags } = this.state,
+        tagsToAdd = tags.filter(t => (!bookmark.tags.includes(t))),
+        tagsToDelete = bookmark.tags.filter(t => (!tags.includes(t)));
 
     // delete tags to be deleted
     deleteTags(bookmark.id, tagsToDelete);
@@ -51,36 +62,53 @@ class Bookmark extends Component {
   }
 
   handleDeleteTag (tagId) {
-    let { tagsToAdd, tagsToDelete } = this.state;
+    let { options, tags } = this.state,
+        currentTag = this.props.tags[tagId],
+        sortedOptions;
 
-    // see if the tag is just staged to be added
-    if (tagsToAdd.includes(tagId)) {
-      // in which case, remove it from array of tags to add
-      tagsToAdd = tagsToAdd.splice(tagsToAdd.indexOf(tagId), 1);
-      this.setState({ tagsToAdd });
-    }
-    else {
-      // otherwise, add it to array of tags to delete
-      tagsToDelete.push(tagId);
-      this.setState({ tagsToDelete });
-    }
+    // remove it from array of bookmark tags
+    tags.splice(tags.indexOf(tagId), 1);
+    // if we have a tag object, add it to the tag options
+    if (currentTag) options.push({ label: currentTag.title, value: currentTag.id })
+    sortedOptions = this.sortOptions(options);
+    // update the state
+    this.setState({ options: sortedOptions, tags });
   }
 
   handleExitEdit () {
-    this.setState({ isEditing: false });
-    this.setState({ isAdding: false });
-  }
-
-  handleSelectTag (selectedOption) {
-    let { tagsToAdd } = this.state;
-
-    // add tag to add to 'tagsToAdd' array
-    tagsToAdd.push(selectedOption);
-    this.setState({ tagsToAdd });
+    this.setState({ isAdding: false, isEditing: false });
   }
 
   handleToggleDetails () {
     this.setState({ active: !this.state.active });
+  }
+
+  setOptions () {
+    let { tags } = this.props,
+        allTags = Object.values(tags),
+        currentTags = this.state.tags,
+        options = [],
+        sortedOptions;
+
+    allTags.forEach(t => {
+      if (!currentTags.includes(t.id)) {
+        options.push({ label: t.title, value: t.id });
+      }
+    });
+    // sort the options to appear alphabetically
+    sortedOptions = this.sortOptions(options);
+    this.setState({ options: sortedOptions });
+  }
+
+  sortOptions(options) {
+    return options.sort((a, b) => {
+      let aLabel = a.label.toLowerCase(),
+          bLabel = b.label.toLowerCase();
+
+      if (aLabel < bLabel) return -1;
+      if (aLabel > bLabel) return 1;
+      return 0;
+    });
   }
 
   renderBookmarkActions () {
@@ -100,44 +128,15 @@ class Bookmark extends Component {
 
   renderInput () {
     if (this.state.isAdding) {
-      let { bookmark, tags } = this.props,
-          { tagsToAdd } = this.state,
-          options = [],
-          allTags = Object.values(tags),
-          sortedOptions;
-
-      allTags.forEach(t => {
-        // if the tag isn't already associated with the bookmark or
-        // staged to be added, include it as an option
-
-        // TODOTODOTODOTODOTODOTODOTODOTODOTODOTODO
-        // Make sure tags that shouldn't be in the list aren't
-        // if they're in tagsToAdd, don't render them as options
-        // if they're in tagsToDelete, do render them as an option
-        // TODOTODOTODOTODOTODOTODOTODOTODOTODOTODO
-        
-        if (!bookmark.tags.includes(t.id) && !tagsToAdd.includes(t.id)) {
-          options.push({ label: t.title, value: t.id });
-        }
-      });
-      // sort the options to appear alphabetically
-      sortedOptions = options.sort((a, b) => {
-        let aLabel = a.label.toLowerCase(),
-            bLabel = b.label.toLowerCase();
-
-        if (aLabel < bLabel) return -1;
-        if (aLabel > bLabel) return 1;
-        return 0;
-      });
       return (
         <div className='bookmark-detail bookmark-detail__is-select'>
           <Select.Creatable
             className='tag-selector'
             multi={false}
             name='tag-select'
-            onChange={(selected) => this.handleSelectTag(selected)}
-            options={sortedOptions}
-            value={this.state.value}
+            onChange={(selected) => this.handleAddTag(selected)}
+            options={this.state.options}
+            value=''
             />
         </div>
       );
@@ -145,33 +144,23 @@ class Bookmark extends Component {
   }
 
   renderTags () {
-    let tagIds = this.props.bookmark.tags,
+    let tagIds = this.state.tags,
         // get tag object for each id
-        tags = tagIds.map(t => (this.props.tags[t]));
+        tags = tagIds.map(id => {
+          // if a tag object exists for the id, return that
+          if (this.props.tags[id]) return this.props.tags[id];
+          // otherwise, create an object for the tag to be created
+          return { title: id, id: id }
+        });
 
     if (this.state.isEditing) {
-      let newTags = [];
-
-      // create object to render for each 'tagToAdd' on save
-      this.state.tagsToAdd.forEach(newTag => {
-        if (!tagIds.includes(newTag.value)) {
-          newTags.push({ title: newTag.label, id: newTag.value });
-        }
-      });
-
-      tags = tags.concat(newTags);
-
       // render each tag associated with the bookmark, plus
       // the ones staged to be added to the bookmark
       return (
         <span className='bookmark-tags__editing'>
-          {tags.map(tag => {
-            if (!this.state.tagsToDelete.includes(tag.id)){
-              return (
-                <button className='button bookmark-button bookmark-tag' key={tag.id} onClick={() => this.handleDeleteTag(tag.id)}>{tag.title} <i className='fa fa-times-circle'/></button>
-              );
-            }
-          })}
+          {tags.map(tag => (
+            <button className='button bookmark-button bookmark-tag' key={tag.id} onClick={() => this.handleDeleteTag(tag.id)}>{tag.title} <i className='fa fa-times-circle'/></button>
+          ))}
         </span>
       );
     }

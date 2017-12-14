@@ -1,9 +1,8 @@
 import { proxyStore } from '../injected';
 
-export function addTags (bookmarkId, newTags) {
-  let { bookmarks, tags } = proxyStore.state,
-      // get ids for each tag to be added
-      tagIds = newTags.map(t => (t.value)),
+export function addTags (bookmarkId, tagIds) {
+  let tags = proxyStore.state.tags,
+      bookmarks = proxyStore.state.bookmarks,
       // get bookmark object to add from
       bookmark = bookmarks.find(b => (b.id === bookmarkId));
 
@@ -15,7 +14,6 @@ export function addTags (bookmarkId, newTags) {
           bookmark.tags.push(id);
           // add the bookmark's id to the tag's bookmarks array
           tagToUpdate.bookmarks.push(bookmarkId);
-          console.log('tagToUpdate:', tagToUpdate);
           // update the tag in the store
           proxyStore.dispatch(createOrUpdateTag(tagToUpdate));
         }
@@ -41,18 +39,12 @@ export function addTags (bookmarkId, newTags) {
 
             // add that tag id to the bookmark's tags array
             bookmark.tags.push(id);
-            console.log('folder:', folder);
-            console.log('newTag:', newTag);
             // add the tag to the store
             proxyStore.dispatch(createOrUpdateTag(newTag));
           })
         }
       });
 
-  console.log('bookmarkId:', bookmarkId)
-  console.log('bookmark:', bookmark)
-  console.log('newTags:', newTags)
-  console.log('tagIds:', tagIds)
   // update the bookmark in the store
   proxyStore.dispatch(updateBookmark(bookmark));
 }
@@ -62,7 +54,8 @@ export function createOrUpdateTag (tag) {
 }
 
 export function deleteTags (bookmarkId, tagIds) {
-  let { bookmarks, tags } = proxyStore.state,
+  let tags = proxyStore.state.tags,
+      bookmarks = proxyStore.state.bookmarks,
       // get object for each tag being deleted
       tagsToDelete = tagIds.map(id => (tags[id])),
       // get bookmark object to delete from
@@ -70,7 +63,6 @@ export function deleteTags (bookmarkId, tagIds) {
       // get bookmark's tags that aren't in the tagIds to be deleted
       updatedTagList = bookmark.tags.filter(id => (!tagIds.includes(id)));
 
-  console.log('tagsToDelete:', tagsToDelete)
   // remove the bookmark id from each tag's object
   tagsToDelete.forEach(tag => {
     // get bookmarks for the current tag, minus the one to be deleted

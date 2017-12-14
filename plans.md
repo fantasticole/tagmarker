@@ -7,16 +7,16 @@
   * Update db
 * Add tag functionality
   * ~~Create/import dropdown/autocomplete with existing tags~~
-  * Add to array of tags on bookmark in store
-  * Add bookmark id to tag's bookmarks array in store
+  * ~~Add to array of tags on bookmark in store~~
+  * ~~Add bookmark id to tag's bookmarks array in store~~
   * Update db
 * Edit bookmark name functionality
   * Update bookmark name in Chrome
 * Add bookmark functionality
   * Add bookmark to Chrome (where?)
 * Add tag functionality
-  * Create custom folder in 'Other Bookmarks'
-  * Check to see if it exists
+  * ~~Create custom folder in 'Other Bookmarks'~~
+  * ~~Check to see if it exists~~
 * Figure out where to store all of this so it persists
 * Make tags searchable
   * When one tag is selected, the only other tags that should show should be the ones that overlap.

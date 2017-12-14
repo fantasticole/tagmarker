@@ -60,8 +60,6 @@ class Drawer extends Component {
           ));
 
       this.setState({ selectedBookmarks });
-      console.log('selectedTags:', selectedTags);
-      console.log('selectedBookmarks:', selectedBookmarks)
     }
   }
 
