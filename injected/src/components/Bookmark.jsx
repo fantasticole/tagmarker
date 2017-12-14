@@ -4,9 +4,10 @@ import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 
 import MarqueeWrapper from './MarqueeWrapper';
+import Select from 'react-select';
 
 import ifTrue from '../utils/ifTrue';
-import { deleteTags } from '../utils/actions';
+import { addTags, deleteTags } from '../utils/actions';
 
 class Bookmark extends Component {
   constructor(props) {
@@ -14,9 +15,11 @@ class Bookmark extends Component {
 
     this.state = {
       active: false,
+      isAdding: false,
       isEditing: false,
       tagsToAdd: [],
       tagsToDelete: [],
+      value: '',
     };
   }
 
@@ -28,11 +31,7 @@ class Bookmark extends Component {
   }
 
   handleClickAdd () {
-    console.log('add!')
-  }
-
-  handleExitEdit () {
-    this.setState({ isEditing: false });
+    this.setState({ isAdding: true });
   }
 
   handleClickEdit () {
@@ -41,17 +40,43 @@ class Bookmark extends Component {
 
   handleClickSave () {
     let { bookmark } = this.props,
-        { tagsToDelete } = this.state;
+        { tagsToAdd, tagsToDelete } = this.state;
 
+    // delete tags to be deleted
     deleteTags(bookmark.id, tagsToDelete);
+    // add tags to be added
+    addTags(bookmark.id, tagsToAdd);
+    // exit editing state
     this.handleExitEdit();
   }
 
   handleDeleteTag (tagId) {
-    let { tagsToDelete } = this.state;
+    let { tagsToAdd, tagsToDelete } = this.state;
 
-    tagsToDelete.push(tagId);
-    this.setState({ tagsToDelete });
+    // see if the tag is just staged to be added
+    if (tagsToAdd.includes(tagId)) {
+      // in which case, remove it from array of tags to add
+      tagsToAdd = tagsToAdd.splice(tagsToAdd.indexOf(tagId), 1);
+      this.setState({ tagsToAdd });
+    }
+    else {
+      // otherwise, add it to array of tags to delete
+      tagsToDelete.push(tagId);
+      this.setState({ tagsToDelete });
+    }
+  }
+
+  handleExitEdit () {
+    this.setState({ isEditing: false });
+    this.setState({ isAdding: false });
+  }
+
+  handleSelectTag (selectedOption) {
+    let { tagsToAdd } = this.state;
+
+    // add tag to add to 'tagsToAdd' array
+    tagsToAdd.push(selectedOption);
+    this.setState({ tagsToAdd });
   }
 
   handleToggleDetails () {
@@ -73,14 +98,77 @@ class Bookmark extends Component {
     );
   }
 
-  renderTags (tags) {
+  renderInput () {
+    if (this.state.isAdding) {
+      let { bookmark, tags } = this.props,
+          { tagsToAdd } = this.state,
+          options = [],
+          allTags = Object.values(tags),
+          sortedOptions;
+
+      allTags.forEach(t => {
+        // if the tag isn't already associated with the bookmark or
+        // staged to be added, include it as an option
+
+        // TODOTODOTODOTODOTODOTODOTODOTODOTODOTODO
+        // Make sure tags that shouldn't be in the list aren't
+        // if they're in tagsToAdd, don't render them as options
+        // if they're in tagsToDelete, do render them as an option
+        // TODOTODOTODOTODOTODOTODOTODOTODOTODOTODO
+        
+        if (!bookmark.tags.includes(t.id) && !tagsToAdd.includes(t.id)) {
+          options.push({ label: t.title, value: t.id });
+        }
+      });
+      // sort the options to appear alphabetically
+      sortedOptions = options.sort((a, b) => {
+        let aLabel = a.label.toLowerCase(),
+            bLabel = b.label.toLowerCase();
+
+        if (aLabel < bLabel) return -1;
+        if (aLabel > bLabel) return 1;
+        return 0;
+      });
+      return (
+        <div className='bookmark-detail bookmark-detail__is-select'>
+          <Select.Creatable
+            className='tag-selector'
+            multi={false}
+            name='tag-select'
+            onChange={(selected) => this.handleSelectTag(selected)}
+            options={sortedOptions}
+            value={this.state.value}
+            />
+        </div>
+      );
+    }
+  }
+
+  renderTags () {
+    let tagIds = this.props.bookmark.tags,
+        // get tag object for each id
+        tags = tagIds.map(t => (this.props.tags[t]));
+
     if (this.state.isEditing) {
+      let newTags = [];
+
+      // create object to render for each 'tagToAdd' on save
+      this.state.tagsToAdd.forEach(newTag => {
+        if (!tagIds.includes(newTag.value)) {
+          newTags.push({ title: newTag.label, id: newTag.value });
+        }
+      });
+
+      tags = tags.concat(newTags);
+
+      // render each tag associated with the bookmark, plus
+      // the ones staged to be added to the bookmark
       return (
         <span className='bookmark-tags__editing'>
-          {tags.map(tagId => {
-            if (!this.state.tagsToDelete.includes(tagId)){
+          {tags.map(tag => {
+            if (!this.state.tagsToDelete.includes(tag.id)){
               return (
-                <button className='button bookmark-button bookmark-tag' key={tagId} onClick={() => this.handleDeleteTag(tagId)}>{this.props.tags[tagId].title} <i className='fa fa-times-circle'/></button>
+                <button className='button bookmark-button bookmark-tag' key={tag.id} onClick={() => this.handleDeleteTag(tag.id)}>{tag.title} <i className='fa fa-times-circle'/></button>
               );
             }
           })}
@@ -89,8 +177,8 @@ class Bookmark extends Component {
     }
     return (
       <MarqueeWrapper>
-        {tags.map(tagId => (
-          <span className='bookmark-tag' key={tagId}>{this.props.tags[tagId].title}</span>
+        {tags.map(tag => (
+          <span className='bookmark-tag' key={tag.id}>{tag.title}</span>
         ))}
       </MarqueeWrapper>
     );
@@ -114,16 +202,17 @@ class Bookmark extends Component {
         </p>
         {ifTrue(active).render(() => (
           <div className='bookmark-info'>
-            <div className='bookmark-info__detail'>
+            <div className='bookmark-detail bookmark-detail__is-link'>
               <a className='bookmark-info__link' href={bookmark.url} target='_parent'>{bookmark.title || bookmark.url}</a>
             </div>
-            <div className='bookmark-info__detail'>
+            <div className='bookmark-detail bookmark-detail__is-date'>
               <span className='detail-title'>Date Added:</span> { new Date(bookmark.dateAdded).toLocaleString() }
             </div>
-            <div className='bookmark-info__detail'>
-              { this.renderTags(bookmark.tags) }
+            <div className='bookmark-detail bookmark-detail__is-tags'>
+              { this.renderTags() }
             </div>
-            <div className='bookmark-info__detail'>
+            {this.renderInput()}
+            <div className='bookmark-detail bookmark-detail__is-actions'>
               {this.renderBookmarkActions()}
             </div>
           </div>

@@ -5,6 +5,7 @@ import { Store } from 'react-chrome-redux';
 
 import Drawer from './components/Drawer';
 
+import 'react-select/dist/react-select.css';
 import './injected.scss';
 import 'font-awesome/css/font-awesome.css';
 

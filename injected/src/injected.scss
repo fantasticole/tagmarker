@@ -168,9 +168,10 @@ button:focus {
   padding-left: 3px;
 }
 
-.bookmark-info__detail {
+.bookmark-detail {
   margin: 4px 0;
   width: 100%;
+  position: relative;
 }
 
 .bookmark-info__link {
@@ -212,4 +213,13 @@ button:focus {
   font-weight: bold;
   color: #bbb;
   text-transform: uppercase;
+}
+
+.bookmark-detail__is-select {
+  position: absolute;
+  margin: 0;
+  width: 230px;
+  & + .bookmark-detail {
+    margin-top: 44px;
+  }
 }

@@ -11,8 +11,11 @@ class TagList extends Component {
   render() {
     let tagNames = this.props.tags ? Object.values(this.props.tags) : [],
         sortedTagNames = tagNames.sort((a, b) => {
-          if (a.title < b.title) return -1;
-          if (a.title > b.title) return 1;
+          let aTitle = a.title.toLowerCase(),
+              bTitle = b.title.toLowerCase();
+
+          if (aTitle < bTitle) return -1;
+          if (aTitle > bTitle) return 1;
           return 0;
         });
 

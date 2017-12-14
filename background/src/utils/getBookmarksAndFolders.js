@@ -1,6 +1,6 @@
 export default function getBookmarksAndFolders (bookmarks, data) {
   for (var x in bookmarks) {
-    let { dateAdded, id, parentId, title } = bookmarks[x],
+    let { dateAdded, dateGroupModified, id, parentId, title } = bookmarks[x],
         // use parent's ID to get all previous parents IDs
         // if parent's ID is 0 or undefined, set parents as empty array
         // could hide 1 (Bookmarks Bar) and 2 (Other Bookmarks) as well
@@ -11,7 +11,7 @@ export default function getBookmarksAndFolders (bookmarks, data) {
       // add folder's information to the data's tags object
       data['tags'][id] = {
         dateAdded,
-        dateGroupModified: bookmarks[x].dateGroupModified,
+        dateGroupModified,
         id,
         parentId,
         parents,

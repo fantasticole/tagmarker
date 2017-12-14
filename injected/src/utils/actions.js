@@ -1,7 +1,64 @@
 import { proxyStore } from '../injected';
 
-export function addTag (data) {
-  return { type: 'ADD_BOOKMARK_TAG', data };
+export function addTags (bookmarkId, newTags) {
+  let { bookmarks, tags } = proxyStore.state,
+      // get ids for each tag to be added
+      tagIds = newTags.map(t => (t.value)),
+      // get bookmark object to add from
+      bookmark = bookmarks.find(b => (b.id === bookmarkId));
+
+      tagIds.forEach(id => {
+        let tagToUpdate = tags[id];
+        // if we have a tag for the id already
+        if (tagToUpdate) {
+          // add that tag id to the bookmark's tags array
+          bookmark.tags.push(id);
+          // add the bookmark's id to the tag's bookmarks array
+          tagToUpdate.bookmarks.push(bookmarkId);
+          console.log('tagToUpdate:', tagToUpdate);
+          // update the tag in the store
+          proxyStore.dispatch(createOrUpdateTag(tagToUpdate));
+        }
+        else {
+          // otherwise, create a folder for the new tag
+          // inside of the tagmarker folder
+          chrome.bookmarks.create({
+            parentId: proxyStore.tagMarkerFolder.id,
+            title: id
+          }, folder => {
+            // add the folder we just created to the store as a tag
+            // with the bookmark as an item in its bookmarks array
+            let  { dateAdded, dateGroupModified, id, parentId, parents, title } = folder,
+                newTag = {
+                  dateAdded,
+                  dateGroupModified,
+                  id,
+                  parentId,
+                  parents,
+                  title,
+                  bookmarks: [ bookmarkId ],
+                };
+
+            // add that tag id to the bookmark's tags array
+            bookmark.tags.push(id);
+            console.log('folder:', folder);
+            console.log('newTag:', newTag);
+            // add the tag to the store
+            proxyStore.dispatch(createOrUpdateTag(newTag));
+          })
+        }
+      });
+
+  console.log('bookmarkId:', bookmarkId)
+  console.log('bookmark:', bookmark)
+  console.log('newTags:', newTags)
+  console.log('tagIds:', tagIds)
+  // update the bookmark in the store
+  proxyStore.dispatch(updateBookmark(bookmark));
+}
+
+export function createOrUpdateTag (tag) {
+  return { type: 'CREATE_OR_UPDATE_TAG', tag };
 }
 
 export function deleteTags (bookmarkId, tagIds) {
@@ -13,6 +70,7 @@ export function deleteTags (bookmarkId, tagIds) {
       // get bookmark's tags that aren't in the tagIds to be deleted
       updatedTagList = bookmark.tags.filter(id => (!tagIds.includes(id)));
 
+  console.log('tagsToDelete:', tagsToDelete)
   // remove the bookmark id from each tag's object
   tagsToDelete.forEach(tag => {
     // get bookmarks for the current tag, minus the one to be deleted
@@ -21,7 +79,7 @@ export function deleteTags (bookmarkId, tagIds) {
     // set the updated list on the tag object
     tag.bookmarks = tagBookmarks;
     // update the store
-    proxyStore.dispatch(updateTag(tag));
+    proxyStore.dispatch(createOrUpdateTag(tag));
   })
   // update the bookmark's tags to remove the deleted ones
   bookmark.tags = updatedTagList
@@ -31,8 +89,4 @@ export function deleteTags (bookmarkId, tagIds) {
 
 export function updateBookmark (bookmark) {
   return { type: 'UPDATE_BOOKMARK', bookmark };
-}
-
-export function updateTag (tag) {
-  return { type: 'UPDATE_TAG', tag };
 }

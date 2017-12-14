@@ -2,7 +2,7 @@ import { createStore } from 'redux';
 import store from './store';
 import { wrapStore } from 'react-chrome-redux';
 
-import { setBookmarks, setTags } from './store/actions';
+import { setBookmarkFolder, setBookmarks, setTags } from './store/actions';
 
 import createDatabase from './utils/createDatabase';
 import getBookmarksAndFolders from './utils/getBookmarksAndFolders';
@@ -17,6 +17,30 @@ wrapStore(store, {
 //   drawerOpen: false,
 //   tags: {},
 // }
+
+// see if there is a folder for tagmarker bookmarks
+chrome.bookmarks.search({ title: 'TagMarker Bookmarks' }, (arr) => {
+  console.log('tagmarker search arr:', arr)
+  // if the returned array has objects
+  if (arr.length) {
+    // find the folder that matches the query
+    let folder = arr.find(option => (option.dateGroupModified));
+
+    console.log('tagmarker folder:', folder)
+    // if we found a folder, set that it in the store
+    if (folder) store.dispatch(setBookmarkFolder(folder));
+  }
+  else {
+    // create the folder in 'Other Bookmarks'
+    // 'Other Bookmarks' is default parent if no parentId is specified
+    chrome.bookmarks.create({ title: 'TagMarker Bookmarks' }, folder => {
+      console.log('tagmarker folder:', folder)
+      // set the folder in the store
+      store.dispatch(setBookmarkFolder(folder));
+    });
+  }
+})
+
 
 // open and close drawer on icon click
 chrome.browserAction.onClicked.addListener((tab) => {
