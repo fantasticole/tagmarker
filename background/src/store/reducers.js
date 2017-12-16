@@ -6,13 +6,15 @@ export function bookmarks (state = [], action) {
     case 'SET_BOOKMARKS':
       return action.data;
     case 'UPDATE_BOOKMARK':
-      // state is array of all bookmarks
-      let updated = state.map((b) => (
-        // find this bookmark and update it
-        b.id === action.bookmark.id ? action.bookmark : b
-      ));
+      // find the index of the object we want to update
+      let index = state.findIndex(b => (b.id === action.bookmark.id)),
+          // get the whole array to return
+          bookmarks = [...state];
+
+      // update just the object we want to change
+      bookmarks[index] = action.bookmark;
       // return the whole list
-      return updated;
+      return bookmarks;
     default:
       return state;
   }

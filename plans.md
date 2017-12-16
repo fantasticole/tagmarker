@@ -14,6 +14,7 @@
   * Update bookmark name in Chrome
 * Add bookmark functionality
   * Add bookmark to Chrome (where?)
+  * Listen for manually created bookmarks
 * Add tag functionality
   * ~~Create custom folder in 'Other Bookmarks'~~
   * ~~Check to see if it exists~~

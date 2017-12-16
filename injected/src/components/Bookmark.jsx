@@ -53,10 +53,10 @@ class Bookmark extends Component {
         tagsToAdd = tags.filter(t => (!bookmark.tags.includes(t))),
         tagsToDelete = bookmark.tags.filter(t => (!tags.includes(t)));
 
-    // delete tags to be deleted
-    deleteTags(bookmark.id, tagsToDelete);
-    // add tags to be added
-    addTags(bookmark.id, tagsToAdd);
+    // delete tags to be deleted if we have any
+    if (tagsToDelete.length) deleteTags(bookmark.id, tagsToDelete);
+    // add tags to be added if we have any
+    if (tagsToAdd.length) addTags(bookmark.id, tagsToAdd);
     // exit editing state
     this.handleExitEdit();
   }

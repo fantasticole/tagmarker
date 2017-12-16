@@ -1,4 +1,3 @@
-import { createStore } from 'redux';
 import store from './store';
 import { wrapStore } from 'react-chrome-redux';
 
