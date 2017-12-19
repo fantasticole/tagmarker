@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { connect } from 'react-redux';
+
+import Loader from './Loader';
+
+import ifTrue from '../utils/ifTrue';
 
 class Settings extends Component {
   constructor(props) {
@@ -9,11 +12,17 @@ class Settings extends Component {
     this.state = {
       activeFolders: [],
       folderRoot: {},
+      selected: null,
     };
   }
 
   componentDidMount () {
     this.loadFolders();
+  }
+
+  handleAddFolder (parentId, parentName) {
+    // this.renderModal();
+    console.log('add folder in:', parentId);
   }
 
   handleClickFolder (e, id) {
@@ -33,8 +42,9 @@ class Settings extends Component {
     this.setState({ activeFolders });
   }
 
-  handleSelectFolder (id) {
-    console.log('selected:', id);
+  handleSelectFolder (selected) {
+    this.setState({ selected });
+    // TODO: add dispatch to props
     // this.props.dispatch({ action: 'SET_FOLDER', folder });
   }
 
@@ -51,9 +61,28 @@ class Settings extends Component {
     if (this.state.activeFolders.includes(id)) nodeClasses.push('active');
     // if the node is a folder
     if (children) {
+      // see if any of the children are folders
+      let childFolders = children.filter(c => c.hasOwnProperty('children'));
+
       // return a list item for the node and list its children
       return (
-        <li className={nodeClasses.join(' ')} key={id} onClick={e => this.handleClickFolder(e, id)}><i className='fa fa-caret-right'/> {title}
+        <li className={nodeClasses.join(' ')} key={id}>
+          <span className='folder-name'>
+            <span onClick={e => this.handleClickFolder(e, id)}>
+              {ifTrue(childFolders.length).render(() => (<i className='fa fa-caret-right show-more'/>))}
+              {title}
+            </span>
+            <span className='folder-actions'>
+              <input
+                checked={this.state.selected === id}
+                onChange={() => this.handleSelectFolder(id)}
+                title='select folder'
+                type='radio'
+                value={id}
+                />
+                <button className='button add-folder' onClick={() => {this.handleAddFolder(id, title)}} title='add folder'><i className='fa fa-plus-circle'/></button>
+            </span>
+          </span>
           <ul className='folder-list'>{children.map(child => this.renderChildren(child))}</ul>
         </li>
       )
@@ -63,9 +92,11 @@ class Settings extends Component {
   // render the user's bookmark folders
   renderFolders () {
     return (
-      <ul className='folder-list root-list'>
-        {this.state.folderRoot.children.map(child => this.renderChildren(child))}
-      </ul>
+      <form>
+        <ul className='folder-list root-list'>
+          {this.state.folderRoot.children.map(child => this.renderChildren(child))}
+        </ul>
+      </form>
     )
   }
 
@@ -76,7 +107,7 @@ class Settings extends Component {
         <div className='settings-content'>
           <p className='settings__text'>Where do you want to save your new bookmarks and tags?</p>
           {this.state.folderRoot.children ?
-            this.renderFolders() : <div className='loader' />
+            this.renderFolders() : <Loader />
           }
         </div>
       </div>
@@ -84,11 +115,4 @@ class Settings extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    bookmarks: state.bookmarks,
-    tags: state.tags,
-  };
-}
-
-export default connect(mapStateToProps)(Settings);
+export default Settings;

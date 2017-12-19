@@ -76,7 +76,13 @@ class Bookmark extends Component {
   }
 
   handleExitEdit () {
-    this.setState({ isAdding: false, isEditing: false });
+    // reset options and tags and exit editing state
+    this.setState({
+      isAdding: false,
+      isEditing: false,
+      options: [],
+      tags: [...this.props.bookmark.tags],
+    });
   }
 
   handleToggleDetails () {
