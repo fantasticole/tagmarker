@@ -13,12 +13,16 @@
 * Edit bookmark name functionality
   * Update bookmark name in Chrome
 * Add bookmark functionality
+  * Ask where new folders/bookmarks should be created
+    * Bookmarks Bar or Other Bookmarks
+    * Choose folder name
   * Add bookmark to Chrome (where?)
   * Listen for manually created bookmarks
 * Add tag functionality
   * ~~Create custom folder in 'Other Bookmarks'~~
   * ~~Check to see if it exists~~
 * Figure out where to store all of this so it persists
+  * indexedDB?
 * Make tags searchable
   * When one tag is selected, the only other tags that should show should be the ones that overlap.
 

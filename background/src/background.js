@@ -29,15 +29,6 @@ chrome.bookmarks.search({ title: 'TagMarker Bookmarks' }, (arr) => {
     // if we found a folder, set that it in the store
     if (folder) store.dispatch(setBookmarkFolder(folder));
   }
-  else {
-    // create the folder in 'Other Bookmarks'
-    // 'Other Bookmarks' is default parent if no parentId is specified
-    chrome.bookmarks.create({ title: 'TagMarker Bookmarks' }, folder => {
-      console.log('tagmarker folder:', folder)
-      // set the folder in the store
-      store.dispatch(setBookmarkFolder(folder));
-    });
-  }
 })
 
 
