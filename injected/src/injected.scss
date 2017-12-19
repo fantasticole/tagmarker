@@ -55,10 +55,18 @@ button:focus,
   cursor: pointer;
 }
 
-.drawer-content {
+.drawer__content {
   width: calc(100% - 30px);
   margin-left: 25px;
   height: 100%;
+}
+
+.drawer__header {
+  margin: 0;
+  text-transform: uppercase;
+  border-bottom: 1px solid #ccc;
+  text-align: center;
+  font-size: 20px;
 }
 
 //
@@ -72,7 +80,7 @@ button:focus,
 
 .tagmarker-list {
   list-style: none;
-  margin-top: 0;
+  margin-top: 5px;
   overflow: scroll;
   width: 100%;
   display: inline-block;
@@ -81,10 +89,10 @@ button:focus,
 }
 
 .tag-list {
-  height: 35%;
   padding: 3px;
   border: 1px solid #bbb;
   flex: 7;
+  transition: height 0.3s;
 }
 
 .tag-item {
@@ -237,19 +245,16 @@ button:focus,
 // SETTINGS VIEW STYLES
 //
 
-.settings__header {
-  margin: 0;
-  text-transform: uppercase;
-  border-bottom: 1px solid #ccc;
-  text-align: center;
-}
-
-.settings-content {
+.settings__content {
   margin-top: 10px;
   border-left: 1px dotted #ccc;
   max-height: calc(100% - 40px);
   padding-left: 10px;
   overflow: scroll;
+}
+
+.settings__content {
+  margin-top: 5px;
 }
 
 .root-list {

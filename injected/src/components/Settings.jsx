@@ -102,9 +102,9 @@ class Settings extends Component {
 
   render () {
     return (
-      <div className='drawer-content settings'>
-        <h1 className='settings__header'>Settings</h1>
-        <div className='settings-content'>
+      <div className='drawer__content settings'>
+        <h1 className='drawer__header settings__header'>Settings</h1>
+        <div className='settings__content'>
           <p className='settings__text'>Where do you want to save your new bookmarks and tags?</p>
           {this.state.folderRoot.children ?
             this.renderFolders() : <Loader />

@@ -54,11 +54,13 @@ class Lists extends Component {
 
   render () {
     return (
-      <div className='drawer-content lists'>
+      <div className='drawer__content lists'>
+        <h1 className='drawer__header tags__header'>Tags</h1>
         <TagList
           handleClickTag={(id) => this.handleClickTag(id)}
           selectedTags={this.state.selectedTags}
           />
+        <h1 className='drawer__header bookmarks__header'>Bookmarks</h1>
         <BookmarkList
           selectedBookmarks={this.state.selectedBookmarks}
           />
