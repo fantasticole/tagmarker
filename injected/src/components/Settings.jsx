@@ -14,6 +14,7 @@ class Settings extends Component {
 
     this.state = {
       activeFolders: [],
+      folderName: '',
       folderRoot: {},
       selected: this.props.tagMarkerFolder.id,
     };
@@ -24,20 +25,31 @@ class Settings extends Component {
   }
 
   handleAddFolder (parentId, title) {
-    // this.renderModal();
-    console.log('add folder in:', parentId);
     chrome.bookmarks.search({ title }, arr => {
-      let folder = arr.filter(f => f.id === parentId),
-           modalContainer = document.getElementsByClassName('modal-container')[0];
+      let folder = arr.find(f => f.id === parentId),
+          modalContainer = document.getElementsByClassName('modal-container')[0],
+          title;
+
+      if (folder) title = folder.title;
+      else if (parentId === "1") title = 'Bookmarks Bar';
+      else title = 'Other Bookmarks'
 
       ReactDOM.render(
-        <Modal className="create-folder-modal">
-          <h1>Add folder in: {folder.title}</h1>
+        <Modal className='create-folder-modal'>
+          <h1 className='create-folder__header'>Add folder in: {title}</h1>
+          <input className='create-folder__input modal__header' onChange={(e) => this.handleChange(e)}type='text' />
+          <span className='create-folder__actions'>
+            <button className='button create-folder-action__button' onClick={() => this.handleClickSubmit(parentId)}>Submit <i className='fa fa-floppy-o'/></button>
+            <button className='button create-folder-action__button' onClick={() => this.handleDeactivate()}>Cancel <i className='fa fa-ban'/></button>
+          </span>
         </Modal>,
         modalContainer
       );
     })
-    // this.props.setBookmarkFolder(folder);
+  }
+
+  handleChange (event) {
+    this.setState({ folderName: event.target.value });
   }
 
   handleClickCancel () {
@@ -46,6 +58,19 @@ class Settings extends Component {
 
   handleClickSave () {
     console.log('Save!')
+  }
+
+  handleClickSubmit (parentId) {
+    // TODO: make this into an action that
+    // - updates tags
+    // - updates the folder structure listed on settings page
+    chrome.bookmarks.create({
+      parentId,
+      title: this.state.folderName
+    }, folder => {
+      this.props.setBookmarkFolder(folder);
+    });
+    this.handleDeactivate();
   }
 
   handleClickFolder (e, id) {
@@ -63,6 +88,10 @@ class Settings extends Component {
 
     // update the state
     this.setState({ activeFolders });
+  }
+
+  handleDeactivate () {
+    ReactDOM.unmountComponentAtNode(document.getElementsByClassName('modal-container')[0]);
   }
 
   handleSelectFolder (selected) {
@@ -124,7 +153,6 @@ class Settings extends Component {
   }
 
   render () {
-    console.log('this:', this)
     return (
       <div className='drawer__content settings'>
         <h1 className='drawer__header settings__header'>Settings</h1>

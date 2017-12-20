@@ -1,7 +1,30 @@
+// COLORS //
+// BASE STYLES //
 // LIST VIEW STYLES //
 // SETTINGS VIEW STYLES //
 // LOADER STYLES //
 // MODAL STYLES //
+
+// // // // // // // // // //
+// // // COLORS // // //
+// // // // // // // // // //
+
+$deep: #09203f;
+$deep-highlight: #204c8a;
+$light-deep: rgba(9, 32, 63, 0.2);
+$lighter-deep: rgba(9, 32, 63, 0.1);
+$light: #5256D3; // rgb(82, 86, 211)
+$light-highlight: #767BF7;
+$light-light: rgba(82, 86, 211, 0.5);
+$base: #fff;
+$base-translucent: rgba(255, 255, 255, 0.7);
+$light-accent: #ccc;
+$mid-accent: #bbb;
+$deep-accent: #aaa;
+
+// // // // // // // // // //
+// // // BASE STYLES // // //
+// // // // // // // // // //
 
 #tags {
   position: absolute;
@@ -9,7 +32,7 @@
   right: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-size: 14px;
-  color: #09203f;
+  color: $deep;
 }
 
 .drawer {
@@ -21,7 +44,7 @@
   width: 300px;
   padding: 5px;
   box-sizing: border-box;
-  background-color: #09203f;
+  background-color: $deep;
   // background-image: linear-gradient(to top, #fcc5e4 0%, #fda34b 15%, #ff7882 35%, #c8699e 52%, #7046aa 71%, #0c1db8 87%, #020f75 100%);
   // background-image: linear-gradient(to top, #ff0844 0%, #ffb199 100%);
   // background-image: linear-gradient(-20deg, #b721ff 0%, #21d4fd 100%);
@@ -29,11 +52,11 @@
   // background-image: linear-gradient(45deg, #874da2 0%, #c43a30 100%);
   // background-image: linear-gradient(to top, #FF5722 0%, #f9f047 100%);
   // background-image: linear-gradient(to top, #0fd850 0%, #f9f047 100%);
-  background-image: linear-gradient(to top, #09203f 0%, #5256D3 100%);
+  background-image: linear-gradient(to top, $deep 0%, $light 100%);
 }
 
 .container {
-  background-color: #fff;
+  background-color: $base;
   padding: 5px;
   height: calc(100% - 10px);
 }
@@ -58,7 +81,7 @@ button:focus,
     margin-bottom: 5px;
     height: 28px;
     &:hover {
-      color: #5256D3;
+      color: $light;
       cursor: pointer;
     }
     &:last-child {
@@ -84,9 +107,9 @@ button:focus,
 .drawer__header {
   margin: 0;
   text-transform: uppercase;
-  border-bottom: 1px solid rgba(82, 86, 211, 0.5);
+  border-bottom: 1px solid $light-light;
   text-align: center;
-  font-size: 20px;
+  font-size: 15px;
 }
 
 // // // // // // // // // // // //
@@ -110,7 +133,7 @@ button:focus,
 
 .tag-list {
   padding: 3px;
-  border: 1px solid #bbb;
+  border: 1px solid $mid-accent;
   flex: 7;
   transition: height 0.3s;
 }
@@ -120,10 +143,10 @@ button:focus,
   max-width: 100%;
   .tag:hover {
     cursor: pointer;
-    background-color: #5256D3;
-    background-image: linear-gradient(to top, #5256D3 0%, #767BF7 100%);
+    background-color: $light;
+    background-image: linear-gradient(to top, $light 0%, $light-highlight 100%);
     .tagCount {
-      color: #5256D3;
+      color: $light;
     }
   }
 }
@@ -132,27 +155,29 @@ button:focus,
 .bookmark-tag {
   display: inline-block;
   border-radius: 20px;
-  background-color: #09203f;
-  background-image: linear-gradient(to top, #09203f 0%, #204c8a 100%);
-  color: #fff;
+  background-color: $deep;
+  background-image: linear-gradient(to top, $deep 0%, $deep-highlight 100%);
+  color: $base;
   padding: 3px 5px;
   margin: 1px;
   white-space: nowrap;
+  text-shadow: 0px 0px 1px $light-deep;
   &.selected {
-    background-color: #5256D3;
-    background-image: linear-gradient(to top, #5256D3 0%, #767BF7 100%);
+    background-color: $light;
+    background-image: linear-gradient(to top, $light 0%, $light-highlight 100%);
     .tagCount {
-      color: #5256D3;
+      color: $light;
     }
   }
 }
 
 .tagCount {
-  background-color: #fff;
+  background-color: $base;
   border-radius: 10px;
   font-size: 11px;
   padding: 0px 3px;
-  color: #09203f;
+  color: $deep;
+  text-shadow: 0px 0px 1px $lighter-deep;
 }
 
 .bookmark-list {
@@ -179,13 +204,13 @@ button:focus,
   padding: 4px 0;
   margin: 0 0 2px -15px;
   &:hover {
-    border-bottom: 2px solid #09203f;
+    border-bottom: 2px solid $deep;
     padding-bottom: 2px;
   }
 }
 
 .show-more {
-  color: #bbb;
+  color: $mid-accent;
   background: transparent;
   border: none;
   padding: 0;
@@ -198,7 +223,7 @@ button:focus,
 .bookmark__details {
   font-size: 12px;
   overflow: hidden;
-  border-left: 1px dotted rgba(82, 86, 211, 0.5);
+  border-left: 1px dotted $light-light;
   padding-left: 3px;
 }
 
@@ -221,16 +246,16 @@ button:focus,
 .bookmark-tags__editing {
   white-space: normal;
   .bookmark-tag:hover {
-    background-color: #09203f;
-    background-image: linear-gradient(to top, #09203f 0%, #204c8a 100%);
+    background-color: $deep;
+    background-image: linear-gradient(to top, $deep 0%, $deep-highlight 100%);
     cursor: pointer;
   }
 }
 
 .bookmark-tag {
   padding: 2px 5px 1px;
-  background-color: #aaa;
-  background-image: linear-gradient(to top, #aaa 0%, #ccc 100%);
+  background-color: $deep-accent;
+  background-image: linear-gradient(to top, $deep-accent 0%, $light-accent 100%);
   font-size: 12px;
 }
 
@@ -247,13 +272,13 @@ button:focus,
     margin-right: 0;
   }
   &:hover {
-    color: #5256D3;
+    color: $light;
   }
 }
 
 .detail-title {
   font-weight: bold;
-  color: #bbb;
+  color: $mid-accent;
   text-transform: uppercase;
 }
 
@@ -278,13 +303,14 @@ button:focus,
 
 .settings__content {
   margin-top: 10px;
-  border-left: 1px dotted rgba(82, 86, 211, 0.5);
+  margin-left: 7px;
+  border-left: 1px dotted $light-light;
   max-height: calc(100% - 40px);
-  padding-left: 10px;
+  padding-left: 5px;
   overflow: scroll;
 }
 
-.settings__content {
+.settings__text {
   margin-top: 5px;
 }
 
@@ -319,7 +345,7 @@ button:focus,
   display: block;
   &:hover {
     margin-bottom: 1px;
-    border-bottom: 2px solid #09203f;
+    border-bottom: 2px solid $deep;
   }
   .show-more {
     margin-right: 5px;
@@ -337,9 +363,24 @@ button:focus,
 .add-folder {
   font-size: 15px;
   margin-left: 3px;
-  color: #09203f;
+  color: $deep;
   &:hover {
-    color: #5256D3;
+    color: $light;
+  }
+}
+
+.create-folder__input {
+  width: 100%;
+  font-size: 16px;
+}
+
+.create-folder-action__button {
+  width: 50%;
+  margin-top: 10px;
+  padding: 5px;
+  &:hover {
+    background-color: $deep;
+    color: $base;
   }
 }
 
@@ -355,8 +396,8 @@ button:focus,
 }
 
 .loader {
-  border: 4px solid #eee;
-  border-top: 4px solid #09203f;
+  border: 4px solid $light-accent;
+  border-top: 4px solid $deep;
   border-radius: 50%;
   width: 20px;
   height: 20px;
@@ -378,15 +419,25 @@ button:focus,
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: rgba(255, 255, 255, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  background-color: $base-translucent;
 }
 
 .modal__viewport {
-  background-color: #fff;
+  background-color: $base;
   width: calc(100% - 40px);
   padding: 10px;
   box-sizing: border-box;
+  color: $deep;
+  box-shadow: 0 0 5px $light-deep;
+  margin: auto;
+  margin-top: 50px;
+}
+
+.modal__close {
+  float: right;
+  font-size: 16px;
+}
+
+.modal__content {
+  margin-bottom: 18px;
 }
