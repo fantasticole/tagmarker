@@ -55,6 +55,7 @@ class Drawer extends Component {
           {this.renderActions()}
           {this.state.view === 'tags' ? <Lists /> : <Settings />}
         </div>
+        <div className='modal-container' />
       </div>
     );
   }

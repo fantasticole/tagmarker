@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import { connect } from 'react-redux';
 
 import Loader from './Loader';
+
+import Modal from './Modal';
 
 import ifTrue from '../utils/ifTrue';
 
@@ -12,7 +15,7 @@ class Settings extends Component {
     this.state = {
       activeFolders: [],
       folderRoot: {},
-      selected: null,
+      selected: this.props.tagMarkerFolder.id,
     };
   }
 
@@ -20,9 +23,25 @@ class Settings extends Component {
     this.loadFolders();
   }
 
-  handleAddFolder (parentId, parentName) {
+  handleAddFolder (parentId, title) {
     // this.renderModal();
     console.log('add folder in:', parentId);
+    chrome.bookmarks.search({ title }, arr => {
+      let folder = arr.filter(f => f.id === parentId),
+           modalContainer = document.getElementsByClassName('modal-container')[0];
+
+      ReactDOM.render(
+        <Modal className="create-folder-modal">
+          <h1>Add folder in: {folder.title}</h1>
+        </Modal>,
+        modalContainer
+      );
+    })
+    // this.props.setBookmarkFolder(folder);
+  }
+
+  handleClickCancel () {
+    console.log('Exit!')
   }
 
   handleClickSave () {
@@ -44,10 +63,6 @@ class Settings extends Component {
 
     // update the state
     this.setState({ activeFolders });
-  }
-
-  handleExitEdit () {
-    console.log('Exit!')
   }
 
   handleSelectFolder (selected) {
@@ -109,6 +124,7 @@ class Settings extends Component {
   }
 
   render () {
+    console.log('this:', this)
     return (
       <div className='drawer__content settings'>
         <h1 className='drawer__header settings__header'>Settings</h1>
@@ -118,11 +134,23 @@ class Settings extends Component {
             this.renderFolders() : <Loader />
           }
           <button className='button settings-action__button' onClick={() => this.handleClickSave()}>Save <i className='fa fa-floppy-o'/></button>
-          <button className='button settings-action__button' onClick={() => this.handleExitEdit()}>Cancel <i className='fa fa-ban'/></button>
+          <button className='button settings-action__button' onClick={() => this.handleClickCancel()}>Cancel <i className='fa fa-ban'/></button>
         </div>
       </div>
     );
   }
 }
 
-export default Settings;
+const mapStateToProps = (state) => {
+  return {
+    tagMarkerFolder: state.tagMarkerFolder,
+  };
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setBookmarkFolder: (folder) => {dispatch({ type: 'SET_FOLDER', folder })},
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Settings);

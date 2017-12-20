@@ -1,3 +1,8 @@
+// LIST VIEW STYLES //
+// SETTINGS VIEW STYLES //
+// LOADER STYLES //
+// MODAL STYLES //
+
 #tags {
   position: absolute;
   top: 0;
@@ -14,7 +19,7 @@
   right: 0;
   height: 100vh;
   width: 300px;
-  padding: 6px;
+  padding: 5px;
   box-sizing: border-box;
   background-color: #09203f;
   // background-image: linear-gradient(to top, #fcc5e4 0%, #fda34b 15%, #ff7882 35%, #c8699e 52%, #7046aa 71%, #0c1db8 87%, #020f75 100%);
@@ -29,7 +34,7 @@
 
 .container {
   background-color: #fff;
-  padding: 4px;
+  padding: 5px;
   height: calc(100% - 10px);
 }
 
@@ -84,9 +89,9 @@ button:focus,
   font-size: 20px;
 }
 
-//
-// LIST VIEW STYLES
-//
+// // // // // // // // // // // //
+// // // LIST VIEW STYLES // // //
+// // // // // // // // // // //
 
 .lists {
   display: flex;
@@ -267,9 +272,9 @@ button:focus,
   }
 }
 
-//
-// SETTINGS VIEW STYLES
-//
+// // // // // // // // // // // // // //
+// // // SETTINGS VIEW STYLES // // //
+// // // // // // // // // // // // //
 
 .settings__content {
   margin-top: 10px;
@@ -338,9 +343,9 @@ button:focus,
   }
 }
 
-//
-// LOADER STYLES
-//
+// // // // // // // // // // //
+// // // LOADER STYLES // // //
+// // // // // // // // // //
 
 .loader-container {
   width: calc(100% - 10px);
@@ -361,4 +366,27 @@ button:focus,
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+// // // // // // // // // // //
+// // // MODAL STYLES // // //
+// // // // // // // // // //
+
+.modal__fill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal__viewport {
+  background-color: #fff;
+  width: calc(100% - 40px);
+  padding: 10px;
+  box-sizing: border-box;
 }

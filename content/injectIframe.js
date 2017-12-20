@@ -31,6 +31,7 @@ var extensionOrigin = 'chrome-extension://' + chrome.runtime.id;
 
 if (!location.ancestorOrigins.contains(extensionOrigin)) {
     var iframe = document.createElement('iframe');
+    iframe.id = 'tagmarker-iframe';
     // dynamically add in iframe source
     // Must be declared at web_accessible_resources in manifest.json
     iframe.src = chrome.runtime.getURL('content/injected.html');
