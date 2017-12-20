@@ -51,8 +51,10 @@ class Drawer extends Component {
   render () {
     return (
       <div className='drawer'>
-        {this.renderActions()}
-        {this.state.view === 'tags' ? <Lists /> : <Settings />}
+        <div className='container'>
+          {this.renderActions()}
+          {this.state.view === 'tags' ? <Lists /> : <Settings />}
+        </div>
       </div>
     );
   }

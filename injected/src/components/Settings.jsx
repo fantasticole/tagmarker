@@ -25,6 +25,10 @@ class Settings extends Component {
     console.log('add folder in:', parentId);
   }
 
+  handleClickSave () {
+    console.log('Save!')
+  }
+
   handleClickFolder (e, id) {
     let { activeFolders } = this.state;
 
@@ -40,6 +44,10 @@ class Settings extends Component {
 
     // update the state
     this.setState({ activeFolders });
+  }
+
+  handleExitEdit () {
+    console.log('Exit!')
   }
 
   handleSelectFolder (selected) {
@@ -80,7 +88,7 @@ class Settings extends Component {
                 type='radio'
                 value={id}
                 />
-                <button className='button add-folder' onClick={() => {this.handleAddFolder(id, title)}} title='add folder'><i className='fa fa-plus-circle'/></button>
+                <button className='button add-folder' onClick={() => {this.handleAddFolder(id, title)}} title='add folder'  type='button'><i className='fa fa-plus-circle'/></button>
             </span>
           </span>
           <ul className='folder-list'>{children.map(child => this.renderChildren(child))}</ul>
@@ -105,10 +113,12 @@ class Settings extends Component {
       <div className='drawer__content settings'>
         <h1 className='drawer__header settings__header'>Settings</h1>
         <div className='settings__content'>
-          <p className='settings__text'>Where do you want to save your new bookmarks and tags?</p>
+          <p className='settings__text'>Where do you want to save new bookmarks and tags?</p>
           {this.state.folderRoot.children ?
             this.renderFolders() : <Loader />
           }
+          <button className='button settings-action__button' onClick={() => this.handleClickSave()}>Save <i className='fa fa-floppy-o'/></button>
+          <button className='button settings-action__button' onClick={() => this.handleExitEdit()}>Cancel <i className='fa fa-ban'/></button>
         </div>
       </div>
     );

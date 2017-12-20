@@ -120,22 +120,22 @@ class Bookmark extends Component {
   renderBookmarkActions () {
     if (this.state.isEditing) {
       return (
-        <span>
-          <button className='button bookmark__action-button add-tag' onClick={() => this.handleClickAdd()}>Add Tag <i className='fa fa-plus-circle'/></button>
-          <button className='button bookmark__action-button' onClick={() => this.handleClickSave()}>Save <i className='fa fa-floppy-o'/></button>
-          <button className='button bookmark__action-button' onClick={() => this.handleExitEdit()}>Cancel <i className='fa fa-ban'/></button>
+        <span className='bookmark__actions'>
+          <button className='button bookmark-action__button add-tag' onClick={() => this.handleClickAdd()}>Add Tag <i className='fa fa-plus-circle'/></button>
+          <button className='button bookmark-action__button' onClick={() => this.handleClickSave()}>Save <i className='fa fa-floppy-o'/></button>
+          <button className='button bookmark-action__button' onClick={() => this.handleExitEdit()}>Cancel <i className='fa fa-ban'/></button>
         </span>
       );
     }
     return (
-      <button className='button bookmark__action-button' onClick={() => this.handleClickEdit()}>Edit <i className='fa fa-pencil'/></button>
+      <button className='button bookmark-action__button' onClick={() => this.handleClickEdit()}>Edit <i className='fa fa-pencil'/></button>
     );
   }
 
   renderInput () {
     if (this.state.isAdding) {
       return (
-        <div className='bookmark-detail bookmark-detail__is-select'>
+        <div className='bookmark-detail bookmark-detail__select'>
           <Select.Creatable
             className='tag-selector'
             multi={false}
@@ -189,25 +189,25 @@ class Bookmark extends Component {
     return (
       <li className={bookmarkClasses.join(' ')} key={bookmark.id} ref={`bookmark-${bookmark.id}`}>
         <p
-          className='bookmark-title'
+          className='bookmark__title'
           onClick={() => this.handleToggleDetails()}
           >
           <button className='show-more'><i className='fa fa-caret-right'/></button>
           {bookmark.title}
         </p>
         {ifTrue(active).render(() => (
-          <div className='bookmark-info'>
-            <div className='bookmark-detail bookmark-detail__is-link'>
-              <a className='bookmark-info__link' href={bookmark.url} target='_parent'>{bookmark.title || bookmark.url}</a>
+          <div className='bookmark__details'>
+            <div className='bookmark-detail bookmark-detail__link'>
+              <a className='bookmark-detail__link' href={bookmark.url} target='_parent'><img className='bookmark-favicon' src={`http://www.google.com/s2/favicons?domain=${bookmark.url}`}/>{bookmark.title || bookmark.url}</a>
             </div>
-            <div className='bookmark-detail bookmark-detail__is-date'>
-              <span className='detail-title'>Date Added:</span> { new Date(bookmark.dateAdded).toLocaleString() }
+            <div className='bookmark-detail bookmark-detail__date'>
+              <span className='detail-title'>Created:</span> { new Date(bookmark.dateAdded).toLocaleString() }
             </div>
-            <div className='bookmark-detail bookmark-detail__is-tags'>
+            <div className='bookmark-detail bookmark-detail__tags'>
               { this.renderTags() }
             </div>
             {this.renderInput()}
-            <div className='bookmark-detail bookmark-detail__is-actions'>
+            <div className='bookmark-detail bookmark-detail__actions'>
               {this.renderBookmarkActions()}
             </div>
           </div>
