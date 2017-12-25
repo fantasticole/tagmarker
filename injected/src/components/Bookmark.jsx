@@ -121,14 +121,14 @@ class Bookmark extends Component {
     if (this.state.isEditing) {
       return (
         <span className='bookmark__actions'>
-          <button className='button bookmark-action__button add-tag' onClick={() => this.handleClickAdd()}>Add Tag <i className='fa fa-plus-circle'/></button>
-          <button className='button bookmark-action__button' onClick={() => this.handleClickSave()}>Save <i className='fa fa-floppy-o'/></button>
-          <button className='button bookmark-action__button' onClick={() => this.handleExitEdit()}>Cancel <i className='fa fa-ban'/></button>
+          <button className='button bookmark-action__button action-button add-tag' onClick={() => this.handleClickAdd()}>Add Tag <i className='fa fa-plus-circle'/></button>
+          <button className='button bookmark-action__button action-button' onClick={() => this.handleClickSave()}>Save <i className='fa fa-floppy-o'/></button>
+          <button className='button bookmark-action__button action-button' onClick={() => this.handleExitEdit()}>Cancel <i className='fa fa-ban'/></button>
         </span>
       );
     }
     return (
-      <button className='button bookmark-action__button' onClick={() => this.handleClickEdit()}>Edit <i className='fa fa-pencil'/></button>
+      <button className='button bookmark-action__button action-button' onClick={() => this.handleClickEdit()}>Edit <i className='fa fa-pencil'/></button>
     );
   }
 

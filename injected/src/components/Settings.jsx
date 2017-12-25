@@ -39,8 +39,8 @@ class Settings extends Component {
           <h1 className='create-folder__header'>Add folder in: {title}</h1>
           <input className='create-folder__input modal__header' onChange={(e) => this.handleChange(e)}type='text' />
           <span className='create-folder__actions'>
-            <button className='button create-folder-action__button' onClick={() => this.handleClickSubmit(parentId)}>Submit <i className='fa fa-floppy-o'/></button>
-            <button className='button create-folder-action__button' onClick={() => this.handleDeactivate()}>Cancel <i className='fa fa-ban'/></button>
+            <button className='button create-folder-action__button action-button' onClick={() => this.handleClickSubmit(parentId)}>Submit <i className='fa fa-floppy-o'/></button>
+            <button className='button create-folder-action__button action-button' onClick={() => this.handleDeactivate()}>Cancel <i className='fa fa-ban'/></button>
           </span>
         </Modal>,
         modalContainer
@@ -161,8 +161,8 @@ class Settings extends Component {
           {this.state.folderRoot.children ?
             this.renderFolders() : <Loader />
           }
-          <button className='button settings-action__button' onClick={() => this.handleClickSave()}>Save <i className='fa fa-floppy-o'/></button>
-          <button className='button settings-action__button' onClick={() => this.handleClickCancel()}>Cancel <i className='fa fa-ban'/></button>
+          <button className='button settings-action__button action-button' onClick={() => this.handleClickSave()}>Save <i className='fa fa-floppy-o'/></button>
+          <button className='button settings-action__button action-button' onClick={() => this.handleClickCancel()}>Cancel <i className='fa fa-ban'/></button>
         </div>
       </div>
     );

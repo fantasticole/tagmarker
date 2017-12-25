@@ -263,8 +263,7 @@ button:focus,
   font-size: 14px;
 }
 
-.bookmark-action__button,
-.settings-action__button {
+.action-button {
   border-radius: 0;
   padding: 1px 4px 2px;
   margin-right: 5px;
@@ -272,7 +271,8 @@ button:focus,
     margin-right: 0;
   }
   &:hover {
-    color: $light;
+    color: $base;
+    background-color: $light-light;
   }
 }
 
@@ -378,10 +378,7 @@ button:focus,
   width: 50%;
   margin-top: 10px;
   padding: 5px;
-  &:hover {
-    background-color: $deep;
-    color: $base;
-  }
+  margin-right: 0;
 }
 
 // // // // // // // // // // //
