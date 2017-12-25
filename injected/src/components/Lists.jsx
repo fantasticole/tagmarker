@@ -42,14 +42,68 @@ class Lists extends Component {
             // add unique ids to arr
             return arr.concat(additions)
           // }, []);
-          }, []),
-          selectedBookmarks = filteredBookmarks.map(id => (
-            // get the bookmark object for each id
-            bookmarks.find(bookmark => (bookmark.id === id))
-          ));
+          }, []);
+          // selectedBookmarks = filteredBookmarks.map(id => (
+          //   // get the bookmark object for each id
+          //   bookmarks.find(bookmark => (bookmark.id === id))
+          // )),
+          // selectedBookmarks;
 
-      this.setState({ selectedBookmarks });
+      console.log('filteredBookmarks:', filteredBookmarks)
+      console.log('find this many bookmarks:', filteredBookmarks.length);
+      var t0 = performance.now();
+      this.getBookmarksFromAPI(filteredBookmarks, t0);
+      // var t1 = performance.now();
+      var t2 = performance.now();
+      this.getBookmarksFromLocalStorage(filteredBookmarks, t2);
+      // var t3 = performance.now();
+      // console.log("Call to get from API took " + (t1 - t0) + " milliseconds.")
+      // console.log("Call to get from LocalStorage took " + (t3 - t2) + " milliseconds.")
+
+      // console.log('selectedBookmarks:', selectedBookmarks)
+      // this.setState({ selectedBookmarks });
     }
+  }
+
+  // getBookmarksFromStore (idList) {
+  //   let { bookmarks } = this.props,
+  //       selectedStore = idList.map(id => (
+  //         // get the bookmark object for each id
+  //         bookmarks.find(bookmark => (bookmark.id === id))
+  //       ));
+  //   console.log('selectedStore:', selectedStore)
+  // }
+
+  getBookmarksFromAPI (idList, start) {
+    // let selectedAPI = idList.map(id => (
+    //       new Promise((resolve, reject) => {
+    //         chrome.bookmarks.get(id, resolve);
+    //       }).then(arr => (arr[0]))
+    //     ));
+    chrome.bookmarks.get(idList, selectedBookmarks => {
+      var t1 = performance.now();
+      console.log("Call to get from API took " + (t1 - start) + " milliseconds.")
+      console.log('selectedAPI:', selectedBookmarks)
+      // this.setState({ selectedBookmarks });
+    });
+
+    // Promise.all(selectedAPI).then(selectedBookmarks => {
+    //   var t1 = performance.now();
+    //   console.log("Call to get from API took " + (t1 - start) + " milliseconds.")
+    //   console.log('selectedAPI:', selectedBookmarks)
+    //   this.setState({ selectedBookmarks });
+    // });
+  }
+
+  getBookmarksFromLocalStorage (idList, start) {
+    var t3 = performance.now();
+    let bookmarks = JSON.parse(localStorage.getItem('bookmarks')),
+        selectedBookmarks = idList.map(id => (
+          bookmarks.find(bookmark => (bookmark.id === id))
+        ));
+    console.log("Call to get from LocalStorage took " + (t3 - start) + " milliseconds.")
+    console.log('selectedBookmarks:', selectedBookmarks)
+    this.setState({ selectedBookmarks });
   }
 
   render () {

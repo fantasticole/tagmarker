@@ -25,6 +25,10 @@
   * indexedDB?
 * Make tags searchable
   * When one tag is selected, the only other tags that should show should be the ones that overlap.
+* Connect bookmarks
+  * link them manually/by date
+* FEATURE REQUEST: Page previews?
+  * on hover show screen rendering
 
 ## Tag Storage
 - Set an object somewhere (IndexedDB?) to hold folder and tag objects
