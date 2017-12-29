@@ -7,7 +7,6 @@ import MarqueeWrapper from './MarqueeWrapper';
 import Select from 'react-select';
 
 import ifTrue from '../utils/ifTrue';
-import { addTags, deleteTags } from '../utils/actions';
 
 class Bookmark extends Component {
   constructor(props) {
@@ -54,11 +53,15 @@ class Bookmark extends Component {
         tagsToDelete = bookmark.tags.filter(t => (!tags.includes(t)));
 
     // delete tags to be deleted if we have any
-    if (tagsToDelete.length) deleteTags(bookmark.id, tagsToDelete);
+    if (tagsToDelete.length) this.props.deleteTags(bookmark.id, tagsToDelete);
     // add tags to be added if we have any
-    if (tagsToAdd.length) addTags(bookmark.id, tagsToAdd);
+    if (tagsToAdd.length) this.props.addTags(bookmark.id, tagsToAdd);
     // exit editing state
-    this.handleExitEdit();
+    this.setState({
+      isAdding: false,
+      isEditing: false,
+      options: [],
+    });
   }
 
   handleDeleteTag (tagId) {
@@ -75,7 +78,7 @@ class Bookmark extends Component {
     this.setState({ options: sortedOptions, tags });
   }
 
-  handleExitEdit () {
+  handleExitEdit (reset) {
     // reset options and tags and exit editing state
     this.setState({
       isAdding: false,
@@ -217,10 +220,25 @@ class Bookmark extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
+  // get the bookmark from the store based on the component's id
+  let bookmark = state.bookmarks.find(b => b.id === ownProps.id);
+
   return {
+    bookmark,
     tags: state.tags,
   };
 }
 
-export default connect(mapStateToProps)(Bookmark);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addTags: (bookmarkId, tagIds) => {
+      dispatch({ type: 'ADD_TAGS', bookmarkId, tagIds });
+    },
+    deleteTags: (bookmarkId, tagIds) => {
+      dispatch({ type: 'DELETE_TAGS', bookmarkId, tagIds });
+    },
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Bookmark);

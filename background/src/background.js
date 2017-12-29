@@ -3,7 +3,6 @@ import { wrapStore } from 'react-chrome-redux';
 
 import { setBookmarkFolder, setBookmarks, setTags } from './store/actions';
 
-import createDatabase from './utils/createDatabase';
 import getBookmarksAndFolders from './utils/getBookmarksAndFolders';
 
 wrapStore(store, {
@@ -33,7 +32,7 @@ chrome.bookmarks.search({ title: 'TagMarker Bookmarks' }, (arr) => {
 
 
 // open and close drawer on icon click
-chrome.browserAction.onClicked.addListener((tab) => {
+chrome.browserAction.onClicked.addListener(tab => {
   // get current drawer status
   let { drawerOpen } = store.getState(),
       // if it's open send close action and vice versa
@@ -43,6 +42,19 @@ chrome.browserAction.onClicked.addListener((tab) => {
   chrome.tabs.sendMessage(tab.id, { action, ref: 'drawer' });
   // update the store
   store.dispatch({ type: 'TOGGLE_DRAWER', data: !drawerOpen });
+});
+
+chrome.commands.onCommand.addListener(command => {
+  console.log('Command:', command);
+  if (command === "add-bookmark") {
+    chrome.tabs.query({
+      active: true,
+      currentWindow: true
+    }, tabs => {
+      let { url } = tabs[0];
+      console.log('add! loc:', url)
+    });
+  }
 });
 
 // listen for commands from popup or drawer component to open or close
@@ -61,8 +73,10 @@ chrome.bookmarks.getTree(arr => {
   let data = getBookmarksAndFolders(arr, { bookmarks: [], tags: {}, });
   // set data as variable on the window for debugging purposes
   window.bookmarkData = data;
+  chrome.storage.local.set({'TagMarker': data}, (...args) => {
+    console.log('args:', args)
+  });
   // save formatted bookmarks and tags in the store
-  createDatabase(data);
   store.dispatch(setBookmarks(data.bookmarks));
   store.dispatch(setTags(data.tags));
 });

@@ -29,8 +29,26 @@
     "activeTab",
     "bookmarks",
     "storage",
+    "unlimitedStorage",
     "https://ajax.googleapis.com/"
   ],
+  "commands": {
+    "add-bookmark": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+A",
+        "mac": "Command+Shift+A"
+      },
+      "description": "Add Bookmark"
+    },
+    "_execute_browser_action": {
+      "suggested_key": {
+        "windows": "Ctrl+Shift+X",
+        "mac": "Command+Shift+X",
+        "chromeos": "Ctrl+Shift+X",
+        "linux": "Ctrl+Shift+X"
+      }
+    }
+  },
   "web_accessible_resources": [
       "content/injected.html"
   ]

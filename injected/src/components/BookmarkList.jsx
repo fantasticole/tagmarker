@@ -12,10 +12,10 @@ class BookmarkList extends Component {
   render () {
     return (
       <ul className='tagmarker-list bookmark-list'>
-        {this.props.selectedBookmarks.map(bookmark => (
+        {this.props.selectedBookmarks.map(bookmarkId => (
           <Bookmark
-            bookmark={bookmark}
-            key={bookmark.id}
+            id={bookmarkId}
+            key={bookmarkId}
             />
         ))}
       </ul>
