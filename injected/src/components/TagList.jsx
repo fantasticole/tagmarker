@@ -49,6 +49,7 @@ class TagList extends Component {
 }
 
 const mapStateToProps = (state) => {
+  return {
     tags: state.tags,
   };
 }
