@@ -1,7 +1,7 @@
 import store from './store';
 import { wrapStore } from 'react-chrome-redux';
 
-import { setBookmarkFolder, setBookmarks, setTags } from './store/actions';
+import { setFolder, setBookmarks, setTags } from './store/actions';
 
 import getBookmarksAndFolders from './utils/getBookmarksAndFolders';
 
@@ -26,7 +26,7 @@ chrome.bookmarks.search({ title: 'TagMarker Bookmarks' }, (arr) => {
 
     console.log('tagmarker folder:', folder)
     // if we found a folder, set that it in the store
-    if (folder) store.dispatch(setBookmarkFolder(folder));
+    if (folder) store.dispatch(setFolder(folder));
   }
 })
 

@@ -14,7 +14,6 @@ export const proxyStore =  new Store({
   portName: 'tagmarker'
 });
 
-
 render(
   <Provider store={ proxyStore }>
     <Drawer/>

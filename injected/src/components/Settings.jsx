@@ -37,7 +37,7 @@ class Settings extends Component {
       ReactDOM.render(
         <Modal className='create-folder-modal'>
           <h1 className='create-folder__header'>Add folder in: {title}</h1>
-          <input className='create-folder__input modal__header' onChange={(e) => this.handleChange(e)}type='text' />
+          <input autoFocus className='create-folder__input modal__header' onChange={(e) => this.handleChange(e)} type='text' />
           <span className='create-folder__actions'>
             <button className='button create-folder-action__button action-button' onClick={() => this.handleClickSubmit(parentId)}>Submit <i className='fa fa-floppy-o'/></button>
             <button className='button create-folder-action__button action-button' onClick={() => this.handleDeactivate()}>Cancel <i className='fa fa-ban'/></button>
@@ -57,20 +57,20 @@ class Settings extends Component {
   }
 
   handleClickSave () {
-    console.log('Save!')
+    this.props.setBookmarkFolder(this.state.selected);
   }
 
   handleClickSubmit (parentId) {
     // TODO: make this into an action that
     // - updates tags
-    // - updates the folder structure listed on settings page
     chrome.bookmarks.create({
       parentId,
       title: this.state.folderName
     }, folder => {
-      this.props.setBookmarkFolder(folder);
+      this.handleSelectFolder(folder.id);
     });
     this.handleDeactivate();
+    this.loadFolders();
   }
 
   handleClickFolder (e, id) {
@@ -96,8 +96,6 @@ class Settings extends Component {
 
   handleSelectFolder (selected) {
     this.setState({ selected });
-    // TODO: add dispatch to props
-    // this.props.dispatch({ action: 'SET_FOLDER', folder });
   }
 
   loadFolders () {
@@ -177,7 +175,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setBookmarkFolder: (folder) => {dispatch({ type: 'SET_FOLDER', folder })},
+    setBookmarkFolder: (id) => {dispatch({ type: 'SET_BOOKMARK_FOLDER', id })},
   };
 }
 

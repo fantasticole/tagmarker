@@ -1,4 +1,4 @@
-export function setBookmarkFolder (folder) {
+export function setFolder (folder) {
   return { type: 'SET_FOLDER', folder };
 }
 

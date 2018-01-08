@@ -1,4 +1,4 @@
-import { createOrUpdateTag, updateBookmark } from './actions';
+import { createOrUpdateTag, setFolder, updateBookmark } from './actions';
 
 function addTags (originalAction) {
   let { bookmarkId, tagIds } = originalAction;
@@ -89,7 +89,20 @@ function deleteTags (originalAction) {
   }
 }
 
+function setBookmarkFolder (originalAction) {
+  let { id } = originalAction;
+
+  return (dispatch, getState) => {
+    // get folder corresponding to selected id
+    chrome.bookmarks.get(id, (arr) => {
+      // set it as the tagMarkerFolder
+      dispatch(setFolder(arr[0]));
+    })
+  }
+}
+
 export default {
   'ADD_TAGS': addTags,
   'DELETE_TAGS': deleteTags,
+  'SET_BOOKMARK_FOLDER': setBookmarkFolder,
 };
