@@ -16,6 +16,7 @@
   * Ask where new folders/bookmarks should be created
     * Bookmarks Bar or Other Bookmarks
     * Choose folder name
+    * ~~Set this in settings~~
   * Add bookmark to Chrome (where?)
   * Listen for manually created bookmarks
 * Add tag functionality
@@ -24,11 +25,13 @@
 * Figure out where to store all of this so it persists
   * indexedDB?
 * Make tags searchable
-  * When one tag is selected, the only other tags that should show should be the ones that overlap.
+  * ~~When one tag is selected, the only other tags that should show should be the ones that overlap.~~
 * Connect bookmarks
   * link them manually/by date
 * FEATURE REQUEST: Page previews?
   * on hover show screen rendering
+* Add details to tags in select box
+  * Put parent folder name in parens after?
 
 ## Tag Storage
 - Set an object somewhere (IndexedDB?) to hold folder and tag objects

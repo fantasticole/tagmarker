@@ -20,16 +20,37 @@ export function bookmarks (state = [], action) {
   }
 };
 
+export function relations (state = {}, action) {
+  switch (action.type) {
+    case 'SET_RELATIONS':
+      return action.data;
+    case 'CREATE_OR_UPDATE_RELATIONS':
+      // get object holding all of the tags
+      let updated = Object.assign({}, state);
+
+      // create or update each tag that we're being passed
+      action.relations.forEach(r => {
+        updated[r.id] = r.relation;
+      })
+      // return all of the relations
+      return updated;
+    default:
+      return state;
+  }
+};
+
 export function tags (state = {}, action) {
   switch (action.type) {
     case 'SET_TAGS':
       return action.data;
-    case 'CREATE_OR_UPDATE_TAG':
+    case 'CREATE_OR_UPDATE_TAGS':
       // get object holding all of the tags
       let updated = Object.assign({}, state);
 
-      // create or update the one that we're being passed
-      updated[action.tag.id] = action.tag;
+      // create or update each tag that we're being passed
+      action.tags.forEach(tag => {
+        updated[tag.id] = tag;
+      })
       // return all of the tags
       return updated;
     default:
@@ -58,6 +79,7 @@ export function tagMarkerFolder (state = {}, action) {
 export default combineReducers({
   bookmarks,
   drawerOpen: toggleDrawer,
+  relations,
   tagMarkerFolder,
   tags,
 });

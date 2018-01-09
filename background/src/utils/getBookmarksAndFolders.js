@@ -1,5 +1,3 @@
-import getTagConnections from './getTagConnections';
-
 export default function getBookmarksAndFolders (bookmarks, data) {
   for (var x in bookmarks) {
     let { dateAdded, dateGroupModified, id, parentId, title } = bookmarks[x],
@@ -19,7 +17,6 @@ export default function getBookmarksAndFolders (bookmarks, data) {
         parents,
         title,
         bookmarks: [],
-        related: [],
       }
       getBookmarksAndFolders(bookmarks[x].children, data);
     }
@@ -44,5 +41,5 @@ export default function getBookmarksAndFolders (bookmarks, data) {
   }
   // remove parent of bookmarks bar/other bookmarks
   delete data.tags["0"];
-  return getTagConnections(data);
+  return data;
 }

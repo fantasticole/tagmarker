@@ -25,7 +25,7 @@ class Lists extends Component {
 
   handleClickTag (id) {
     let { selectedBookmarks, selectedTags } = this.state,
-        { tags } = this.props,
+        { relations, tags } = this.props,
         tagIndex = selectedTags.indexOf(id),
         filteredTags = Object.values(tags),
         relatedTags,
@@ -40,13 +40,16 @@ class Lists extends Component {
       relatedTags = Array.from(new Set(
         // get related tag ids for each selected tag
         selectedTags.reduce((arr, tagId) => {
-          return arr.concat(tags[tagId].related);
+          return arr.concat(relations[tagId]);
         }, [])
       ));
       // only keep the ones that appear in all related arrays
       filteredTags = relatedTags
         .filter(tagId => {
-          return selectedTags.every(id => tags[id].related.includes(tagId));
+          // ignore any tags included in selected array
+          if (!selectedTags.includes(tagId)) {
+            return selectedTags.every(id => relations[id].includes(tagId));
+          }
         })
         // get the actual tag objects
         .map(id => (tags[id]));
@@ -102,7 +105,7 @@ class Lists extends Component {
   }
 
   render () {
-    let { selectedTags } = this.state,
+    let { filteredTags, filteredBookmarks, options, selectedTags } = this.state,
         selected = selectedTags.map(id => (this.props.tags[id]));
 
     return (
@@ -113,17 +116,17 @@ class Lists extends Component {
           multi={false}
           name='taglist-select'
           onChange={(selected) => this.handleClickTag(selected.value)}
-          options={this.state.options}
+          options={options}
           value=''
           />
         <TagList
           handleClickTag={(id) => this.handleClickTag(id)}
           selectedTags={selected}
-          tags={this.state.filteredTags}
+          tags={filteredTags}
           />
         <h1 className='drawer__header bookmarks__header'>Bookmarks</h1>
         <BookmarkList
-          selectedBookmarks={this.state.filteredBookmarks}
+          selectedBookmarks={filteredBookmarks}
           />
       </div>
     );
@@ -133,6 +136,7 @@ class Lists extends Component {
 const mapStateToProps = (state) => {
   return {
     bookmarks: state.bookmarks,
+    relations: state.relations,
     tags: state.tags,
   };
 }

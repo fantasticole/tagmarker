@@ -1,4 +1,5 @@
-import { createOrUpdateTag, setFolder, updateBookmark } from './actions';
+import getTagConnections from '../utils/getTagConnections';
+import { createOrUpdateRelations, createOrUpdateTags, setFolder, updateBookmark } from './actions';
 
 function addTags (originalAction) {
   let { bookmarkId, tagIds } = originalAction;
@@ -9,26 +10,28 @@ function addTags (originalAction) {
         bookmark = bookmarks.find(b => (b.id === bookmarkId)),
         // TODO: make sure there is always a folder chosen
         tagMarkerFolderId = tagMarkerFolder.id ? tagMarkerFolder.id : "1",
-        tagPromises = tagIds.map(id => (createTag(tags, id, bookmarkId, tagMarkerFolder.id, dispatch)));
+        tagPromises = tagIds.map(id => (createTag(tags, id, bookmark, tagMarkerFolder.id)));
 
-    Promise.all(tagPromises).then(idsToAdd => {
+    Promise.all(tagPromises).then(tagsToUpdate => {
+      let idsToAdd = tagsToUpdate.map(t => (t.id));
+
       // update the bookmark's tags to add the new ones
       bookmark.tags = bookmark.tags.concat(idsToAdd);
-      return dispatch(updateBookmark(bookmark));
+      dispatch(updateBookmark(bookmark));
+      dispatch(createOrUpdateTags(tagsToUpdate));
+      return dispatch(createOrUpdateRelations(bookmark.tags));
     });
   }
 }
 
-function createTag (tags, tagId, bookmarkId, tagMarkerFolderId, dispatch) {
+function createTag (tags, tagId, bookmark, tagMarkerFolderId) {
   let tagToUpdate = tags[tagId];
 
   // if we have a tag for the id already
   if (tagToUpdate) {
     // add the bookmark's id to the tag's bookmarks array
-    tagToUpdate.bookmarks.push(bookmarkId);
-    // update the tag in the store
-    dispatch(createOrUpdateTag(tagToUpdate));
-    return tagToUpdate.id;
+    tagToUpdate.bookmarks.push(bookmark.id);
+    return tagToUpdate;
   }
   // otherwise, create a folder for the new tag
   // inside of the tagmarker folder
@@ -50,12 +53,10 @@ function createTag (tags, tagId, bookmarkId, tagMarkerFolderId, dispatch) {
           parentId,
           parents,
           title,
-          bookmarks: [ bookmarkId ],
+          bookmarks: [ bookmark.id ],
         };
 
-    // add the tag to the store
-    dispatch(createOrUpdateTag(newTag));
-    return id;
+    return newTag;
   })
 }
 
@@ -63,14 +64,14 @@ function deleteTags (originalAction) {
   let { bookmarkId, tagIds } = originalAction;
 
   return (dispatch, getState) => {
-    let tags = getState().tags,
-        bookmarks = getState().bookmarks,
+    let { bookmarks, tags } = getState(),
         // get object for each tag being deleted
         tagsToDelete = tagIds.map(id => (tags[id])),
         // get bookmark object to delete from
         bookmark = bookmarks.find(b => (b.id === bookmarkId)),
         // get bookmark's tags that aren't in the tagIds to be deleted
-        updatedTagList = bookmark.tags.filter(id => (!tagIds.includes(id)));
+        updatedTagList = bookmark.tags.filter(id => (!tagIds.includes(id))),
+        tagsToUpdate = [];
 
     // remove the bookmark id from each tag's object
     tagsToDelete.forEach(tag => {
@@ -79,13 +80,16 @@ function deleteTags (originalAction) {
 
       // set the updated list on the tag object
       tag.bookmarks = tagBookmarks;
-      // update the store
-      dispatch(createOrUpdateTag(tag));
+      // add to list of tags to update
+      tagsToUpdate.push(tag);
     })
+    // update the store
+    dispatch(createOrUpdateTags(tagsToUpdate));
     // update the bookmark's tags to remove the deleted ones
     bookmark.tags = updatedTagList;
     // update the store
-    return dispatch(updateBookmark(bookmark));
+    dispatch(updateBookmark(bookmark));
+    return dispatch(createOrUpdateRelations([...bookmark.tags, ...tagIds]));
   }
 }
 
