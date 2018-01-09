@@ -1,6 +1,7 @@
 // COLORS //
 // BASE STYLES //
 // LIST VIEW STYLES //
+// SELECT STYLES //
 // SETTINGS VIEW STYLES //
 // LOADER STYLES //
 // MODAL STYLES //
@@ -121,6 +122,50 @@ button:focus,
   flex-direction: column;
 }
 
+.list__actions {
+  height: 35px;
+  text-align: right;
+  display: flex;
+  flex-direction: row;
+  .button {
+    height: 20px;
+    vertical-align: top;
+    font-size: 16px;
+    padding: 5px;
+    margin-top: 5px;
+    box-sizing: content-box;
+    &.active,
+    &:hover {
+      color: $light;
+      cursor: pointer;
+    }
+  }
+}
+
+.search-tags {
+  flex: 1;
+}
+
+.list__sort {
+  overflow: hidden;
+  transition: all 0.3s ease-in-out;
+  padding-right: 5px;
+  .button {
+    width: 40px;
+    font-family: monospace;
+    font-size: 15px;
+    i {
+      font-size: 12px;
+      padding-right: 2px;
+    }
+  }
+}
+
+.list__search {
+  transition: all 0.3s ease-in-out;
+  display: inline-block;
+}
+
 .tagmarker-list {
   list-style: none;
   margin-top: 5px;
@@ -134,8 +179,9 @@ button:focus,
 .tag-list {
   padding: 3px;
   border: 1px solid $mid-accent;
-  flex: 7;
   transition: height 0.3s;
+  height: auto;
+  max-height: 30%;
 }
 
 .tag-item {
@@ -297,9 +343,30 @@ button:focus,
   }
 }
 
+// // // // // // // // // // //
+// // // SELECT STYLES // // //
+// // // // // // // // // //
+
+.Select.is-focused:not(.is-open) {
+  &> .Select-control {
+    box-shadow: none;
+    border: none;
+  }
+}
+
+.Select-control {
+  border: none;
+  border-bottom: 1px solid $deep;
+  border-radius: 0;
+}
+
+.Select-arrow {
+  border-color: $deep transparent transparent;
+}
+
 // // // // // // // // // // // // // //
 // // // SETTINGS VIEW STYLES // // //
-// // // // // // // // // // // // //
+// // // // // // // // // // // //
 
 .settings__content {
   margin-top: 10px;

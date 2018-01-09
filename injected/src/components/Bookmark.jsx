@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import classNames from 'classnames';
 
 import { connect } from 'react-redux';
 
@@ -185,12 +186,12 @@ class Bookmark extends Component {
   render () {
     let { bookmark } = this.props,
         { active } = this.state,
-        bookmarkClasses = ['bookmark'];
-
-    if (active) bookmarkClasses.push('active');
+        bookmarkClasses = classNames('bookmark', {
+          'active': active,
+        });
     
     return (
-      <li className={bookmarkClasses.join(' ')} key={bookmark.id} ref={`bookmark-${bookmark.id}`}>
+      <li className={bookmarkClasses} key={bookmark.id} ref={`bookmark-${bookmark.id}`}>
         <p
           className='bookmark__title'
           onClick={() => this.handleToggleDetails()}

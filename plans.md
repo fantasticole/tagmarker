@@ -1,6 +1,9 @@
 # PLANS
 
 ## To Do
+* Tests
+  * components
+  * actions
 * Delete tag functionality
   * ~~Remove from array of tags on bookmark in store~~
   * ~~Remove bookmark id from tag's bookmarks array in store~~

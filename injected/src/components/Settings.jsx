@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
+import classNames from 'classnames';
 
 import Loader from './Loader';
 
@@ -106,9 +107,10 @@ class Settings extends Component {
 
   renderChildren (childNode) {
     let { children, id, title } = childNode,
-        nodeClasses = ['folder-node'];
+        nodeClasses = classNames('folder-node', {
+          'active': this.state.activeFolders.includes(id),
+        });
 
-    if (this.state.activeFolders.includes(id)) nodeClasses.push('active');
     // if the node is a folder
     if (children) {
       // see if any of the children are folders
@@ -116,7 +118,7 @@ class Settings extends Component {
 
       // return a list item for the node and list its children
       return (
-        <li className={nodeClasses.join(' ')} key={id}>
+        <li className={nodeClasses} key={id}>
           <span className='folder-name'>
             <span onClick={e => this.handleClickFolder(e, id)}>
               {ifTrue(childFolders.length).render(() => (<i className='fa fa-caret-right show-more'/>))}
