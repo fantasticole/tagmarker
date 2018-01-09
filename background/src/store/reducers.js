@@ -26,7 +26,7 @@ export function tags (state = {}, action) {
       return action.data;
     case 'CREATE_OR_UPDATE_TAG':
       // get object holding all of the tags
-      let updated = {...state};
+      let updated = Object.assign({}, state);
 
       // create or update the one that we're being passed
       updated[action.tag.id] = action.tag;

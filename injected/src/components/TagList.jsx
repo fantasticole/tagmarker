@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 
 import MarqueeWrapper from './MarqueeWrapper';
 
@@ -9,23 +8,25 @@ class TagList extends Component {
   }
 
   render() {
-    let tagNames = this.props.tags ? Object.values(this.props.tags) : [],
-        sortedTagNames = tagNames.sort((a, b) => {
+    let { selectedTags, tags } = this.props,
+        sortedTags = tags.sort((a, b) => {
           let aTitle = a.title.toLowerCase(),
               bTitle = b.title.toLowerCase();
 
           if (aTitle < bTitle) return -1;
           if (aTitle > bTitle) return 1;
           return 0;
-        });
+        }),
+        allTags = selectedTags.concat(sortedTags),
+        selectedIds = selectedTags.map(t => (t.id));
 
     return (
       <ul className='tagmarker-list tag-list'>
-        {sortedTagNames.map(tag => {
+        {allTags.map(tag => {
           let tagClasses = ['tag'];
 
           // add class if tag is selected
-          if (this.props.selectedTags.includes(tag.id)) {
+          if (selectedIds.includes(tag.id)) {
             tagClasses.push('selected');
           }
 
@@ -48,10 +49,4 @@ class TagList extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    tags: state.tags,
-  };
-}
-
-export default connect(mapStateToProps)(TagList);
+export default TagList;

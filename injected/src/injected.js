@@ -14,9 +14,18 @@ export const proxyStore =  new Store({
   portName: 'tagmarker'
 });
 
-render(
-  <Provider store={ proxyStore }>
-    <Drawer/>
-  </Provider>
-  , document.getElementById('tags')
-);
+let checkForData = setInterval(storeLoaded, 100)
+
+// make sure we have data from the store before rendering
+function storeLoaded () {
+  if (proxyStore.state.bookmarks) {
+    clearInterval(checkForData);
+    render(
+      <Provider store={ proxyStore }>
+        <Drawer/>
+      </Provider>
+      , document.getElementById('tags')
+    );
+  }
+}
+
