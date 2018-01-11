@@ -1,11 +1,10 @@
 import store from './store';
 import { wrapStore } from 'react-chrome-redux';
 
-import { setFolder, setBookmarks, setRelations, setTags } from './store/actions';
+import { setFolder, setBookmarks, setTags } from './store/actions';
 
 import addBookmark from './utils/addBookmark';
 import getBookmarksAndFolders from './utils/getBookmarksAndFolders';
-import getTagConnections from './utils/getTagConnections';
 
 wrapStore(store, {
   portName: 'tagmarker',
@@ -48,17 +47,15 @@ chrome.commands.onCommand.addListener(command => {
 
 // get all bookmarks from chrome
 chrome.bookmarks.getTree(arr => {
-  let data = getBookmarksAndFolders(arr, { bookmarks: {}, relations: {}, tags: {}, }),
-      relationalData = getTagConnections(data);
+  let data = getBookmarksAndFolders(arr, { bookmarks: {}, tags: {}, });
   // set data as variable on the window for debugging purposes
-  window.bookmarkData = relationalData;
-  chrome.storage.local.set({'TagMarker': relationalData}, () => {
+  window.bookmarkData = data;
+  chrome.storage.local.set({'TagMarker': data}, () => {
     if (chrome.runtime.lastError) {
       console.log("Error Storing: " + chrome.runtime.lastError);
     }
   });
   // save formatted bookmarks and tags in the store
-  store.dispatch(setBookmarks(relationalData.bookmarks));
-  store.dispatch(setRelations(relationalData.relations));
-  store.dispatch(setTags(relationalData.tags));
+  store.dispatch(setBookmarks(data.bookmarks));
+  store.dispatch(setTags(data.tags));
 });

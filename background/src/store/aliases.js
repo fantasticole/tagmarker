@@ -1,5 +1,4 @@
-import getTagConnections from '../utils/getTagConnections';
-import { createOrUpdateRelations, createOrUpdateTags, setFolder, createOrUpdateBookmark } from './actions';
+import { createOrUpdateTags, setFolder, createOrUpdateBookmark } from './actions';
 
 function addTags (originalAction) {
   let { bookmarkId, tagIds } = originalAction;
@@ -18,8 +17,7 @@ function addTags (originalAction) {
       // update the bookmark's tags to add the new ones
       bookmark.tags = bookmark.tags.concat(idsToAdd);
       dispatch(createOrUpdateBookmark(bookmark));
-      dispatch(createOrUpdateTags(tagsToUpdate));
-      return dispatch(createOrUpdateRelations(bookmark.tags));
+      return dispatch(createOrUpdateTags(tagsToUpdate));
     });
   }
 }
@@ -38,6 +36,7 @@ function createBookmark (originalAction) {
       tagsToAdd.push(parentId);
       parentId = tags[parentId];
     }
+    console.log('tagsToAdd:', tagsToAdd)
 
     // add bookmark to each tag
     tagsToAdd.forEach(id => {
@@ -71,6 +70,7 @@ function createTag (tags, tagId, bookmark, tagMarkerFolderId) {
       title: tagId
     }, resolve);
   }).then(folder => {
+    console.log('folder:', folder)
     // add the folder we just created to the store as a tag
     // with the bookmark as an item in its bookmarks array
     let  { dateAdded, dateGroupModified, id, parentId, title } = folder,
@@ -118,8 +118,7 @@ function deleteTags (originalAction) {
     // update the bookmark's tags to remove the deleted ones
     bookmark.tags = updatedTagList;
     // update the store
-    dispatch(createOrUpdateBookmark(bookmark));
-    return dispatch(createOrUpdateRelations([...bookmark.tags, ...tagIds]));
+    return dispatch(createOrUpdateBookmark(bookmark));
   }
 }
 

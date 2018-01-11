@@ -28,51 +28,33 @@ class Lists extends Component {
   }
 
   componentDidUpdate (prevProps) {
-    let { selectedTags } = this.state,
+    let { selectedTags, filteredBookmarks } = this.state,
         // if any of the selected tags' bookmark count changes
-        updateBookmarks = selectedTags.some(tagId => {
+        updateTags = selectedTags.some(tagId => {
           return prevProps.tags[tagId].bookmarks.length !== this.props.tags[tagId].bookmarks.length;
+        }),
+        updateBookmarks = filteredBookmarks.some(bId => {
+          return prevProps.bookmarks[bId].tags.length !== this.props.bookmarks[bId].tags.length;
         });
 
     // update the bookmarks
+    if (updateTags) this.filterTags();
     if (updateBookmarks) this.filterBookmarks();
   }
 
   handleClickTag (id) {
     let { selectedTags } = this.state,
-        { relations, tags } = this.props,
-        tagIndex = selectedTags.indexOf(id),
-        filteredTags = Object.keys(tags),
-        relatedTags,
-        filteredTagIds;
+        tagIndex = selectedTags.indexOf(id);
 
     // if the id is already in selectedTags, splice it out
     // otherwise, add it
     tagIndex < 0 ? selectedTags.push(id) : selectedTags.splice(tagIndex, 1);
-
-    if (selectedTags.length) {
-      // get list of unique related tag ids
-      relatedTags = Array.from(new Set(
-        // get related tag ids for each selected tag
-        selectedTags.reduce((arr, tagId) => {
-          return arr.concat(relations[tagId]);
-        }, [])
-      ));
-      // only keep the ones that appear in all related arrays
-      filteredTags = relatedTags
-        .filter(tagId => {
-          // ignore any tags included in selected array
-          if (!selectedTags.includes(tagId)) {
-            return selectedTags.every(id => relations[id].includes(tagId));
-          }
-        });
-    }
     // update the state
-    this.setState({ filteredTags, selectedTags });
+    this.setState({ selectedTags });
 
     // update bookmarks and select options
     this.filterBookmarks();
-    this.setOptions(filteredTags);
+    this.filterTags();
   }
 
   handleSetSort (sortBy) {
@@ -94,23 +76,38 @@ class Lists extends Component {
   filterBookmarks () {
     let { bookmarks, tags } = this.props,
         { selectedTags } = this.state,
-        // get all bookmarks associated with current tags
-        selectedBookmarks = selectedTags.reduce((arr, id) => {
-          // filter tag's bookmarks array for duplicates
-          let additions = tags[id].bookmarks.filter(bookmark => (
-            // return item if not already in arr
-            !arr.includes(bookmark)
-          ));
-          // add unique ids to arr
-          return arr.concat(additions)
-        }, []),
-        filteredBookmarks = selectedBookmarks.filter(b => {
-          let current = bookmarks[b];
-
-          return selectedTags.every((id) => current.tags.includes(id))
-        });
+        filteredBookmarks = Object.values(bookmarks).filter(b => {
+          return selectedTags.every((id) => b.tags.includes(id));
+        }).map(bookmark => bookmark.id);
 
     this.setState({ filteredBookmarks });
+  }
+
+  filterTags () {
+    let { selectedTags } = this.state,
+        { tags } = this.props,
+        filteredTags = Object.keys(tags);
+
+    if (selectedTags.length) filteredTags = this.getRelatedTags();
+    this.setOptions(filteredTags);
+    // update the state
+    this.setState({ filteredTags });
+  }
+
+  getRelatedTags () {
+    let { selectedTags } = this.state,
+        bookmarks = Object.values(this.props.bookmarks),
+        filteredBookmarks = bookmarks.filter(b => {
+          return selectedTags.every((id) => b.tags.includes(id));
+        }),
+        allTags = filteredBookmarks.reduce((tags, bookmark) => {
+          return tags.concat(bookmark.tags);
+        }, []),
+        relatedTags = Array.from(new Set(allTags)).filter(id => {
+          return !selectedTags.includes(id);
+        });
+
+    return relatedTags;
   }
 
   setOptions (filteredTags) {
@@ -216,7 +213,6 @@ class Lists extends Component {
 const mapStateToProps = (state) => {
   return {
     bookmarks: state.bookmarks,
-    relations: state.relations,
     tags: state.tags,
   };
 }

@@ -44,7 +44,7 @@
   * ~~Make sure the drawer knows where to be open and where to be closed~~
   * ~~default to close on page load/refresh, only open when told~~
 * Make sure there's always a folder to write to
-  * Load app on settings screen to select folder
+  * ~~Load app on settings screen to select folder~~
 
 ## Tag Storage
 - Set an object somewhere (IndexedDB?) to hold folder and tag objects
