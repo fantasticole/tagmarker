@@ -10,16 +10,21 @@ class BookmarkList extends Component {
   }
 
   render () {
+    if (this.props.selectedBookmarks.length) {
+      return (
+        <ul className='tagmarker-list bookmark-list'>
+          {this.props.selectedBookmarks.map(bookmarkId => (
+            <Bookmark
+              id={bookmarkId}
+              key={bookmarkId}
+              />
+          ))}
+        </ul>
+      );
+    }
     return (
-      <ul className='tagmarker-list bookmark-list'>
-        {this.props.selectedBookmarks.map(bookmarkId => (
-          <Bookmark
-            id={bookmarkId}
-            key={bookmarkId}
-            />
-        ))}
-      </ul>
-    );
+      <p className='bookmark__list-is_empty'>no bookmarks to display</p>
+    )
   }
 }
 

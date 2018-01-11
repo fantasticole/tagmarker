@@ -76,7 +76,10 @@ class Lists extends Component {
   }
 
   handleSearchTags () {
-    this.setState({ isSearching: !this.state.isSearching });
+    let isSearching = !this.state.isSearching;
+
+    this.setState({ isSearching });
+    if (isSearching) this.refs.searchbar.focus();
   }
 
   loadBookmarks () {
@@ -132,6 +135,9 @@ class Lists extends Component {
         }),
         numClasses = classNames('list__button', 'button', 'sort-tags__button-by_num', {
           'active': sortBy === 'num',
+        }),
+        dateClasses = classNames('list__button', 'button', 'sort-tags__button-by_date', {
+          'active': sortBy === 'date',
         });
 
     return (
@@ -141,7 +147,11 @@ class Lists extends Component {
         </button>
         <button className={numClasses} onClick={() => this.handleSetSort('num')} title='sort numerically'>
           <i className={`fa fa-long-arrow-${sortBy === 'num' ? dir : 'up'}`}/>09
-          </button>
+        </button>
+        <button className={dateClasses} onClick={() => this.handleSetSort('date')} title='sort by date'>
+          <i className={`fa fa-long-arrow-${sortBy === 'date' ? dir : 'up'}`}/>
+          <i className='fa fa-calendar-o'/>
+        </button>
       </div>
     )
   }
@@ -153,7 +163,7 @@ class Lists extends Component {
           flex: isSearching ? '1' : '0',
         },
         searchBoxStyle = {
-          flex: isSearching ? '4' : '0',
+          flex: isSearching ? '8' : '0',
           overflow: isSearching ? 'visible' : 'hidden',
         };
 
@@ -163,18 +173,17 @@ class Lists extends Component {
         <div className='list__actions'>
           {this.renderSortActions()}
           <button className='list__button button search-tags' onClick={() => this.handleSearchTags()} style={searchIconStyle} title='search tags'>
-            <i className='fa fa-search'/>
+            { isSearching ? <i className='fa fa-long-arrow-left'/> : <i className='fa fa-search'/> }
           </button>
           <div className='list__search' style={searchBoxStyle}>
-            <Select.Creatable
-              autoFocus={isSearching}
+            <Select
               className='list-selector'
               multi={false}
               name='list-select'
               onChange={(selected) => this.handleClickTag(selected.value)}
-              openOnFocus={true}
               options={options}
               placeholder=''
+              ref='searchbar'
               value=''
               />
           </div>

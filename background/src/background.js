@@ -10,27 +10,17 @@ wrapStore(store, {
   portName: 'tagmarker',
 });
 
-// Default store structure:
-// {
-//   bookmarks: [],
-//   drawerOpen: false,
-//   tags: {},
-// }
-
 // see if there is a folder for tagmarker bookmarks
 chrome.bookmarks.search({ title: 'TagMarker Bookmarks' }, (arr) => {
-  console.log('tagmarker search arr:', arr)
   // if the returned array has objects
   if (arr.length) {
     // find the folder that matches the query
     let folder = arr.find(option => (option.dateGroupModified));
 
-    console.log('tagmarker folder:', folder)
     // if we found a folder, set that it in the store
     if (folder) store.dispatch(setFolder(folder));
   }
 })
-
 
 // open and close drawer on icon click
 chrome.browserAction.onClicked.addListener(tab => {

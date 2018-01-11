@@ -22,12 +22,13 @@
     * ~~Set this in settings~~
   * Add bookmark to Chrome (where?)
   * Listen for manually created bookmarks
-* Add tag functionality
-  * ~~Create custom folder in 'Other Bookmarks'~~
+* ~~Add tag functionality~~
+  * ~~Add to selected folder if it exists~~
+  * ~~Otherwise, create custom folder in 'Other Bookmarks'~~
   * ~~Check to see if it exists~~
 * Figure out where to store all of this so it persists
   * indexedDB?
-* Make tags searchable
+* ~~Make tags searchable~~
   * ~~When one tag is selected, the only other tags that should show should be the ones that overlap.~~
 * Connect bookmarks
   * link them manually/by date

@@ -1,0 +1,253 @@
+@import 'colors';
+
+// // // // // // // // // // // //
+// // // LIST STYLES // // //
+// // // // // // // // // // //
+
+.lists {
+  display: flex;
+  flex-direction: column;
+}
+
+.list__actions {
+  height: 35px;
+  text-align: right;
+  display: flex;
+  flex-direction: row;
+  .button {
+    height: 20px;
+    vertical-align: top;
+    font-size: 16px;
+    padding: 5px;
+    margin-top: 5px;
+    box-sizing: content-box;
+    &.active,
+    &:hover {
+      color: $light;
+      cursor: pointer;
+    }
+  }
+  .search-tags {
+    font-size: 14px;
+    margin-top: 4px;
+    .fa-long-arrow-left {
+      margin-top: 1px;
+    }
+  }
+}
+
+.search-tags {
+  flex: 1;
+}
+
+.list__sort {
+  overflow: hidden;
+  transition: all 0.3s ease-in-out;
+  .button {
+    width: 40px;
+    font-family: monospace;
+    font-size: 15px;
+    i {
+      font-size: 12px;
+      padding-right: 2px;
+    }
+  }
+}
+
+.list__search {
+  transition: all 0.3s ease-in-out;
+  display: inline-block;
+}
+
+.tagmarker-list {
+  list-style: none;
+  margin-top: 5px;
+  overflow: scroll;
+  width: 100%;
+  display: inline-block;
+  padding-left: 0;
+  box-sizing: border-box;
+}
+
+.tag-list {
+  padding: 3px;
+  border: 1px solid $mid-accent;
+  transition: height 0.3s;
+  max-height: 30%;
+}
+
+.tag-item {
+  display: inline-block;
+  max-width: 100%;
+  .tag:hover {
+    cursor: pointer;
+    background-color: $light;
+    background-image: linear-gradient(to top, $light 0%, $light-highlight 100%);
+    .tagCount {
+      color: $light;
+    }
+  }
+}
+
+.divider {
+  width: 100%;
+  border-bottom: 1px dotted $deep-accent;
+  margin: 5px 0;
+}
+
+.tag,
+.bookmark-tag {
+  display: inline-block;
+  border-radius: 20px;
+  background-color: $deep;
+  background-image: linear-gradient(to top, $deep 0%, $deep-highlight 100%);
+  color: $base;
+  padding: 3px 5px;
+  margin: 1px;
+  white-space: nowrap;
+  text-shadow: 0px 0px 1px $light-deep;
+  &.selected {
+    background-color: $light;
+    background-image: linear-gradient(to top, $light 0%, $light-highlight 100%);
+    .tagCount {
+      color: $light;
+    }
+  }
+}
+
+.tagCount {
+  background-color: $base;
+  border-radius: 10px;
+  font-size: 11px;
+  padding: 0px 3px;
+  color: $deep;
+  text-shadow: 0px 0px 1px $lighter-deep;
+}
+
+.bookmark__list-is_empty {
+  font-style: italic;
+  color: $light-accent;
+  text-align: center;
+}
+
+.bookmark-list {
+  flex: 13;
+  margin-bottom: 0;
+}
+
+.bookmark {
+  white-space: nowrap;
+  padding-left: 15px;
+  margin: 10px 0;
+  &.active {
+    .show-more {
+      transform: rotate(90deg);
+    }
+  }
+}
+
+.bookmark__title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 4px 0;
+  margin: 0 0 2px -15px;
+  &:hover {
+    border-bottom: 2px solid $deep;
+    padding-bottom: 2px;
+  }
+}
+
+.show-more {
+  color: $mid-accent;
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin-right: 2px;
+  transition: transform 0.3s;
+  width: 13px;
+  cursor: pointer;
+}
+
+.bookmark__details {
+  font-size: 12px;
+  overflow: hidden;
+  border-left: 1px dotted $light-light;
+  padding-left: 3px;
+}
+
+.bookmark-detail {
+  margin: 4px 0;
+  width: 100%;
+  position: relative;
+}
+
+.bookmark-detail__link {
+  white-space: normal;
+}
+
+.bookmark-favicon {
+  height: 10px;
+  margin-right: 3px;
+  margin-bottom: -1px;
+}
+
+.bookmark-tags__editing {
+  white-space: normal;
+  .bookmark-tag:hover {
+    background-color: $deep;
+    background-image: linear-gradient(to top, $deep 0%, $deep-highlight 100%);
+    cursor: pointer;
+  }
+}
+
+.bookmark-tag {
+  padding: 2px 5px 1px;
+  background-color: $deep-accent;
+  background-image: linear-gradient(to top, $deep-accent 0%, $light-accent 100%);
+  font-size: 12px;
+}
+
+.bookmark-button i {
+  font-size: 14px;
+}
+
+.action-button {
+  border-radius: 1px;
+  border: 1px solid transparent;
+  padding: 1px 4px 2px;
+  margin-right: 5px;
+  &:last-child {
+    margin-right: 0;
+  }
+  &:hover {
+    color: $light;
+    border-color: $light;
+  }
+}
+
+.detail-title {
+  font-weight: bold;
+  color: $mid-accent;
+  text-transform: uppercase;
+}
+
+.bookmark-detail__tags .marquee {
+  .bookmark-tag {
+    cursor: default;
+  }
+}
+
+.bookmark-detail__select {
+  position: absolute;
+  margin: 0;
+  width: 230px;
+  .Select-menu-outer {
+    max-height: 100px;
+    overflow: auto;
+  }
+  & + .bookmark-detail {
+    margin-top: 44px;
+  }
+}

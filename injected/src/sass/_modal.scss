@@ -1,0 +1,34 @@
+@import 'colors';
+
+// // // // // // // // // // //
+// // // MODAL STYLES // // //
+// // // // // // // // // //
+
+.modal__fill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: $base-translucent;
+}
+
+.modal__viewport {
+  background-color: $base;
+  width: calc(100% - 40px);
+  padding: 10px;
+  box-sizing: border-box;
+  color: $deep;
+  box-shadow: 0 0 5px $light-deep;
+  margin: auto;
+  margin-top: 50px;
+}
+
+.modal__close {
+  float: right;
+  font-size: 16px;
+}
+
+.modal__content {
+  margin-bottom: 18px;
+}
