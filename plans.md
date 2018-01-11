@@ -22,20 +22,29 @@
     * ~~Set this in settings~~
   * Add bookmark to Chrome (where?)
   * Listen for manually created bookmarks
+  * Get and save bookmark details on 'add' command
 * ~~Add tag functionality~~
   * ~~Add to selected folder if it exists~~
   * ~~Otherwise, create custom folder in 'Other Bookmarks'~~
   * ~~Check to see if it exists~~
 * Figure out where to store all of this so it persists
-  * indexedDB?
+  * indexedDB? local storage?
 * ~~Make tags searchable~~
   * ~~When one tag is selected, the only other tags that should show should be the ones that overlap.~~
 * Connect bookmarks
   * link them manually/by date
 * FEATURE REQUEST: Page previews?
   * on hover show screen rendering
-* Add details to tags in select box
+* Add context details to tags in select box
+  * ~~bookmark count~~
   * Put parent folder name in parens after?
+* Add backup capability
+  * Download json file from settings page
+* ~~Track drawer status by tab~~
+  * ~~Make sure the drawer knows where to be open and where to be closed~~
+  * ~~default to close on page load/refresh, only open when told~~
+* Make sure there's always a folder to write to
+  * Load app on settings screen to select folder
 
 ## Tag Storage
 - Set an object somewhere (IndexedDB?) to hold folder and tag objects

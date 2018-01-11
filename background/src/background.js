@@ -3,6 +3,7 @@ import { wrapStore } from 'react-chrome-redux';
 
 import { setFolder, setBookmarks, setRelations, setTags } from './store/actions';
 
+import addBookmark from './utils/addBookmark';
 import getBookmarksAndFolders from './utils/getBookmarksAndFolders';
 import getTagConnections from './utils/getTagConnections';
 
@@ -24,39 +25,25 @@ chrome.bookmarks.search({ title: 'TagMarker Bookmarks' }, (arr) => {
 
 // open and close drawer on icon click
 chrome.browserAction.onClicked.addListener(tab => {
-  // get current drawer status
-  let { drawerOpen } = store.getState(),
-      // if it's open send close action and vice versa
-      action = drawerOpen ? 'close_drawer' : 'open_drawer';
-
   // send the action to the container
-  chrome.tabs.sendMessage(tab.id, { action, ref: 'drawer' });
-  // update the store
-  store.dispatch({ type: 'TOGGLE_DRAWER', data: !drawerOpen });
+  chrome.tabs.sendMessage(tab.id, { ref: 'toggle_drawer' });
+});
+
+// listen for commands from popup or component
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  // if the message is about toggling the drawer
+  if (request.ref === 'toggle_drawer') {
+    // pass the message along
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      chrome.tabs.sendMessage(tabs[0].id, { ref: 'toggle_drawer' });
+    });
+  }
+  // if the message is about adding a bookmark
+  else if (request.ref === 'add_bookmark') addBookmark();
 });
 
 chrome.commands.onCommand.addListener(command => {
-  console.log('Command:', command);
-  if (command === "add-bookmark") {
-    chrome.tabs.query({
-      active: true,
-      currentWindow: true
-    }, tabs => {
-      let { url } = tabs[0];
-      console.log('add! loc:', url)
-    });
-  }
-});
-
-// listen for commands from popup or drawer component to open or close
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  // make sure the message is about the drawer
-  if (request.ref === 'drawer') {
-    // pass the message along
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      chrome.tabs.sendMessage(tabs[0].id, { action: request.msg, ref: 'drawer' });
-    });
-  };
+  if (command === "add-bookmark") addBookmark();
 });
 
 // get all bookmarks from chrome
@@ -65,12 +52,13 @@ chrome.bookmarks.getTree(arr => {
       relationalData = getTagConnections(data);
   // set data as variable on the window for debugging purposes
   window.bookmarkData = relationalData;
-  chrome.storage.local.set({'TagMarker': relationalData}, (...args) => {
-    console.log('args:', args)
+  chrome.storage.local.set({'TagMarker': relationalData}, () => {
+    if (chrome.runtime.lastError) {
+      console.log("Error Storing: " + chrome.runtime.lastError);
+    }
   });
   // save formatted bookmarks and tags in the store
   store.dispatch(setBookmarks(relationalData.bookmarks));
   store.dispatch(setRelations(relationalData.relations));
   store.dispatch(setTags(relationalData.tags));
 });
-

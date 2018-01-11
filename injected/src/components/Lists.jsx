@@ -115,7 +115,7 @@ class Lists extends Component {
 
   setOptions (filteredTags) {
     let { tags } = this.props,
-        options = filteredTags.map(id => ({ label: tags[id].title, value: id })),
+        options = filteredTags.map(id => ({ label: `${tags[id].title}(${tags[id].bookmarks.length})`, value: id })),
         // sort the options to appear alphabetically
         sortedOptions = this.sortOptions(options);
 

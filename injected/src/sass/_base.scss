@@ -50,11 +50,11 @@ button:focus,
           box-shadow: none;
 }
 
-.actions {
+.drawer-actions {
   top: 5px;
   position: absolute;
   width: 15px;
-  button {
+  .button {
     font-size: 24px;
     margin-bottom: 5px;
     height: 28px;
@@ -63,9 +63,12 @@ button:focus,
       cursor: pointer;
     }
     &:last-child {
-      font-size: 18px;
       margin-bottom: 0;
     }
+  }
+  .show-settings,
+  .show-tags {
+    font-size: 18px;
   }
 }
 

@@ -1,3 +1,7 @@
+export function createOrUpdateBookmark (bookmark) {
+  return { type: 'CREATE_OR_UPDATE_BOOKMARK', bookmark };
+}
+
 export function createOrUpdateRelations (tagIds) {
   return (dispatch, getState) => {
     let { bookmarks, tags } = getState(),
@@ -39,8 +43,4 @@ export function setRelations (data) {
 
 export function setTags (data) {
   return { type: 'SET_TAGS', data };
-}
-
-export function updateBookmark (bookmark) {
-  return { type: 'UPDATE_BOOKMARK', bookmark };
 }

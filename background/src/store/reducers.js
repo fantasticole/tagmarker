@@ -5,7 +5,7 @@ export function bookmarks (state = [], action) {
   switch (action.type) {
     case 'SET_BOOKMARKS':
       return action.data;
-    case 'UPDATE_BOOKMARK':
+    case 'CREATE_OR_UPDATE_BOOKMARK':
       // get object holding all of the bookmarks
       let updated = Object.assign({}, state);
 
@@ -56,15 +56,6 @@ export function tags (state = {}, action) {
   }
 };
 
-export function toggleDrawer (state = false, action) {
-  switch (action.type) {
-    case 'TOGGLE_DRAWER':
-      return action.data;
-    default:
-      return state;
-  }
-};
-
 export function tagMarkerFolder (state = {}, action) {
   switch (action.type) {
     case 'SET_FOLDER':
@@ -76,7 +67,6 @@ export function tagMarkerFolder (state = {}, action) {
 
 export default combineReducers({
   bookmarks,
-  drawerOpen: toggleDrawer,
   relations,
   tagMarkerFolder,
   tags,

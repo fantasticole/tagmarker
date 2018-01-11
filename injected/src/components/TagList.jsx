@@ -68,9 +68,9 @@ class TagList extends Component {
       );
     })
 
-    // if we have selected tags
-    if (selectedIds.length) {
-      // add divider between selected tags and unselected
+    // if we have both selected and unselected tags
+    if (selectedIds.length && this.props.tags.length > 0) {
+      // add divider between the two sets
       tags.splice(selectedIds.length, 0, <div key='divider' className='divider'/>);
     }
     return tags;

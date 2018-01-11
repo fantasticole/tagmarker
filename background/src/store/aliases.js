@@ -1,5 +1,5 @@
 import getTagConnections from '../utils/getTagConnections';
-import { createOrUpdateRelations, createOrUpdateTags, setFolder, updateBookmark } from './actions';
+import { createOrUpdateRelations, createOrUpdateTags, setFolder, createOrUpdateBookmark } from './actions';
 
 function addTags (originalAction) {
   let { bookmarkId, tagIds } = originalAction;
@@ -17,10 +17,40 @@ function addTags (originalAction) {
 
       // update the bookmark's tags to add the new ones
       bookmark.tags = bookmark.tags.concat(idsToAdd);
-      dispatch(updateBookmark(bookmark));
+      dispatch(createOrUpdateBookmark(bookmark));
       dispatch(createOrUpdateTags(tagsToUpdate));
       return dispatch(createOrUpdateRelations(bookmark.tags));
     });
+  }
+}
+
+function createBookmark (originalAction) {
+  let { bookmark } = originalAction;
+
+  return (dispatch, getState) => {
+    let { parentId } = bookmark,
+        { tags } = getState(),
+        tagsToAdd = [],
+        tagsToUpdate = [];
+
+    // gather all parent tags up to bookmarks root
+    while (parentId > 0) {
+      tagsToAdd.push(parentId);
+      parentId = tags[parentId];
+    }
+
+    // add bookmark to each tag
+    tagsToAdd.forEach(id => {
+      let updatedTag = tags[id];
+
+      updatedTag.bookmarks.push(bookmark.id);
+
+      tagsToUpdate.push(updatedTag);
+    })
+
+    bookmark.tags = tagsToAdd;
+    dispatch(createOrUpdateBookmark(bookmark));
+    return dispatch(createOrUpdateTags(tagsToUpdate));
   }
 }
 
@@ -88,7 +118,7 @@ function deleteTags (originalAction) {
     // update the bookmark's tags to remove the deleted ones
     bookmark.tags = updatedTagList;
     // update the store
-    dispatch(updateBookmark(bookmark));
+    dispatch(createOrUpdateBookmark(bookmark));
     return dispatch(createOrUpdateRelations([...bookmark.tags, ...tagIds]));
   }
 }
@@ -107,6 +137,7 @@ function setBookmarkFolder (originalAction) {
 
 export default {
   'ADD_TAGS': addTags,
+  'CREATE_BOOKMARK': createBookmark,
   'DELETE_TAGS': deleteTags,
   'SET_BOOKMARK_FOLDER': setBookmarkFolder,
 };

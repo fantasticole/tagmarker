@@ -13,13 +13,16 @@ document.body.appendChild(anchor);
 // listen for flags to open and close drawer
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   // make sure the message is about the drawer
-  if (request.ref === 'drawer') {
-    // ge tthe action and the container DOM element
+  if (request.ref === 'toggle_drawer') {
+    // get the action and the container DOM element
     let { action } = request,
-        frameContainer = document.getElementById('tagmarker-container');
+        frameContainer = document.getElementById('tagmarker-container'),
+        currentStyle = frameContainer.style.transform,
+        // get current drawer status
+        isOpen = currentStyle === 'translateX(0%)' ? true : false;
 
-    // apply that action to the container
-    frameContainer.style.transform=`translateX(${action === 'open_drawer' ? 0 : 105 }%)`
+    // toggle the drawer's visibility
+    frameContainer.style.transform=`translateX(${isOpen ? 105 : 0 }%)`
   }
 })
 
@@ -27,18 +30,18 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 // https://stackoverflow.com/questions/24641592/injecting-iframe-into-page-with-restrictive-content-security-policy
 
 // Avoid recursive frame insertion...
-var extensionOrigin = 'chrome-extension://' + chrome.runtime.id;
+let extensionOrigin = 'chrome-extension://' + chrome.runtime.id;
 
 if (!location.ancestorOrigins.contains(extensionOrigin)) {
-    var iframe = document.createElement('iframe');
-    iframe.id = 'tagmarker-iframe';
-    // dynamically add in iframe source
-    // Must be declared at web_accessible_resources in manifest.json
-    iframe.src = chrome.runtime.getURL('content/injected.html');
+  let iframe = document.createElement('iframe');
+  iframe.id = 'tagmarker-iframe';
+  // dynamically add in iframe source
+  // Must be declared at web_accessible_resources in manifest.json
+  iframe.src = chrome.runtime.getURL('content/injected.html');
 
-    // remove any iframe styles and set my own
-    iframe.style.cssText = 'all: unset; position: absolute; top: 0; bottom: 0; right: 0; height: 100%; width: 100%;';
+  // remove any iframe styles and set my own
+  iframe.style.cssText = 'all: unset; position: absolute; top: 0; bottom: 0; right: 0; height: 100%; width: 100%;';
 
-    // add the iframe to the container
-    document.getElementById('tagmarker-container').appendChild(iframe);
+  // add the iframe to the container
+  document.getElementById('tagmarker-container').appendChild(iframe);
 }
