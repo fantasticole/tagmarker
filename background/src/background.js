@@ -61,7 +61,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
 // get all bookmarks from chrome
 chrome.bookmarks.getTree(arr => {
-  let data = getBookmarksAndFolders(arr, { bookmarks: [], relations: {}, tags: {}, }),
+  let data = getBookmarksAndFolders(arr, { bookmarks: {}, relations: {}, tags: {}, }),
       relationalData = getTagConnections(data);
   // set data as variable on the window for debugging purposes
   window.bookmarkData = relationalData;

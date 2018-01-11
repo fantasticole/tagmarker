@@ -7,7 +7,7 @@ function addTags (originalAction) {
   return (dispatch, getState) => {
     let { bookmarks, tagMarkerFolder, tags } = getState(),
         // get bookmark object to add from
-        bookmark = bookmarks.find(b => (b.id === bookmarkId)),
+        bookmark = bookmarks[bookmarkId],
         // TODO: make sure there is always a folder chosen
         tagMarkerFolderId = tagMarkerFolder.id ? tagMarkerFolder.id : "1",
         tagPromises = tagIds.map(id => (createTag(tags, id, bookmark, tagMarkerFolder.id)));
@@ -68,7 +68,7 @@ function deleteTags (originalAction) {
         // get object for each tag being deleted
         tagsToDelete = tagIds.map(id => (tags[id])),
         // get bookmark object to delete from
-        bookmark = bookmarks.find(b => (b.id === bookmarkId)),
+        bookmark = bookmarks[bookmarkId],
         // get bookmark's tags that aren't in the tagIds to be deleted
         updatedTagList = bookmark.tags.filter(id => (!tagIds.includes(id))),
         tagsToUpdate = [];

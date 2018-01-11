@@ -40,7 +40,7 @@
 ## Tag Storage
 - Set an object somewhere (IndexedDB?) to hold folder and tag objects
 - When a bookmark/tag is added, add that ID to the corresponding tag's bookmarks array and remove for deletion.
-- Have an array of bookmark objects that have an array of tag IDs in their data.
+- Have an object of bookmarks that have an array of tag IDs in their data.
 
 Example:
 If a bookmark exists in this folder structure:
@@ -79,8 +79,8 @@ data.tags = {
 }
 ```
 ```
-data.bookmarks = [
-  {
+data.bookmarks = {
+  "123": {
     dateAdded: 1329359259993,
     id: "123",
     parentId: "14",
@@ -88,13 +88,13 @@ data.bookmarks = [
     title: "December 1st Assignment",
     url: "www.example.com"
   },
-  {
+  "554": {
     id: "554",
     tags: ["2", "1"]
     title: "November 1st Assignment",
     ...
   },
-]
+}
 ```
 
 

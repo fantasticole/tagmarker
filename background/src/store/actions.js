@@ -8,7 +8,7 @@ export function createOrUpdateRelations (tagIds) {
       // get the updated bookmarks associated with our current tag
       let bookmarkIds = tags[id].bookmarks,
           // the objects for each bookmark
-          bookmarkObjects = bookmarkIds.map(id => bookmarks.find(b => b.id === id)),
+          bookmarkObjects = bookmarkIds.map(id => bookmarks[id]),
           // and the updated relation
           relation = bookmarkObjects.reduce((arr, bookmark) => {
             return Array.from(new Set(arr.concat(bookmark.tags)));

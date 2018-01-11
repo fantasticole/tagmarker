@@ -223,7 +223,7 @@ class Bookmark extends Component {
 
 const mapStateToProps = (state, ownProps) => {
   // get the bookmark from the store based on the component's id
-  let bookmark = state.bookmarks.find(b => b.id === ownProps.id);
+  let bookmark = state.bookmarks[ownProps.id];
 
   return {
     bookmark,

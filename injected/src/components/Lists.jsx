@@ -14,7 +14,7 @@ class Lists extends Component {
     this.state = {
       ascending: true,
       filteredBookmarks: [],
-      filteredTags: Object.values(this.props.tags),
+      filteredTags: Object.keys(this.props.tags),
       isSearching: false,
       selectedTags: [],
       sortBy: 'alpha',
@@ -23,15 +23,26 @@ class Lists extends Component {
   }
 
   componentDidMount () {
-    this.loadBookmarks();
+    this.filterBookmarks();
     this.setOptions(this.state.filteredTags);
   }
 
+  componentDidUpdate (prevProps) {
+    let { selectedTags } = this.state,
+        // if any of the selected tags' bookmark count changes
+        updateBookmarks = selectedTags.some(tagId => {
+          return prevProps.tags[tagId].bookmarks.length !== this.props.tags[tagId].bookmarks.length;
+        });
+
+    // update the bookmarks
+    if (updateBookmarks) this.filterBookmarks();
+  }
+
   handleClickTag (id) {
-    let { selectedBookmarks, selectedTags } = this.state,
+    let { selectedTags } = this.state,
         { relations, tags } = this.props,
         tagIndex = selectedTags.indexOf(id),
-        filteredTags = Object.values(tags),
+        filteredTags = Object.keys(tags),
         relatedTags,
         filteredTagIds;
 
@@ -54,15 +65,13 @@ class Lists extends Component {
           if (!selectedTags.includes(tagId)) {
             return selectedTags.every(id => relations[id].includes(tagId));
           }
-        })
-        // get the actual tag objects
-        .map(id => (tags[id]));
+        });
     }
     // update the state
     this.setState({ filteredTags, selectedTags });
 
     // update bookmarks and select options
-    this.loadBookmarks();
+    this.filterBookmarks();
     this.setOptions(filteredTags);
   }
 
@@ -82,7 +91,7 @@ class Lists extends Component {
     if (isSearching) this.refs.searchbar.focus();
   }
 
-  loadBookmarks () {
+  filterBookmarks () {
     let { bookmarks, tags } = this.props,
         { selectedTags } = this.state,
         // get all bookmarks associated with current tags
@@ -94,10 +103,9 @@ class Lists extends Component {
           ));
           // add unique ids to arr
           return arr.concat(additions)
-        // }, []);
         }, []),
         filteredBookmarks = selectedBookmarks.filter(b => {
-          let current = bookmarks.find(bookmark => bookmark.id === b);
+          let current = bookmarks[b];
 
           return selectedTags.every((id) => current.tags.includes(id))
         });
@@ -106,7 +114,8 @@ class Lists extends Component {
   }
 
   setOptions (filteredTags) {
-    let options = filteredTags.map(t => ({ label: t.title, value: t.id })),
+    let { tags } = this.props,
+        options = filteredTags.map(id => ({ label: tags[id].title, value: id })),
         // sort the options to appear alphabetically
         sortedOptions = this.sortOptions(options);
 
@@ -159,6 +168,7 @@ class Lists extends Component {
   render () {
     let { ascending, filteredTags, filteredBookmarks, isSearching, options, selectedTags, sortBy } = this.state,
         selected = selectedTags.map(id => (this.props.tags[id])),
+        filtered = filteredTags.map(id => (this.props.tags[id])),
         searchIconStyle = {
           flex: isSearching ? '1' : '0',
         },
@@ -191,7 +201,7 @@ class Lists extends Component {
         <TagList
           handleClickTag={(id) => this.handleClickTag(id)}
           selectedTags={selected}
-          tags={filteredTags}
+          tags={filtered}
           sort={{ ascending, sortBy }}
           />
         <h1 className='drawer__header bookmarks__header'>Bookmarks</h1>
