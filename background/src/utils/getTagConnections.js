@@ -1,4 +1,4 @@
-export default function getBookmarksAndFolders (data) {
+export default function getTagConnections (data) {
   let { bookmarks, relations } = data;
 
   // for each bookmark in the bookmarks object
