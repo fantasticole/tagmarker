@@ -39,7 +39,10 @@ class Lists extends Component {
 
     // update the bookmarks
     if (updateTags) this.filterTags();
-    if (updateBookmarks) this.filterBookmarks();
+    if (updateBookmarks) {
+      this.filterBookmarks();
+      this.filterTags();
+    }
   }
 
   handleClickTag (id) {

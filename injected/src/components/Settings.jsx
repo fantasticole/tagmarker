@@ -62,16 +62,13 @@ class Settings extends Component {
   }
 
   handleClickSubmit (parentId) {
-    // TODO: make this into an action that
-    // - updates tags
-    chrome.bookmarks.create({
-      parentId,
-      title: this.state.folderName
-    }, folder => {
-      this.handleSelectFolder(folder.id);
-    });
+    this.props.createFolder(this.state.folderName, parentId)
+      .then((id) => {
+        console.log('id:', id)
+        this.handleSelectFolder(id);
+        this.loadFolders();
+      }, e => console.log);
     this.handleDeactivate();
-    this.loadFolders();
   }
 
   handleClickFolder (e, id) {
@@ -178,6 +175,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     setBookmarkFolder: (id) => {dispatch({ type: 'SET_BOOKMARK_FOLDER', id })},
+    createFolder: (title, parentId) => {dispatch({ type: 'CREATE_FOLDER', title, parentId })},
   };
 }
 

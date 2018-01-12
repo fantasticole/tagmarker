@@ -14,18 +14,11 @@ export const proxyStore =  new Store({
   portName: 'tagmarker'
 });
 
-let checkForData = setInterval(storeLoaded, 100)
-
-// make sure we have data from the store before rendering
-function storeLoaded () {
-  if (proxyStore.state.bookmarks) {
-    clearInterval(checkForData);
-    render(
-      <Provider store={ proxyStore }>
-        <Drawer/>
-      </Provider>
-      , document.getElementById('tags')
-    );
-  }
-}
-
+const unsubscribe = proxyStore.subscribe(() => {
+   unsubscribe(); // make sure to only fire once
+   render(
+    <Provider store={proxyStore}>
+      <Drawer/>
+    </Provider>
+    , document.getElementById('tags'));
+});

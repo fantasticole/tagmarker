@@ -16,8 +16,8 @@ function addTags (originalAction) {
 
       // update the bookmark's tags to add the new ones
       bookmark.tags = bookmark.tags.concat(idsToAdd);
-      dispatch(createOrUpdateBookmark(bookmark));
-      return dispatch(createOrUpdateTags(tagsToUpdate));
+      dispatch(createOrUpdateTags(tagsToUpdate));
+      return dispatch(createOrUpdateBookmark(bookmark));
     });
   }
 }
@@ -36,7 +36,6 @@ function createBookmark (originalAction) {
       tagsToAdd.push(parentId);
       parentId = tags[parentId];
     }
-    console.log('tagsToAdd:', tagsToAdd)
 
     // add bookmark to each tag
     tagsToAdd.forEach(id => {
@@ -48,8 +47,37 @@ function createBookmark (originalAction) {
     })
 
     bookmark.tags = tagsToAdd;
-    dispatch(createOrUpdateBookmark(bookmark));
-    return dispatch(createOrUpdateTags(tagsToUpdate));
+    dispatch(createOrUpdateTags(tagsToUpdate));
+    return dispatch(createOrUpdateBookmark(bookmark));
+  }
+}
+
+function createFolder (originalAction) {
+  let { title, parentId } = originalAction;
+
+  return (dispatch, getState) => {
+    let { tags } = getState();
+
+    // updates tags
+    chrome.bookmarks.create({
+      parentId,
+      title,
+    }, folder => {
+      let  { dateAdded, dateGroupModified, id } = folder,
+          // get parents array and add immediate parent
+          parents = [...tags[parentId].parents, parentId],
+          newTag = {
+            dateAdded,
+            dateGroupModified,
+            id,
+            parentId,
+            parents,
+            title,
+            bookmarks: [],
+          };
+      dispatch(createOrUpdateTags([newTag]));
+      return id;
+    });
   }
 }
 
@@ -70,7 +98,6 @@ function createTag (tags, tagId, bookmark, tagMarkerFolderId) {
       title: tagId
     }, resolve);
   }).then(folder => {
-    console.log('folder:', folder)
     // add the folder we just created to the store as a tag
     // with the bookmark as an item in its bookmarks array
     let  { dateAdded, dateGroupModified, id, parentId, title } = folder,
@@ -137,6 +164,7 @@ function setBookmarkFolder (originalAction) {
 export default {
   'ADD_TAGS': addTags,
   'CREATE_BOOKMARK': createBookmark,
+  'CREATE_FOLDER': createFolder,
   'DELETE_TAGS': deleteTags,
   'SET_BOOKMARK_FOLDER': setBookmarkFolder,
 };
