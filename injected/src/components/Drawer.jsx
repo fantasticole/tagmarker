@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { connect } from 'react-redux';
 
-import Lists from './Lists';
+import ListView from '../containers/ListView';
 import Modal from './Modal';
-import Settings from './Settings';
+import SettingsView from '../containers/SettingsView';
 
 import ifTrue from '../utils/ifTrue';
 
-class Drawer extends Component {
+export default class Drawer extends Component {
   constructor(props) {
     super(props);
 
@@ -127,26 +126,10 @@ class Drawer extends Component {
       <div className='drawer'>
         <div className='container'>
           {this.renderActions()}
-          {this.state.view === 'tags' ? <Lists /> : <Settings />}
+          {this.state.view === 'tags' ? <ListView /> : <SettingsView />}
         </div>
         <div className='modal-container' />
       </div>
     );
   }
 }
-
-const mapStateToProps = (state) => {
-  return {
-    tagMarkerFolder: state.tagMarkerFolder,
-  };
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    toggleDrawer: () => {dispatch({ type: 'TOGGLE_DRAWER', data: false })},
-    createBookmark: (bookmark) => {dispatch({ type: 'CREATE_BOOKMARK', bookmark })},
-  };
-}
-
-
-export default connect(mapStateToProps, mapDispatchToProps)(Drawer);

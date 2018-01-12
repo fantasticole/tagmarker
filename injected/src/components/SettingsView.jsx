@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { connect } from 'react-redux';
 import classNames from 'classnames';
 
 import Loader from './Loader';
-
 import Modal from './Modal';
 
 import ifTrue from '../utils/ifTrue';
 
-class Settings extends Component {
+export default class SettingsView extends Component {
   constructor(props) {
     super(props);
 
@@ -165,18 +163,3 @@ class Settings extends Component {
     );
   }
 }
-
-const mapStateToProps = (state) => {
-  return {
-    tagMarkerFolder: state.tagMarkerFolder,
-  };
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    setBookmarkFolder: (id) => {dispatch({ type: 'SET_BOOKMARK_FOLDER', id })},
-    createFolder: (title, parentId) => {dispatch({ type: 'CREATE_FOLDER', title, parentId })},
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Settings);

@@ -5,7 +5,7 @@ import MarqueeWrapper from './MarqueeWrapper';
 
 import ifTrue from '../utils/ifTrue';
 
-class TagList extends Component {
+export default class TagList extends Component {
   constructor (props) {
     super(props);
   }
@@ -89,5 +89,3 @@ class TagList extends Component {
     );
   }
 }
-
-export default TagList;

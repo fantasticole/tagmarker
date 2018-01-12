@@ -3,7 +3,7 @@ import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import { Store } from 'react-chrome-redux';
 
-import Drawer from './components/Drawer';
+import Drawer from './containers/Drawer';
 
 import 'react-select/dist/react-select.css';
 import './injected.scss';

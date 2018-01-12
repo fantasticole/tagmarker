@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
-import Bookmark from './Bookmark';
+import Bookmark from '../containers/Bookmark';
 
 
-class BookmarkList extends Component {
+export default class BookmarkList extends Component {
   constructor(props) {
     super(props);
   }
@@ -27,5 +27,3 @@ class BookmarkList extends Component {
     )
   }
 }
-
-export default BookmarkList;

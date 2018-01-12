@@ -2,14 +2,12 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 
-import { connect } from 'react-redux';
-
 import MarqueeWrapper from './MarqueeWrapper';
 import Select from 'react-select';
 
 import ifTrue from '../utils/ifTrue';
 
-class Bookmark extends Component {
+export default class Bookmark extends Component {
   constructor(props) {
     super(props);
 
@@ -220,26 +218,3 @@ class Bookmark extends Component {
     );
   }
 }
-
-const mapStateToProps = (state, ownProps) => {
-  // get the bookmark from the store based on the component's id
-  let bookmark = state.bookmarks[ownProps.id];
-
-  return {
-    bookmark,
-    tags: state.tags,
-  };
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    addTags: (bookmarkId, tagIds) => {
-      dispatch({ type: 'ADD_TAGS', bookmarkId, tagIds });
-    },
-    deleteTags: (bookmarkId, tagIds) => {
-      dispatch({ type: 'DELETE_TAGS', bookmarkId, tagIds });
-    },
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Bookmark);

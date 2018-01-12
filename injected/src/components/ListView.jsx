@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { connect } from 'react-redux';
 import classNames from 'classnames';
 
 import Select from 'react-select';
-import BookmarkList from './BookmarkList';
-import TagList from './TagList';
+import BookmarkList from '../containers/BookmarkList';
+import TagList from '../containers/TagList';
 
-class Lists extends Component {
+export default class ListView extends Component {
   constructor(props) {
     super(props);
 
@@ -212,11 +211,3 @@ class Lists extends Component {
     );
   }
 }
-
-const mapStateToProps = (state) => {
-  return {
-    bookmarks: state.bookmarks,
-    tags: state.tags,
-  };
-}
-export default connect(mapStateToProps)(Lists);
