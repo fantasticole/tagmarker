@@ -1,7 +1,7 @@
 import store from './store';
 import { wrapStore } from 'react-chrome-redux';
 
-import { setFolder, setBookmarks, setTags } from './store/actions';
+import { setFolder, setBookmarks, setTags, updateFilteredTags } from './store/actions';
 
 import addBookmark from './utils/addBookmark';
 import getBookmarksAndFolders from './utils/getBookmarksAndFolders';
@@ -58,4 +58,5 @@ chrome.bookmarks.getTree(arr => {
   // save formatted bookmarks and tags in the store
   store.dispatch(setBookmarks(data.bookmarks));
   store.dispatch(setTags(data.tags));
+  store.dispatch(updateFilteredTags(Object.keys(data.tags)));
 });

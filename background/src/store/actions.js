@@ -17,3 +17,11 @@ export function setBookmarks (data) {
 export function setTags (data) {
   return { type: 'SET_TAGS', data };
 }
+
+export function updateFilteredTags (tags) {
+  return { type: 'UPDATE_FILTERED_TAGS', tags };
+}
+
+export function updateSelectedTags (tags) {
+  return { type: 'UPDATE_SELECTED_TAGS', tags };
+}

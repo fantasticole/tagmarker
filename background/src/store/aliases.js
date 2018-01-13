@@ -1,4 +1,11 @@
-import { createOrUpdateTags, setFolder, createOrUpdateBookmark } from './actions';
+import {
+  createOrUpdateTags,
+  setFilteredTags,
+  setFolder,
+  createOrUpdateBookmark,
+  updateFilteredTags,
+  updateSelectedTags
+} from './actions';
 
 function addTags (originalAction) {
   let { bookmarkId, tagIds } = originalAction;
@@ -149,6 +156,55 @@ function deleteTags (originalAction) {
   }
 }
 
+function filterTags (allBookmarks, selectedTags) {
+  let bookmarks = Object.values(allBookmarks),
+      filteredBookmarks = bookmarks.filter(b => {
+        return selectedTags.every((id) => b.tags.includes(id));
+      }),
+      allTags = filteredBookmarks.reduce((tags, bookmark) => {
+        return tags.concat(bookmark.tags);
+      }, []),
+      relatedTags = Array.from(new Set(allTags)).filter(id => {
+        return !selectedTags.includes(id);
+      });
+
+  return relatedTags;
+}
+
+function removeTag (originalAction) {
+  let { id } = originalAction;
+
+  return (dispatch, getState) => {
+    let { bookmarks, selected } = getState(),
+        // find id's index in selected tags array
+        index = selected.indexOf(id),
+        filteredTags;
+
+    selected.splice(index, 1);
+    // update filtered tags based on updated selections
+    filteredTags = filterTags(bookmarks, selected);
+    // update the store
+    dispatch(updateSelectedTags(selected));
+    return dispatch(updateFilteredTags(filteredTags));
+  }
+}
+
+function selectTag (originalAction) {
+  let { id } = originalAction;
+
+  return (dispatch, getState) => {
+    let { bookmarks, selected } = getState(),
+        // add id to selected tags array
+        selectedTags = [...selected, id],
+        // update filtered tags based on updated selections
+        filteredTags = filterTags(bookmarks, selectedTags)
+
+    // update the store
+    dispatch(updateSelectedTags(selectedTags));
+    return dispatch(updateFilteredTags(filteredTags));
+  }
+}
+
 function setBookmarkFolder (originalAction) {
   let { id } = originalAction;
 
@@ -166,5 +222,7 @@ export default {
   'CREATE_BOOKMARK': createBookmark,
   'CREATE_FOLDER': createFolder,
   'DELETE_TAGS': deleteTags,
+  'REMOVE_TAG': removeTag,
+  'SELECT_TAG': selectTag,
   'SET_BOOKMARK_FOLDER': setBookmarkFolder,
 };

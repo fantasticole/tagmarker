@@ -21,7 +21,7 @@ const mapStateToProps = (state) => {
  */
 const mapDispatchToProps = (dispatch) => {
   return {
-    selectTag: (id) => {dispatch({ type: 'ADD_SELECTED_TAG', id })},
+    selectTag: (id) => {dispatch({ type: 'SELECT_TAG', id })},
   };
 }
 

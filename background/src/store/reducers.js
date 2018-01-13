@@ -18,22 +18,19 @@ export function bookmarks (state = {}, action) {
   }
 };
 
+export function filtered (state = [], action) {
+  switch (action.type) {
+    case 'UPDATE_FILTERED_TAGS':
+      return action.tags;
+    default:
+      return state;
+  }
+};
+
 export function selected (state = [], action) {
   switch (action.type) {
-    case 'ADD_SELECTED_TAG':
-      let added = [...state];
-
-      // add id to the selected array
-      added.push(action.id)
-      return added;
-    case 'REMOVE_SELECTED_TAG':
-      let removed = [...state],
-          // get tag id's index
-          tagIndex = removed.indexOf(action.id);
-
-      // remove id from the selected array
-      removed.splice(tagIndex, 1)
-      return removed;
+    case 'UPDATE_SELECTED_TAGS':
+      return action.tags;
     default:
       return state;
   }
@@ -69,6 +66,7 @@ export function tagMarkerFolder (state = {}, action) {
 
 export default combineReducers({
   bookmarks,
+  filtered,
   selected,
   tagMarkerFolder,
   tags,
