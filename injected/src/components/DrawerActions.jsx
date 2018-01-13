@@ -9,6 +9,7 @@ export default class DrawerActions extends Component {
   }
 
   handleAddBookmark () {
+    // send message to add a bookmark
     chrome.runtime.sendMessage({ ref: 'add_bookmark' });
   }
 
@@ -19,7 +20,6 @@ export default class DrawerActions extends Component {
 
   render() {
     let { folderIsSet, view } = this.props;
-    console.log('folderIsSet:', folderIsSet)
 
     return (
       <div className='drawer-actions'>
