@@ -96,16 +96,12 @@ export default class ListView extends Component {
 
     return (
       <div className='drawer__content lists'>
-        <h1 className='drawer__header tags__header'>Tags</h1>
         <TagList
           onClickTag={(id) => this.handleClickTag(id)}
           selectedTags={selected}
           filteredTags={filtered}
           />
-        <h1 className='drawer__header bookmarks__header'>Bookmarks</h1>
-        <BookmarkList
-          selectedBookmarks={filteredBookmarks}
-          />
+        <BookmarkList selectedBookmarks={filteredBookmarks} />
       </div>
     );
   }

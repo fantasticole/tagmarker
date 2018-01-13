@@ -181,6 +181,7 @@ export default class TagList extends Component {
 
     return (
       <div className='tag-list__container'>
+        <h1 className='drawer__header tags__header'>Tags</h1>
         <div className='list__actions'>
           {this.renderSortActions()}
           <button className='list__button button search-tags' onClick={() => this.handleSearchTags()} style={searchIconStyle} title='search tags'>
