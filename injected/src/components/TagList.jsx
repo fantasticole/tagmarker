@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
 
-import MarqueeWrapper from './MarqueeWrapper';
+import FilteredTags from './FilteredTags';
 import Select from 'react-select';
 import SelectedTags from '../containers/SelectedTags';
 
@@ -104,24 +104,6 @@ export default class TagList extends Component {
     });
   }
 
-  renderTags (tags, selectedIds) {
-    return tags.map(tag => {
-      return (
-        <li
-          className='tag-item'
-          key={tag.id}
-          onClick={() => this.props.selectTag(tag.id)}
-          >
-          <MarqueeWrapper>
-            <p className='tag'>
-              {tag.title} <span className='tagCount'>{tag.bookmarks.length}</span>
-            </p>
-          </MarqueeWrapper>
-        </li>
-      );
-    })
-  }
-
   renderSortActions () {
     let { ascending, isSearching, sortBy } = this.state,
         sortBoxStyle = {
@@ -189,7 +171,7 @@ export default class TagList extends Component {
         </div>
         <ul className='tagmarker-list tag-list'>
           <SelectedTags />
-          {this.renderTags(sortedTags)}
+          <FilteredTags selectTag={this.props.selectTag} tags={sortedTags} />
         </ul>
       </div>
     );
