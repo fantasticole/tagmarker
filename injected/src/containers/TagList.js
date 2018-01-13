@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
  */
 const mapStateToProps = (state) => {
   return {
+    tags: state.tags,
   };
 }
 
@@ -24,4 +25,5 @@ const mapDispatchToProps = (dispatch) => {
   };
 }
 
-export default connect()(TagList);
+export default connect(mapStateToProps)(TagList);
+// export default connect(mapStateToProps, mapDispatchToProps)(TagList);
