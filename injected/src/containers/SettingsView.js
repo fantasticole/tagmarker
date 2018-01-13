@@ -23,7 +23,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     setBookmarkFolder: (id) => {dispatch({ type: 'SET_BOOKMARK_FOLDER', id })},
-    createFolder: (title, parentId) => {dispatch({ type: 'CREATE_FOLDER', title, parentId })},
+    createFolder: (folder) => {dispatch({ type: 'CREATE_FOLDER', folder})},
   };
 }
 

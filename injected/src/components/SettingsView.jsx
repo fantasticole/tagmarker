@@ -25,20 +25,13 @@ export default class SettingsView extends Component {
   }
 
   handleAddFolder (parentId, title) {
-    chrome.bookmarks.search({ title }, arr => {
-      let folder = arr.find(f => f.id === parentId),
-          title;
-
-      if (folder) title = folder.title;
-      else if (parentId === "1") title = 'Bookmarks Bar';
-      else title = 'Other Bookmarks'
-
-      Modal.render(<CreateFolderModal onChange={(e) => this.handleChange(e)} onSubmit={() => this.handleClickSubmit(parentId)} title={title} />);
-    })
-  }
-
-  handleChange (event) {
-    this.setState({ folderName: event.target.value });
+    Modal.render(
+      <CreateFolderModal
+        createFolder={(folder) => this.createFolder(folder)}
+        parentId={parentId}
+        title={title}
+        />
+    );
   }
 
   handleClickCancel () {
@@ -66,18 +59,14 @@ export default class SettingsView extends Component {
     this.props.setBookmarkFolder(this.state.selected);
   }
 
-  handleClickSubmit (parentId) {
-    console.log('Submit:', parentId)
-    this.props.createFolder(this.state.folderName, parentId)
-      .then((id) => {
-        console.log('id:', id)
-        this.handleSelectFolder(id);
-        this.loadFolders();
-      }, e => console.log);
-  }
-
   handleSelectFolder (selected) {
     this.setState({ selected });
+  }
+
+  createFolder (folder) {
+    this.handleSelectFolder(folder.id);
+    this.props.createFolder(folder);
+    this.loadFolders();
   }
 
   loadFolders () {

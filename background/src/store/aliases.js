@@ -60,31 +60,24 @@ function createBookmark (originalAction) {
 }
 
 function createFolder (originalAction) {
-  let { title, parentId } = originalAction;
+  let { folder } = originalAction;
 
   return (dispatch, getState) => {
-    let { tags } = getState();
+    let { tags } = getState(),
+        { dateAdded, dateGroupModified, id, parentId, title } = folder,
+        parents = [...tags[parentId].parents, parentId],
+        newTag = {
+          dateAdded,
+          dateGroupModified,
+          id,
+          parentId,
+          parents,
+          title,
+          bookmarks: [],
+        };  
 
     // updates tags
-    chrome.bookmarks.create({
-      parentId,
-      title,
-    }, folder => {
-      let  { dateAdded, dateGroupModified, id } = folder,
-          // get parents array and add immediate parent
-          parents = [...tags[parentId].parents, parentId],
-          newTag = {
-            dateAdded,
-            dateGroupModified,
-            id,
-            parentId,
-            parents,
-            title,
-            bookmarks: [],
-          };
-      dispatch(createOrUpdateTags([newTag]));
-      return id;
-    });
+    dispatch(createOrUpdateTags([newTag]));
   }
 }
 
