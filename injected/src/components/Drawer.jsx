@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
+import CreateBookmarkModal from './CreateBookmarkModal';
 import ListView from '../containers/ListView';
 import Modal from './Modal';
 import SettingsView from '../containers/SettingsView';
@@ -43,7 +44,7 @@ export default class Drawer extends Component {
     this.setState({ view: 'settings' });
   }
 
-  handleClickSubmit (parentId) {
+  handleClickSubmit () {
     let { tagMarkerFolder } = this.props;
     // // TODO: make this into an action that
     // // - updates tags
@@ -54,7 +55,6 @@ export default class Drawer extends Component {
     }, bookmark => {
       this.props.createBookmark(bookmark);
     });
-    this.handleDeactivate();
   }
 
   handleClickTags () {
@@ -66,38 +66,11 @@ export default class Drawer extends Component {
     chrome.runtime.sendMessage({ ref: 'toggle_drawer' });
   }
 
-  handleDeactivate () {
-    ReactDOM.unmountComponentAtNode(document.getElementsByClassName('modal-container')[0]);
-  }
-
   renderBookmarkModal () {
-    let { title } = this.props.tagMarkerFolder,
-        modalContainer = document.getElementsByClassName('modal-container')[0];
+    let { bookmarkName, bookmarkUrl } = this.state,
+        { title } = this.props.tagMarkerFolder;
 
-    ReactDOM.render(
-      <Modal className='create-bookmark-modal'>
-        <h1 className='create-bookmark__header'>Add bookmark in: {title}</h1>
-        <input
-          className='create-bookmark__input modal__input'
-          defaultValue={this.state.bookmarkName}
-          name='name'
-          onChange={(e) => this.handleChange('bookmarkName', e)}
-          type='text'
-          />
-        <input
-          className='create-bookmark__input modal__input'
-          defaultValue={this.state.bookmarkUrl}
-          name='url'
-          onChange={(e) => this.handleChange('bookmarkUrl', e)}
-          type='text'
-          />
-        <span className='create-bookmark__actions'>
-          <button className='button create-bookmark-action__button action-button' onClick={() => this.handleClickSubmit()}>Submit <i className='fa fa-floppy-o'/></button>
-          <button className='button create-bookmark-action__button action-button' onClick={() => this.handleDeactivate()}>Cancel <i className='fa fa-ban'/></button>
-        </span>
-      </Modal>,
-      modalContainer
-    );
+    Modal.render(<CreateBookmarkModal name={bookmarkName} url={bookmarkUrl} onChange={(key, e) => this.handleChange(key, e)} onSubmit={() => this.handleClickSubmit()} title={title} />);
   }
 
   renderActions () {

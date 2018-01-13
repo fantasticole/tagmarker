@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 
+import CreateFolderModal from './CreateFolderModal';
 import Loader from './Loader';
 import Modal from './Modal';
 
@@ -26,24 +27,13 @@ export default class SettingsView extends Component {
   handleAddFolder (parentId, title) {
     chrome.bookmarks.search({ title }, arr => {
       let folder = arr.find(f => f.id === parentId),
-          modalContainer = document.getElementsByClassName('modal-container')[0],
           title;
 
       if (folder) title = folder.title;
       else if (parentId === "1") title = 'Bookmarks Bar';
       else title = 'Other Bookmarks'
 
-      ReactDOM.render(
-        <Modal className='create-folder-modal'>
-          <h1 className='create-folder__header'>Add folder in: {title}</h1>
-          <input autoFocus className='create-folder__input modal__input' onChange={(e) => this.handleChange(e)} type='text' />
-          <span className='create-folder__actions'>
-            <button className='button create-folder-action__button action-button' onClick={() => this.handleClickSubmit(parentId)}>Submit <i className='fa fa-floppy-o'/></button>
-            <button className='button create-folder-action__button action-button' onClick={() => this.handleDeactivate()}>Cancel <i className='fa fa-ban'/></button>
-          </span>
-        </Modal>,
-        modalContainer
-      );
+      Modal.render(<CreateFolderModal onChange={(e) => this.handleChange(e)} onSubmit={() => this.handleClickSubmit(parentId)} title={title} />);
     })
   }
 
@@ -53,20 +43,6 @@ export default class SettingsView extends Component {
 
   handleClickCancel () {
     console.log('Exit!')
-  }
-
-  handleClickSave () {
-    this.props.setBookmarkFolder(this.state.selected);
-  }
-
-  handleClickSubmit (parentId) {
-    this.props.createFolder(this.state.folderName, parentId)
-      .then((id) => {
-        console.log('id:', id)
-        this.handleSelectFolder(id);
-        this.loadFolders();
-      }, e => console.log);
-    this.handleDeactivate();
   }
 
   handleClickFolder (e, id) {
@@ -86,8 +62,18 @@ export default class SettingsView extends Component {
     this.setState({ activeFolders });
   }
 
-  handleDeactivate () {
-    ReactDOM.unmountComponentAtNode(document.getElementsByClassName('modal-container')[0]);
+  handleClickSave () {
+    this.props.setBookmarkFolder(this.state.selected);
+  }
+
+  handleClickSubmit (parentId) {
+    console.log('Submit:', parentId)
+    this.props.createFolder(this.state.folderName, parentId)
+      .then((id) => {
+        console.log('id:', id)
+        this.handleSelectFolder(id);
+        this.loadFolders();
+      }, e => console.log);
   }
 
   handleSelectFolder (selected) {

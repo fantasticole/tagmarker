@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
-export default class Modal extends Component {
+const Module = {};
+
+Module.Modal = class Modal extends Component {
   constructor(props) {
     super(props);
   }
@@ -30,3 +32,9 @@ export default class Modal extends Component {
     );
   }
 }
+
+Module.render = (modal) => {
+  return ReactDOM.render(modal, document.getElementsByClassName('modal-container')[0]);
+};
+
+module.exports = Module;
