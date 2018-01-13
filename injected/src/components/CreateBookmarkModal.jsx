@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import Modal from './Modal';
 
 export default class CreateBookmarkModal extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
 
     this.state = {

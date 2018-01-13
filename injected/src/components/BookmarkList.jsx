@@ -5,7 +5,7 @@ import Bookmark from '../containers/Bookmark';
 
 
 export default class BookmarkList extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
   }
 

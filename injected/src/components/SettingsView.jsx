@@ -9,7 +9,7 @@ import Modal from './Modal';
 import ifTrue from '../utils/ifTrue';
 
 export default class SettingsView extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
 
     this.state = {

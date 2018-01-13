@@ -7,7 +7,7 @@ import BookmarkList from '../containers/BookmarkList';
 import TagList from '../containers/TagList';
 
 export default class ListView extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
 
     this.state = {

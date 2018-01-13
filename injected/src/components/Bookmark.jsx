@@ -8,7 +8,7 @@ import Select from 'react-select';
 import ifTrue from '../utils/ifTrue';
 
 export default class Bookmark extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
 
     this.state = {
@@ -108,7 +108,7 @@ export default class Bookmark extends Component {
     this.setState({ options: sortedOptions });
   }
 
-  sortOptions(options) {
+  sortOptions (options) {
     return options.sort((a, b) => {
       let aLabel = a.label.toLowerCase(),
           bLabel = b.label.toLowerCase();

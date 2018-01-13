@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 const Module = {};
 
 Module.Modal = class Modal extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
   }
   

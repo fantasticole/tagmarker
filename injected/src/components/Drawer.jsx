@@ -8,7 +8,7 @@ import Modal from './Modal';
 import SettingsView from '../containers/SettingsView';
 
 export default class Drawer extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
 
     this.state = {
