@@ -18,19 +18,13 @@ export default class CreateBookmarkModal extends Component {
   }
 
   handleClickSubmit () {
-    let { tagMarkerFolder } = this.props,
-        { title, url } = this.state;
+    let { title, url } = this.state,
+        parentId = this.props.tagMarkerFolder.id;
 
-    // // TODO: make this into an action that
-    // // - updates tags
-    chrome.bookmarks.create({
-      parentId: tagMarkerFolder.id,
-      title,
-      url,
-    }, bookmark => {
+    chrome.bookmarks.create({ parentId, title, url }, bookmark => {
       this.props.createBookmark(bookmark);
+      this.handleDeactivate();
     });
-    this.handleDeactivate();
   }
 
   handleDeactivate () {
