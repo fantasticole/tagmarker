@@ -22,8 +22,8 @@ const mapStateToProps = (state) => {
  */
 const mapDispatchToProps = (dispatch) => {
   return {
+    selectTag: (id) => {dispatch({ type: 'ADD_SELECTED_TAG', id })},
   };
 }
 
-export default connect(mapStateToProps)(TagList);
-// export default connect(mapStateToProps, mapDispatchToProps)(TagList);
+export default connect(mapStateToProps, mapDispatchToProps)(TagList);

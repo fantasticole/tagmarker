@@ -3,6 +3,7 @@ import classNames from 'classnames';
 
 import MarqueeWrapper from './MarqueeWrapper';
 import Select from 'react-select';
+import SelectedTags from '../containers/SelectedTags';
 
 export default class TagList extends Component {
   constructor (props) {
@@ -24,9 +25,8 @@ export default class TagList extends Component {
     let oldTagCount = prevProps.filteredTags.length,
         newTagCount = this.props.filteredTags.length;
 
-    if (oldTagCount !== newTagCount) {
-      this.setOptions();
-    }
+    // if the selected tag count changed, update select options
+    if (oldTagCount !== newTagCount) this.setOptions();
   }
 
   handleSearchTags () {
@@ -104,33 +104,22 @@ export default class TagList extends Component {
     });
   }
 
-  renderTags (allTags, selectedIds) {
-    let tags = allTags.map(tag => {
-      let tagClasses = classNames('tag', {
-            'selected': selectedIds.includes(tag.id),
-          });
-
+  renderTags (tags, selectedIds) {
+    return tags.map(tag => {
       return (
         <li
           className='tag-item'
           key={tag.id}
-          onClick={() => this.props.onClickTag(tag.id)}
+          onClick={() => this.props.selectTag(tag.id)}
           >
           <MarqueeWrapper>
-            <p className={tagClasses}>
+            <p className='tag'>
               {tag.title} <span className='tagCount'>{tag.bookmarks.length}</span>
             </p>
           </MarqueeWrapper>
         </li>
       );
     })
-
-    // if we have both selected and unselected tags
-    if (selectedIds.length && this.props.tags.length > 0) {
-      // add divider between the two sets
-      tags.splice(selectedIds.length, 0, <div key='divider' className='divider'/>);
-    }
-    return tags;
   }
 
   renderSortActions () {
@@ -167,10 +156,8 @@ export default class TagList extends Component {
 
   render () {
     let { isSearching, options } = this.state,
-        { selectedTags, filteredTags } = this.props,
+        { filteredTags, tags } = this.props,
         sortedTags = filteredTags.sort(this.handleSort()),
-        allTags = selectedTags.concat(sortedTags),
-        selectedIds = selectedTags.map(t => (t.id)),
         searchIconStyle = {
           flex: isSearching ? '1' : '0',
         },
@@ -192,7 +179,7 @@ export default class TagList extends Component {
               className='list-selector'
               multi={false}
               name='list-select'
-              onChange={(selected) => this.props.onClickTag(selected.value)}
+              onChange={(selected) => this.props.selectTag(selected.value)}
               options={options}
               placeholder=''
               ref='searchbar'
@@ -201,7 +188,8 @@ export default class TagList extends Component {
           </div>
         </div>
         <ul className='tagmarker-list tag-list'>
-          {this.renderTags(allTags, selectedIds)}
+          <SelectedTags />
+          {this.renderTags(sortedTags)}
         </ul>
       </div>
     );

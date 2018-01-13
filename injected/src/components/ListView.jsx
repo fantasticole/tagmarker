@@ -12,7 +12,6 @@ export default class ListView extends Component {
     this.state = {
       filteredBookmarks: [],
       filteredTags: Object.keys(this.props.tags),
-      selectedTags: [],
     };
   }
 
@@ -21,42 +20,27 @@ export default class ListView extends Component {
   }
 
   componentDidUpdate (prevProps) {
-    let { selectedTags, filteredBookmarks } = this.state,
+    let { selectedTags } = this.props,
+        { filteredBookmarks } = this.state,
         // if any of the selected tags' bookmark count changes
         updateTags = selectedTags.some(tagId => {
           return prevProps.tags[tagId].bookmarks.length !== this.props.tags[tagId].bookmarks.length;
         }),
         updateBookmarks = filteredBookmarks.some(bId => {
           return prevProps.bookmarks[bId].tags.length !== this.props.bookmarks[bId].tags.length;
-        });
+        }),
+        selectedChanged = prevProps.selectedTags.length !== this.props.selectedTags.length;
 
     // update the bookmarks
     if (updateTags) this.filterTags();
-    if (updateBookmarks) {
+    if (selectedChanged || updateBookmarks) {
       this.filterBookmarks();
       this.filterTags();
     }
   }
 
-  handleClickTag (id) {
-    let { selectedTags } = this.state,
-        tagIndex = selectedTags.indexOf(id);
-
-    // if the id is already in selectedTags, splice it out
-    // otherwise, add it
-    tagIndex < 0 ? selectedTags.push(id) : selectedTags.splice(tagIndex, 1);
-    // update the state
-    this.setState({ selectedTags });
-    // update the store
-    this.props.selectTag(id);
-    // update bookmarks
-    this.filterBookmarks();
-    this.filterTags();
-  }
-
   filterBookmarks () {
-    let { bookmarks, tags } = this.props,
-        { selectedTags } = this.state,
+    let { bookmarks, selectedTags, tags } = this.props,
         filteredBookmarks = Object.values(bookmarks).filter(b => {
           return selectedTags.every((id) => b.tags.includes(id));
         }).map(bookmark => bookmark.id);
@@ -65,8 +49,7 @@ export default class ListView extends Component {
   }
 
   filterTags () {
-    let { selectedTags } = this.state,
-        { tags } = this.props,
+    let { selectedTags, tags } = this.props,
         filteredTags = Object.keys(tags);
 
     if (selectedTags.length) filteredTags = this.getRelatedTags();
@@ -75,7 +58,7 @@ export default class ListView extends Component {
   }
 
   getRelatedTags () {
-    let { selectedTags } = this.state,
+    let { selectedTags } = this.props,
         bookmarks = Object.values(this.props.bookmarks),
         filteredBookmarks = bookmarks.filter(b => {
           return selectedTags.every((id) => b.tags.includes(id));
@@ -91,17 +74,12 @@ export default class ListView extends Component {
   }
 
   render () {
-    let { filteredTags, filteredBookmarks, selectedTags } = this.state,
-        selected = selectedTags.map(id => (this.props.tags[id])),
+    let { filteredTags, filteredBookmarks } = this.state,
         filtered = filteredTags.map(id => (this.props.tags[id]));
 
     return (
       <div className='drawer__content lists'>
-        <TagList
-          onClickTag={(id) => this.handleClickTag(id)}
-          selectedTags={selected}
-          filteredTags={filtered}
-          />
+        <TagList filteredTags={filtered} />
         <BookmarkList selectedBookmarks={filteredBookmarks} />
       </div>
     );

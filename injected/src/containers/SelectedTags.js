@@ -1,4 +1,4 @@
-import ListView from '../components/ListView';
+import SelectedTags from '../components/SelectedTags';
 
 import { connect } from 'react-redux';
 
@@ -9,10 +9,10 @@ import { connect } from 'react-redux';
  * @returns {object} Map of state data to component props.
  */
 const mapStateToProps = (state) => {
+  let { selected, tags } = state;
+
   return {
-    bookmarks: state.bookmarks,
-    selectedTags: state.selected,
-    tags: state.tags,
+    tags: selected.map(id => (tags[id])),
   };
 }
 
@@ -24,8 +24,8 @@ const mapStateToProps = (state) => {
  */
 const mapDispatchToProps = (dispatch) => {
   return {
+    removeTag: (id) => {dispatch({ type: 'REMOVE_SELECTED_TAG', id })},
   };
 }
 
-export default connect(mapStateToProps)(ListView);
-// export default connect(mapStateToProps, mapDispatchToProps)(ListView);
+export default connect(mapStateToProps, mapDispatchToProps)(SelectedTags);
