@@ -4,8 +4,32 @@ import ReactDOM from 'react-dom';
 import Modal from './Modal';
 
 export default class CreateBookmarkModal extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      title: this.props.title,
+      url: this.props.url,
+    };
+  }
+
+  handleChange (bookmarkKey, event) {
+    this.setState({ [bookmarkKey]: event.target.value });
+  }
+
   handleClickSubmit () {
-    this.props.onSubmit();
+    let { tagMarkerFolder } = this.props,
+        { title, url } = this.state;
+
+    // // TODO: make this into an action that
+    // // - updates tags
+    chrome.bookmarks.create({
+      parentId: tagMarkerFolder.id,
+      title,
+      url,
+    }, bookmark => {
+      this.props.createBookmark(bookmark);
+    });
     this.handleDeactivate();
   }
 
@@ -14,21 +38,23 @@ export default class CreateBookmarkModal extends Component {
   }
 
   render () {
+    let { tagMarkerFolder } = this.props;
+
     return (
       <Modal.Modal className='create-bookmark-modal' ref='modal'>
-        <h1 className='create-bookmark__header'>Add bookmark in: {this.props.title}</h1>
+        <h1 className='create-bookmark__header'>Add bookmark in: {tagMarkerFolder.title}</h1>
         <input
           className='create-bookmark__input modal__input'
-          defaultValue={this.props.name}
-          name='name'
-          onChange={(e) => this.props.onChange('bookmarkName', e)}
+          defaultValue={this.props.title}
+          name='title'
+          onChange={(e) => this.handleChange('title', e)}
           type='text'
           />
         <input
           className='create-bookmark__input modal__input'
           defaultValue={this.props.url}
           name='url'
-          onChange={(e) => this.props.onChange('bookmarkUrl', e)}
+          onChange={(e) => this.handleChange('url', e)}
           type='text'
           />
         <span className='create-bookmark__actions'>

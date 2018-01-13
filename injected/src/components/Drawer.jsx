@@ -12,8 +12,6 @@ export default class Drawer extends Component {
     super(props);
 
     this.state = {
-      bookmarkName: '',
-      bookmarkUrl: '',
       view: this.props.tagMarkerFolder.id ? 'tags' : 'settings',
     };
   }
@@ -22,55 +20,28 @@ export default class Drawer extends Component {
     // listen for flags to open and close drawer
     chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
       if (req.ref === 'bookmark_data') {
-        this.setState({
-          bookmarkName: req.data.title,
-          bookmarkUrl: req.data.url,
-        });
-        this.renderBookmarkModal();
+        let { title, url } = req.data,
+            { tagMarkerFolder, createBookmark } = this.props;
+
+        Modal.render(
+          <CreateBookmarkModal
+            createBookmark={(bookmark) => createBookmark(bookmark)}
+            tagMarkerFolder={tagMarkerFolder}
+            title={title}
+            url={url}
+            />
+        );
       }
     })
   }
 
-  handleChange (bookmarkKey, event) {
-    this.setState({ [bookmarkKey]: event.target.value });
-  }
-
-  handleClickSubmit () {
-    let { tagMarkerFolder } = this.props;
-    // // TODO: make this into an action that
-    // // - updates tags
-    chrome.bookmarks.create({
-      parentId: tagMarkerFolder.id,
-      title: this.state.bookmarkName,
-      url: this.state.bookmarkUrl,
-    }, bookmark => {
-      this.props.createBookmark(bookmark);
-    });
-  }
-
   toggleView () {
-    let { view } = this.state,
-        viewOptions = {
-          tags: 'settings',
-          settings: 'tags',
-        };
+    // get the current view
+    let current = this.state.view,
+        // set the new view to the only other option
+        view = current === 'tags' ? 'settings' : 'tags';
 
-    this.setState({ view: viewOptions[view] });
-  }
-
-  renderBookmarkModal () {
-    let { bookmarkName, bookmarkUrl } = this.state,
-        { title } = this.props.tagMarkerFolder;
-
-    Modal.render(
-      <CreateBookmarkModal
-        name={bookmarkName}
-        url={bookmarkUrl}
-        onChange={(key, e) => this.handleChange(key, e)}
-        onSubmit={() => this.handleClickSubmit()}
-        title={title}
-        />
-    );
+    this.setState({ view });
   }
 
   render () {
