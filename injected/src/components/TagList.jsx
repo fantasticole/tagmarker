@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import classNames from 'classnames';
 
+import TagActions from './TagActions';
 import FilteredTags from './FilteredTags';
-import Select from 'react-select';
 import SelectedTags from '../containers/SelectedTags';
 
 export default class TagList extends Component {
@@ -11,29 +10,8 @@ export default class TagList extends Component {
 
     this.state = {
       ascending: true,
-      isSearching: false,
-      options: [],
       sortBy: 'alpha',
     };
-  }
-
-  componentDidMount () {
-    this.setOptions(this.props.filteredTags);
-  }
-
-  componentDidUpdate (prevProps) {
-    let oldTagCount = prevProps.filteredTags.length,
-        newTagCount = this.props.filteredTags.length;
-
-    // if the selected tag count changed, update select options
-    if (oldTagCount !== newTagCount) this.setOptions();
-  }
-
-  handleSearchTags () {
-    let isSearching = !this.state.isSearching;
-
-    this.setState({ isSearching });
-    if (isSearching) this.refs.searchbar.focus();
   }
 
   handleSetSort (sortBy) {
@@ -45,7 +23,7 @@ export default class TagList extends Component {
     }
   }
 
-  handleSort () {
+  sort () {
     let { sortBy, ascending } = this.state;
 
     return (a, b) => {
@@ -84,91 +62,15 @@ export default class TagList extends Component {
     }
   }
 
-  setOptions () {
-    let { filteredTags } = this.props,
-        options = filteredTags.map(tag => ({ label: `${tag.title}(${tag.bookmarks.length})`, value: tag.id })),
-        // sort the options to appear alphabetically
-        sortedOptions = this.sortOptions(options);
-
-    this.setState({ options: sortedOptions });
-  }
-
-  sortOptions (options) {
-    return options.sort((a, b) => {
-      let aLabel = a.label.toLowerCase(),
-          bLabel = b.label.toLowerCase();
-
-      if (aLabel < bLabel) return -1;
-      if (aLabel > bLabel) return 1;
-      return 0;
-    });
-  }
-
-  renderSortActions () {
-    let { ascending, isSearching, sortBy } = this.state,
-        sortBoxStyle = {
-          flex: isSearching ? '0' : '4',
-        },
-        dir = ascending ? 'up' : 'down',
-        alphaClasses = classNames('list__button', 'button', 'sort-tags__button-by_alpha', {
-          'active': sortBy === 'alpha',
-        }),
-        numClasses = classNames('list__button', 'button', 'sort-tags__button-by_num', {
-          'active': sortBy === 'num',
-        }),
-        dateClasses = classNames('list__button', 'button', 'sort-tags__button-by_date', {
-          'active': sortBy === 'date',
-        });
-
-    return (
-      <div className='list__sort' style={sortBoxStyle}>
-        <button className={alphaClasses} onClick={() => this.handleSetSort('alpha')} title='sort alphabetically'>
-          <i className={`fa fa-long-arrow-${sortBy === 'alpha' ? dir : 'up'}`}/>AZ
-        </button>
-        <button className={numClasses} onClick={() => this.handleSetSort('num')} title='sort numerically'>
-          <i className={`fa fa-long-arrow-${sortBy === 'num' ? dir : 'up'}`}/>09
-        </button>
-        <button className={dateClasses} onClick={() => this.handleSetSort('date')} title='sort by date'>
-          <i className={`fa fa-long-arrow-${sortBy === 'date' ? dir : 'up'}`}/>
-          <i className='fa fa-calendar-o'/>
-        </button>
-      </div>
-    )
-  }
-
   render () {
-    let { isSearching, options } = this.state,
-        { filteredTags, tags } = this.props,
-        sortedTags = filteredTags.sort(this.handleSort()),
-        searchIconStyle = {
-          flex: isSearching ? '1' : '0',
-        },
-        searchBoxStyle = {
-          flex: isSearching ? '8' : '0',
-          overflow: isSearching ? 'visible' : 'hidden',
-        }
+    let { ascending, sortBy } = this.state,
+        { filteredTags } = this.props,
+        sortedTags = filteredTags.sort(this.sort());
 
     return (
       <div className='tag-list__container'>
         <h1 className='drawer__header tags__header'>Tags</h1>
-        <div className='list__actions'>
-          {this.renderSortActions()}
-          <button className='list__button button search-tags' onClick={() => this.handleSearchTags()} style={searchIconStyle} title='search tags'>
-            { isSearching ? <i className='fa fa-long-arrow-left'/> : <i className='fa fa-search'/> }
-          </button>
-          <div className='list__search' style={searchBoxStyle}>
-            <Select
-              className='list-selector'
-              multi={false}
-              name='list-select'
-              onChange={(selected) => this.props.selectTag(selected.value)}
-              options={options}
-              placeholder=''
-              ref='searchbar'
-              value=''
-              />
-          </div>
-        </div>
+        <TagActions ascending={ascending} filteredTags={filteredTags} onSort={(sort) => this.handleSetSort(sort)} selectTag={this.props.selectTag} sortBy={sortBy}/>
         <ul className='tagmarker-list tag-list'>
           <SelectedTags />
           <FilteredTags selectTag={this.props.selectTag} tags={sortedTags} />
