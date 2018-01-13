@@ -15,4 +15,16 @@ const mapStateToProps = (state) => {
   };
 }
 
-export default connect(mapStateToProps)(ListView);
+/**
+ * Maps store actions to component props.
+ *
+ * @param {function} dispatch - Store dispatch
+ * @returns {object} Props for the connected component to dispatch actions
+ */
+const mapDispatchToProps = (dispatch) => {
+  return {
+    selectTag: (id) => {dispatch({ type: 'ADD_SELECTED_TAG', id })},
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ListView);

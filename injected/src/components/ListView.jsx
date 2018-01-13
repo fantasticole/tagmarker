@@ -47,7 +47,8 @@ export default class ListView extends Component {
     tagIndex < 0 ? selectedTags.push(id) : selectedTags.splice(tagIndex, 1);
     // update the state
     this.setState({ selectedTags });
-
+    // update the store
+    this.props.selectTag(id);
     // update bookmarks
     this.filterBookmarks();
     this.filterTags();

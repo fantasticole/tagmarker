@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 
-export function bookmarks (state = [], action) {
+export function bookmarks (state = {}, action) {
   console.log('action:', action)
   switch (action.type) {
     case 'SET_BOOKMARKS':
@@ -12,6 +12,19 @@ export function bookmarks (state = [], action) {
       // update just the item we want to change
       updated[action.bookmark.id] = action.bookmark;
       // return the whole object
+      return updated;
+    default:
+      return state;
+  }
+};
+
+export function selected (state = [], action) {
+  switch (action.type) {
+    case 'ADD_SELECTED_TAG':
+      let updated = [...state];
+
+      // add id to the selected array
+      updated.push(action.id)
       return updated;
     default:
       return state;
@@ -48,6 +61,7 @@ export function tagMarkerFolder (state = {}, action) {
 
 export default combineReducers({
   bookmarks,
+  selected,
   tagMarkerFolder,
   tags,
 });
