@@ -22,7 +22,6 @@ const mapStateToProps = (state) => {
  */
 const mapDispatchToProps = (dispatch) => {
   return {
-    toggleDrawer: () => {dispatch({ type: 'TOGGLE_DRAWER', data: false })},
     createBookmark: (bookmark) => {dispatch({ type: 'CREATE_BOOKMARK', bookmark })},
   };
 }
