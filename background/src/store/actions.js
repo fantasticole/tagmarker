@@ -1,3 +1,11 @@
+export function initialize (data) {
+  return (dispatch, getState) => {
+    dispatch(setBookmarks(data.bookmarks));
+    dispatch(setTags(data.tags));
+    dispatch(updateFilteredTags(Object.keys(data.tags)));
+  };
+}
+
 export function createOrUpdateBookmark (bookmark) {
   return { type: 'CREATE_OR_UPDATE_BOOKMARK', bookmark };
 }

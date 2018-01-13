@@ -1,7 +1,7 @@
 import store from './store';
 import { wrapStore } from 'react-chrome-redux';
 
-import { setFolder, setBookmarks, setTags, updateFilteredTags } from './store/actions';
+import { setFolder, initialize } from './store/actions';
 
 import addBookmark from './utils/addBookmark';
 import getBookmarksAndFolders from './utils/getBookmarksAndFolders';
@@ -55,8 +55,6 @@ chrome.bookmarks.getTree(arr => {
       console.log("Error Storing: " + chrome.runtime.lastError);
     }
   });
-  // save formatted bookmarks and tags in the store
-  store.dispatch(setBookmarks(data.bookmarks));
-  store.dispatch(setTags(data.tags));
-  store.dispatch(updateFilteredTags(Object.keys(data.tags)));
+  // initialize data in the store
+  store.dispatch(initialize(data));
 });
