@@ -9,10 +9,11 @@ import { connect } from 'react-redux';
  * @returns {object} Map of state data to component props.
  */
 const mapStateToProps = (state) => {
-  let { selected, tags } = state;
+  let tags = state.selected.map(id => (state.tags[id]));
 
+  console.log('state:', state)
   return {
-    tags: selected.map(id => (tags[id])),
+    tags,
   };
 }
 

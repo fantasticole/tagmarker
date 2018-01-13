@@ -11,7 +11,6 @@ export default class ListView extends Component {
 
     this.state = {
       filteredBookmarks: [],
-      filteredTags: Object.keys(this.props.tags),
     };
   }
 
@@ -22,21 +21,15 @@ export default class ListView extends Component {
   componentDidUpdate (prevProps) {
     let { selectedTags } = this.props,
         { filteredBookmarks } = this.state,
-        // if any of the selected tags' bookmark count changes
-        updateTags = selectedTags.some(tagId => {
+        // if the number of selected tags changes
+        selectedChanged = prevProps.selectedTags.length !== selectedTags.length,
+        // or if the selected tags' bookmark count changes
+        filterBookmarks = selectedTags.some(tagId => {
           return prevProps.tags[tagId].bookmarks.length !== this.props.tags[tagId].bookmarks.length;
-        }),
-        updateBookmarks = filteredBookmarks.some(bId => {
-          return prevProps.bookmarks[bId].tags.length !== this.props.bookmarks[bId].tags.length;
-        }),
-        selectedChanged = prevProps.selectedTags.length !== this.props.selectedTags.length;
+        });
 
     // update the bookmarks
-    if (updateTags) this.filterTags();
-    if (selectedChanged || updateBookmarks) {
-      this.filterBookmarks();
-      this.filterTags();
-    }
+    if (selectedChanged || filterBookmarks) this.filterBookmarks();
   }
 
   filterBookmarks () {
@@ -48,38 +41,12 @@ export default class ListView extends Component {
     this.setState({ filteredBookmarks });
   }
 
-  filterTags () {
-    let { selectedTags, tags } = this.props,
-        filteredTags = Object.keys(tags);
-
-    if (selectedTags.length) filteredTags = this.getRelatedTags();
-    // update the state
-    this.setState({ filteredTags });
-  }
-
-  getRelatedTags () {
-    let { selectedTags } = this.props,
-        bookmarks = Object.values(this.props.bookmarks),
-        filteredBookmarks = bookmarks.filter(b => {
-          return selectedTags.every((id) => b.tags.includes(id));
-        }),
-        allTags = filteredBookmarks.reduce((tags, bookmark) => {
-          return tags.concat(bookmark.tags);
-        }, []),
-        relatedTags = Array.from(new Set(allTags)).filter(id => {
-          return !selectedTags.includes(id);
-        });
-
-    return relatedTags;
-  }
-
   render () {
-    let { filteredTags, filteredBookmarks } = this.state,
-        filtered = filteredTags.map(id => (this.props.tags[id]));
+    let { filteredBookmarks } = this.state;
 
     return (
       <div className='drawer__content lists'>
-        <TagList filteredTags={filtered} />
+        <TagList />
         <BookmarkList selectedBookmarks={filteredBookmarks} />
       </div>
     );
