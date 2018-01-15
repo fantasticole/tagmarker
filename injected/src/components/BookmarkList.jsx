@@ -14,9 +14,9 @@ export default class BookmarkList extends Component {
       <div className='bookmark-list__container'>
         <h1 className='drawer__header bookmarks__header'>Bookmarks</h1>
         {
-          this.props.selectedBookmarks.length ?
+          this.props.filteredBookmarks.length ?
           <ul className='tagmarker-list bookmark-list'>
-            {this.props.selectedBookmarks.map(bookmarkId => (
+            {this.props.filteredBookmarks.map(bookmarkId => (
               <Bookmark
                 id={bookmarkId}
                 key={bookmarkId}

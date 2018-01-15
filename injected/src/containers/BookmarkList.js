@@ -11,6 +11,7 @@ import { connect } from 'react-redux';
 
 const mapStateToProps = (state) => {
   return {
+    filteredBookmarks: state.filteredBookmarks,
   };
 }
 
@@ -26,5 +27,5 @@ const mapDispatchToProps = (dispatch) => {
   };
 }
 
-export default connect()(BookmarkList);
+export default connect(mapStateToProps)(BookmarkList);
 // export default connect(mapStateToProps, mapDispatchToProps)(BookmarkList);

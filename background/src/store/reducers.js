@@ -16,12 +16,23 @@ export function bookmarks (state = {}, action) {
   }
 };
 
-export function filtered (state = [], action) {
+export function filteredBookmarks (state = [], action) {
+  switch (action.type) {
+    case 'UPDATE_FILTERED_BOOKMARKS':
+      let updatedList = [...action.bookmarks];
+
+      return updatedList;
+    default:
+      return state;
+  }
+};
+
+export function filteredTags (state = [], action) {
   switch (action.type) {
     case 'UPDATE_FILTERED_TAGS':
-      let filteredTags = [...action.tags];
+      let updatedList = [...action.tags];
 
-      return filteredTags;
+      return updatedList;
     default:
       return state;
   }
@@ -90,7 +101,8 @@ export function tagMarkerFolder (state = {}, action) {
 
 export default combineReducers({
   bookmarks,
-  filtered,
+  filteredBookmarks,
+  filteredTags,
   selected,
   sort,
   tagMarkerFolder,
