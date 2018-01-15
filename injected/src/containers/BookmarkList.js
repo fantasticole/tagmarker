@@ -15,17 +15,4 @@ const mapStateToProps = (state) => {
   };
 }
 
-
-/**
- * Maps store actions to component props.
- *
- * @param {function} dispatch - Store dispatch
- * @returns {object} Props for the connected component to dispatch actions
- */
-const mapDispatchToProps = (dispatch) => {
-  return {
-  };
-}
-
 export default connect(mapStateToProps)(BookmarkList);
-// export default connect(mapStateToProps, mapDispatchToProps)(BookmarkList);
