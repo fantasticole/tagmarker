@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 
 import BookmarkList from '../containers/BookmarkList';
-import TagList from '../containers/TagList';
+import TagList from './TagList';
 
 export default class ListView extends Component {
   constructor (props) {
