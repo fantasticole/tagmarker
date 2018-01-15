@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import classNames from 'classnames';
 
 import MarqueeWrapper from './MarqueeWrapper';
 
@@ -9,8 +10,12 @@ export default class SelectedTags extends Component {
   }
 
   render () {
+    let listClasses = classNames('selected-tags__list', {
+          'empty': this.props.tags.length === 0,
+        });
+
     return (
-      <div className='selected-tags__list'>
+      <div className={listClasses}>
         {
           this.props.tags.map(tag => {
             return (
