@@ -1,4 +1,4 @@
-import TagList from '../components/TagList';
+import FilteredTags from '../components/FilteredTags';
 
 import { connect } from 'react-redux';
 
@@ -9,10 +9,13 @@ import { connect } from 'react-redux';
  * @returns {object} Map of state data to component props.
  */
 const mapStateToProps = (state) => {
-  let filteredTags = state.filtered.map(id => state.tags[id]);
+  let { filtered, sort, tags } = state,
+      filteredTags = filtered.map(id => tags[id]);
 
   return {
-    filteredTags,
+    ascending: sort.ascending,
+    sortBy: sort.sortBy,
+    tags: filteredTags,
   };
 }
 
@@ -28,4 +31,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(TagList);
+export default connect(mapStateToProps, mapDispatchToProps)(FilteredTags);

@@ -3,6 +3,7 @@ export function initialize (data) {
     dispatch(setBookmarks(data.bookmarks));
     dispatch(setTags(data.tags));
     dispatch(updateFilteredTags(Object.keys(data.tags)));
+    dispatch({ type: 'SET_SORT', sort: 'alpha' });
   };
 }
 

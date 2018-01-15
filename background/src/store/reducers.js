@@ -40,6 +40,28 @@ export function selected (state = [], action) {
   }
 };
 
+export function sort (state = {}, action) {
+  switch (action.type) {
+    case 'SET_SORT':
+      // get object holding current sort state
+      let updated = Object.assign({}, state);
+
+      // if sortBy stays the same, just change the direction
+      if (action.sort === state.sortBy) {
+        updated.ascending = !state.ascending;
+      }
+      else {
+        // otherwise, update sortBy and set default direction
+        updated.sortBy = action.sort;
+        updated.ascending = true;
+      }
+
+      return updated;
+    default:
+      return state;
+  }
+};
+
 export function tags (state = {}, action) {
   switch (action.type) {
     case 'SET_TAGS':
@@ -72,6 +94,7 @@ export default combineReducers({
   bookmarks,
   filtered,
   selected,
+  sort,
   tagMarkerFolder,
   tags,
 });
