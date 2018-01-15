@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 
-import MarqueeWrapper from './MarqueeWrapper';
+import Tag from './Tag';
 
 export default class SelectedTags extends Component {
   constructor (props) {
@@ -18,19 +18,7 @@ export default class SelectedTags extends Component {
       <div className={listClasses}>
         {
           this.props.tags.map(tag => {
-            return (
-              <li
-                className='tag-item'
-                key={tag.id}
-                onClick={() => this.props.removeTag(tag.id)}
-                >
-                <MarqueeWrapper>
-                  <p className='tag selected'>
-                    {tag.title} <span className='tagCount'>{tag.bookmarks.length}</span>
-                  </p>
-                </MarqueeWrapper>
-              </li>
-            );
+            return ( <Tag key={tag.id} onClick={() => this.props.removeTag(tag.id)} tag={tag} isSelected />);
           })
         }
       </div>
