@@ -6,11 +6,9 @@ export function bookmarks (state = {}, action) {
     case 'SET_BOOKMARKS':
       return action.data;
     case 'CREATE_OR_UPDATE_BOOKMARK':
-      // get object holding all of the bookmarks
-      let updated = Object.assign({}, state);
+      // get updated object holding all of the bookmarks
+      let updated = action.bookmarks;
 
-      // update just the item we want to change
-      updated[action.bookmark.id] = action.bookmark;
       // return the whole object
       return updated;
     default:

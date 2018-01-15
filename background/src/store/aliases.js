@@ -1,8 +1,9 @@
 import {
+  createOrUpdateBookmark,
   createOrUpdateTags,
+  filterTags,
   setFilteredTags,
   setFolder,
-  createOrUpdateBookmark,
   updateFilteredTags,
   updateSelectedTags
 } from './actions';
@@ -149,21 +150,6 @@ function deleteTags (originalAction) {
   }
 }
 
-function filterTags (allBookmarks, selectedTags) {
-  let bookmarks = Object.values(allBookmarks),
-      filteredBookmarks = bookmarks.filter(b => {
-        return selectedTags.every((id) => b.tags.includes(id));
-      }),
-      allTags = filteredBookmarks.reduce((tags, bookmark) => {
-        return tags.concat(bookmark.tags);
-      }, []),
-      relatedTags = Array.from(new Set(allTags)).filter(id => {
-        return !selectedTags.includes(id);
-      });
-
-  return relatedTags;
-}
-
 function removeTag (originalAction) {
   let { id } = originalAction;
 
@@ -190,7 +176,7 @@ function selectTag (originalAction) {
         // add id to selected tags array
         selectedTags = [...selected, id],
         // update filtered tags based on updated selections
-        filteredTags = filterTags(bookmarks, selectedTags)
+        filteredTags = filterTags(bookmarks, selectedTags);
 
     // update the store
     dispatch(updateSelectedTags(selectedTags));
