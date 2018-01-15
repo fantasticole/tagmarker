@@ -11,7 +11,6 @@ import { connect } from 'react-redux';
 const mapStateToProps = (state) => {
   let tags = state.selected.map(id => (state.tags[id]));
 
-  console.log('state:', state)
   return {
     tags,
   };

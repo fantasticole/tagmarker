@@ -21,7 +21,9 @@ export function bookmarks (state = {}, action) {
 export function filtered (state = [], action) {
   switch (action.type) {
     case 'UPDATE_FILTERED_TAGS':
-      return action.tags;
+      let filteredTags = [...action.tags];
+
+      return filteredTags;
     default:
       return state;
   }
@@ -30,7 +32,9 @@ export function filtered (state = [], action) {
 export function selected (state = [], action) {
   switch (action.type) {
     case 'UPDATE_SELECTED_TAGS':
-      return action.tags;
+      let selectedTags = [...action.tags];
+      
+      return selectedTags;
     default:
       return state;
   }
