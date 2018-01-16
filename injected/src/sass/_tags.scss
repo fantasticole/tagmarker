@@ -49,17 +49,27 @@
 }
 
 // bookmark tag styles
+.bookmark__tag {
+  padding: 2px 5px 1px;
+  background-color: $deep-accent;
+  background-image: linear-gradient(to top, $deep-accent 0%, $light-accent 100%);
+  font-size: 12px;
+}
+
 .bookmark__tag--is_editing:hover {
   background-color: $deep;
   background-image: linear-gradient(to top, $deep 0%, $deep-highlight 100%);
   cursor: pointer;
 }
 
-.bookmark__tag {
-  padding: 2px 5px 1px;
-  background-color: $deep-accent;
-  background-image: linear-gradient(to top, $deep-accent 0%, $light-accent 100%);
-  font-size: 12px;
+.bookmark__tag--is_suggested {
+  background-color: $light-light;
+  background-image: linear-gradient(to top, $light-light 0%, $lighter-light 100%);
+  cursor: pointer;
+  &:hover {
+    background-color: $light;
+    background-image: linear-gradient(to top, $light 0%, $light-highlight 100%);
+  }
 }
 
 .bookmark__tag i {

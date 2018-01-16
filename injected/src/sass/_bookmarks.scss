@@ -1,0 +1,13 @@
+@import 'colors';
+
+// // // // // // // // // // //
+// // // BOOKMARK STYLES // // //
+// // // // // // // // // //
+
+.create-bookmark__tags--are_selected {
+  + .create-bookmark__tags--are_suggested {
+    border-top: 1px dotted $deep-accent;
+    padding-top: 5px;
+    margin-top: 5px;
+  }
+}
