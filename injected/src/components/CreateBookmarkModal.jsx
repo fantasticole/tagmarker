@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import classNames from 'classnames';
 
 import Select from 'react-select';
 import EditableTags from './EditableTags';
@@ -12,10 +13,12 @@ export default class CreateBookmarkModal extends Component {
 
     this.state = {
       parentId: this.props.tagMarkerFolder.id,
+      preventClose: false,
       suggested: [],
       tagsToAdd: [],
       title: this.props.title,
       url: this.props.url,
+      warn: false,
     };
   }
 
@@ -25,6 +28,14 @@ export default class CreateBookmarkModal extends Component {
 
   handleChange (bookmarkKey, event) {
     this.setState({ [bookmarkKey]: event.target.value });
+    this.triggerCancelBuffer();
+  }
+
+  handleClickCancel () {
+    let { preventClose } = this.state;
+    // check for changes
+    if (preventClose) this.setState({ preventClose: false, warn: true });
+    else this.handleDeactivate();
   }
 
   handleClickSubmit () {
@@ -40,6 +51,11 @@ export default class CreateBookmarkModal extends Component {
     this.refs.modal.deactivate();
   }
 
+  handleSelectFolder(id) {
+    this.triggerCancelBuffer();
+    this.setParent(id);
+  }
+
   setParent (parentId) {
     let { tags } = this.props,
         parent = tags[parentId],
@@ -52,16 +68,25 @@ export default class CreateBookmarkModal extends Component {
 
   setSelectedTags (tagsToAdd) {
     this.setState({ tagsToAdd });
+    this.triggerCancelBuffer();
+  }
+
+  triggerCancelBuffer () {
+    this.setState({ preventClose: true, warn: false })
   }
 
   render () {
-    let { parentId, suggested } = this.state;
+    let { parentId, suggested, warn } = this.state,
+        cancelText = warn ? 'Yes, bye' : 'Cancel',
+        warningClasses = classNames('modal__warning', {
+          visible: warn,
+        });
 
     return (
       <Modal.Modal className='create-bookmark-modal' ref='modal'>
         <h1 className='modal__header create-bookmark__header'>Add bookmark in:</h1>
         <FolderSelection
-          onSelect={(selected) => this.setParent(selected.value)}
+          onSelect={(selected) => this.handleSelectFolder(selected.value)}
           parentId={parentId}
           />
         <input
@@ -86,9 +111,10 @@ export default class CreateBookmarkModal extends Component {
           suggested={suggested}
           tags={this.props.tags}
           />
+        <p className={warningClasses}>Are you sure you want to cancel?</p>
         <span className='modal__actions create-bookmark__actions'>
           <button className='button modal-action__button create-bookmark-action__button action-button' disabled={!parentId} onClick={() => this.handleClickSubmit()}>Submit <i className='fa fa-floppy-o'/></button>
-          <button className='button modal-action__button create-bookmark-action__button action-button' onClick={() => this.handleDeactivate()}>Cancel <i className='fa fa-ban'/></button>
+          <button className='button modal-action__button create-bookmark-action__button action-button' onClick={() => this.handleClickCancel()}>{cancelText} <i className='fa fa-ban'/></button>
         </span>
       </Modal.Modal>
     );
