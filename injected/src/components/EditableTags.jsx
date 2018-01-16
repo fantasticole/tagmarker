@@ -11,7 +11,6 @@ export default class EditableTags extends Component {
     super(props);
 
     this.state = {
-      isEditing: false,
       isAdding: false,
       options: [],
       selected: [],
