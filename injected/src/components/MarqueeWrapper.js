@@ -30,7 +30,7 @@ export default class MarqueeWrapper extends Component {
     this.setState({ scrollDistance: 0 });
   }
 
-  render() {
+  render () {
     // set scroll timing to be relative to disctance
     let scrollTiming = Math.abs(this.state.scrollDistance)/100,
         scrollStyles = {
