@@ -21,7 +21,7 @@ export default class FolderSelection extends Component {
     return childNode.children.reduce((list, child) => {
       if (child.children) {
         // create an indentation for each level down in the folder tree
-        let indents = Array(level).fill(<span className='indent'/>),
+        let indents = this.getIndents(level),
             // include those indentations in the label
             label = <span>{indents}{child.title}</span>,
             // increase the level for when we go another level down
@@ -36,6 +36,15 @@ export default class FolderSelection extends Component {
       }
       return list;
     }, options)
+  }
+
+  getIndents (count) {
+    let indents = [];
+
+    for (var x = 0; x < count; x++) {
+      indents.push(<span className='indent' key={x} />);
+    }
+    return indents;
   }
 
   loadFolders () {
