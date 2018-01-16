@@ -84,7 +84,7 @@ export default class CreateBookmarkModal extends Component {
           tags={this.props.tags}
           />
         <span className='modal__actions create-bookmark__actions'>
-          <button className='button modal-action__button create-bookmark-action__button action-button' onClick={() => this.handleClickSubmit()}>Submit <i className='fa fa-floppy-o'/></button>
+          <button className='button modal-action__button create-bookmark-action__button action-button' disabled={!parentId} onClick={() => this.handleClickSubmit()}>Submit <i className='fa fa-floppy-o'/></button>
           <button className='button modal-action__button create-bookmark-action__button action-button' onClick={() => this.handleDeactivate()}>Cancel <i className='fa fa-ban'/></button>
         </span>
       </Modal.Modal>
