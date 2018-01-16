@@ -24,10 +24,17 @@ export default class EditableTags extends Component {
   }
 
   componentDidUpdate (prevProps) {
-    let { suggested } = this.props;
+    let { suggested } = this.props,
+        lengthChanged = suggested.length !== prevProps.suggested.length,
+        propsChanged;
+
+    // if the length didn't change and we get ids, see if they changed
+    if (!lengthChanged && suggested.length > 0) {
+      propsChanged = suggested.some((id, i) => (id !== prevProps.suggested[i]));
+    }
 
     // if the suggested ids have changed
-    if (prevProps.suggested.some((id, i) => (id !== suggested[i]))) {
+    if (lengthChanged || propsChanged) {
       // update the state
       this.setState({ suggested });
       // update the options
