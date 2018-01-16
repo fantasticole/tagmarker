@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
+import Select from 'react-select';
 import FolderSelection from './FolderSelection';
 import Modal from './Modal';
 
@@ -10,6 +11,8 @@ export default class CreateBookmarkModal extends Component {
 
     this.state = {
       addedTags: [],
+      isAdding: false,
+      options: [],
       parent: this.props.tagMarkerFolder,
       tagsToAdd: [],
       title: this.props.title,
@@ -19,6 +22,11 @@ export default class CreateBookmarkModal extends Component {
 
   componentDidMount () {
     this.setPossibleTags();
+  }
+
+  handleAddTags () {
+    this.setState({ isAdding: true });
+    this.setOptions();
   }
 
   handleChange (bookmarkKey, event) {
@@ -63,6 +71,23 @@ export default class CreateBookmarkModal extends Component {
     }
   }
 
+  selectTag (selected) {
+    console.log('selected:', selected);
+  }
+
+  setOptions () {
+    let { tagsToAdd, addedTags } = this.state,
+        tags = [...tagsToAdd, ...addedTags],
+        options = [];
+
+    Object.values(this.props.tags).forEach(tag => {
+      if (!tags.includes(tag.id)) {
+        options.push({ label: tag.title, value: tag.id });
+      }
+    })
+    this.setState({ options });
+  }
+
   setPossibleTags (tagsToAdd) {
     // if we don't have any tags to add passed in
     if (!tagsToAdd) {
@@ -91,7 +116,7 @@ export default class CreateBookmarkModal extends Component {
   }
 
   renderTags () {
-    let { tagsToAdd } = this.state,
+    let { isAdding, tagsToAdd } = this.state,
         { tags } = this.props,
         tagObjects = tagsToAdd.map(id => tags[id]);
 
@@ -100,6 +125,19 @@ export default class CreateBookmarkModal extends Component {
         {tagObjects.map(tag => (
           <button className='button bookmark__button bookmark__tag bookmark__tag--is_editing' key={tag.id} onClick={() => this.handleDeleteTag(tag.id)}>{tag.title} <i className='fa fa-times-circle'/></button>
         ))}
+        {
+          isAdding ?
+          <Select
+            className='tag-selector'
+            multi={false}
+            name='tag-select'
+            onChange={(selected) => this.selectTag(selected)}
+            options={this.state.options}
+            placeholder=''
+            value=''
+            /> :
+          <button className='button bookmark__button bookmark__button--is_add' onClick={() => this.handleAddTags()}><i className='fa fa-plus-circle'/></button>
+        }
       </div>
     );
   }
