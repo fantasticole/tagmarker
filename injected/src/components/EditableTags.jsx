@@ -82,6 +82,7 @@ export default class EditableTags extends Component {
     // if it's in the options array, remove it
     if (index > -1) options.splice(index, 1);
     this.setState({ isAdding: false, options, selected });
+    this.props.selectTags(selected)
   }
 
   setOptions () {

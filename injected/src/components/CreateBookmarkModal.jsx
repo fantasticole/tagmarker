@@ -11,7 +11,6 @@ export default class CreateBookmarkModal extends Component {
     super(props);
 
     this.state = {
-      addedTags: [],
       parentId: this.props.tagMarkerFolder.id,
       suggested: [],
       tagsToAdd: [],
@@ -29,11 +28,10 @@ export default class CreateBookmarkModal extends Component {
   }
 
   handleClickSubmit () {
-    let { addedTags, parentId, tagsToAdd, title, url } = this.state,
-        tags = [...addedTags, ...tagsToAdd];
+    let { parentId, tagsToAdd, title, url } = this.state;
 
     chrome.bookmarks.create({ parentId, title, url }, bookmark => {
-      this.props.createBookmark(bookmark, tags);
+      this.props.createBookmark(bookmark, tagsToAdd);
       this.handleDeactivate();
     });
   }
@@ -50,6 +48,10 @@ export default class CreateBookmarkModal extends Component {
 
     // set the new parent in the state
     this.setState({ parentId, suggested });
+  }
+
+  setSelectedTags (tagsToAdd) {
+    this.setState({ tagsToAdd });
   }
 
   render () {
@@ -80,6 +82,7 @@ export default class CreateBookmarkModal extends Component {
           type='text'
           />
         <EditableTags
+          selectTags={(tags) => this.setSelectedTags(tags)}
           suggested={suggested}
           tags={this.props.tags}
           />
