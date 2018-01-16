@@ -9,12 +9,10 @@ export function initialize (data) {
 
 export function createOrUpdateBookmark (bookmark) {
   return (dispatch, getState) => {
-    let { bookmarks, selected } = getState(),
-        // get updated bookmarks to pass into filterTags function
-        updatedBookmarks = Object.assign({}, bookmarks, { [bookmark.id]: bookmark });
+    let { selected } = getState();
 
     // update the bookmark in the store as well as filteredTags
-    dispatch({ type: 'CREATE_OR_UPDATE_BOOKMARK', bookmarks: updatedBookmarks });
+    dispatch({ type: 'CREATE_OR_UPDATE_BOOKMARK', bookmark });
     return dispatch(filterBookmarksAndTags(selected));
   };
 }
@@ -28,7 +26,7 @@ export function filterBookmarksAndTags (selectedTags) {
     let { bookmarks, tags } = getState();
 
     // if we have tags selected, filter bookmarks and tags
-    if (selectedTags) {
+    if (selectedTags.length) {
       // look at each bookmark object
       let filteredBookmarks = Object.values(bookmarks).filter(b => {
             // include it if every selected tag is in its tags array
@@ -48,8 +46,8 @@ export function filterBookmarksAndTags (selectedTags) {
       dispatch(updateFilteredTags(relatedTags));
     }
     else {
-      dispatch(updateFilteredBookmarks(Object.values(bookmarks)));
-      dispatch(updateFilteredTags(Object.values(tags)));
+      dispatch(updateFilteredBookmarks(Object.keys(bookmarks)));
+      dispatch(updateFilteredTags(Object.keys(tags)));
     }
   }
 }

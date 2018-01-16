@@ -7,7 +7,7 @@ export function bookmarks (state = {}, action) {
       return action.data;
     case 'CREATE_OR_UPDATE_BOOKMARK':
       // get updated object holding all of the bookmarks
-      let updated = action.bookmarks;
+      let updated = Object.assign({}, state, { [action.bookmark.id]: action.bookmark });
 
       // return the whole object
       return updated;

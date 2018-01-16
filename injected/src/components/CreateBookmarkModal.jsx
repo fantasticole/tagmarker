@@ -42,6 +42,7 @@ export default class CreateBookmarkModal extends Component {
         // find index of tag to remove
         tagIndex = tagsToAdd.indexOf(id);
 
+    
     // remove the tag id
     tagsToAdd.splice(tagIndex, 1);
     // update the state
@@ -53,20 +54,20 @@ export default class CreateBookmarkModal extends Component {
     let { tags } = this.props,
         parentId = this.state.parent.id,
         // get possible tag ideas from parent folder
-        possibleTags = [ ...tags[parentId].parents, parentId ],
-        // get tag objects
-        tagsToAdd = possibleTags.map(id => tags[id]);
+        tagsToAdd = [ ...tags[parentId].parents, parentId ];
 
     // set those in the state
     this.setState({ tagsToAdd });
   }
 
   renderTags () {
-    let { tagsToAdd } = this.state;
+    let { tagsToAdd } = this.state,
+        { tags } = this.props,
+        tagObjects = tagsToAdd.map(id => tags[id]);;
 
     return (
       <div className='create-bookmark__tags'>
-        {tagsToAdd.map(tag => (
+        {tagObjects.map(tag => (
           <button className='button bookmark__button bookmark__tag bookmark__tag--is_editing' key={tag.id} onClick={() => this.handleDeleteTag(tag.id)}>{tag.title} <i className='fa fa-times-circle'/></button>
         ))}
       </div>

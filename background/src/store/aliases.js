@@ -30,26 +30,18 @@ function addTags (originalAction) {
 }
 
 function createBookmark (originalAction) {
-  let { bookmark } = originalAction;
+  let { bookmark, tagsToAdd } = originalAction;
 
   return (dispatch, getState) => {
     let { parentId } = bookmark,
         { tags } = getState(),
-        tagsToAdd = [],
         tagsToUpdate = [];
-
-    // gather all parent tags up to bookmarks root
-    while (parentId > 0) {
-      tagsToAdd.push(parentId);
-      parentId = tags[parentId];
-    }
 
     // add bookmark to each tag
     tagsToAdd.forEach(id => {
       let updatedTag = tags[id];
 
       updatedTag.bookmarks.push(bookmark.id);
-
       tagsToUpdate.push(updatedTag);
     })
 

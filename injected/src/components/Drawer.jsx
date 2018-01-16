@@ -25,7 +25,7 @@ export default class Drawer extends Component {
 
         Modal.render(
           <CreateBookmarkModal
-            createBookmark={(bookmark) => createBookmark(bookmark)}
+            createBookmark={(bookmark, tags) => createBookmark(bookmark, tags)}
             tagMarkerFolder={tagMarkerFolder}
             tags={this.props.tags}
             title={title}
