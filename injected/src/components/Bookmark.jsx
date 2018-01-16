@@ -167,7 +167,7 @@ export default class Bookmark extends Component {
       return (
         <span className='bookmark-tags__editing'>
           {tags.map(tag => (
-            <button className='button bookmark-button bookmark-tag' key={tag.id} onClick={() => this.handleDeleteTag(tag.id)}>{tag.title} <i className='fa fa-times-circle'/></button>
+            <button className='button bookmark__button bookmark__tag bookmark__tag--is_editing' key={tag.id} onClick={() => this.handleDeleteTag(tag.id)}>{tag.title} <i className='fa fa-times-circle'/></button>
           ))}
         </span>
       );
@@ -175,7 +175,7 @@ export default class Bookmark extends Component {
     return (
       <MarqueeWrapper>
         {tags.map(tag => (
-          <span className='bookmark-tag' key={tag.id}>{tag.title}</span>
+          <span className='bookmark__tag' key={tag.id}>{tag.title}</span>
         ))}
       </MarqueeWrapper>
     );
@@ -206,7 +206,7 @@ export default class Bookmark extends Component {
               <span className='detail-title'>Created:</span> { new Date(bookmark.dateAdded).toLocaleString() }
             </div>
             <div className='bookmark-detail bookmark-detail__tags'>
-              { this.renderTags() }
+              {this.renderTags()}
             </div>
             {this.renderInput()}
             <div className='bookmark-detail bookmark-detail__actions'>

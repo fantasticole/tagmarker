@@ -1,0 +1,67 @@
+@import 'colors';
+
+// // // // // // // // // //
+// // // TAG STYLES // // //
+// // // // // // // // //
+
+// general styles
+.tag,
+.bookmark__tag {
+  display: inline-block;
+  border-radius: 20px;
+  background-color: $deep;
+  background-image: linear-gradient(to top, $deep 0%, $deep-highlight 100%);
+  color: $base;
+  padding: 3px 5px;
+  margin: 1px;
+  white-space: nowrap;
+  text-shadow: 0px 0px 1px $light-deep;
+  &.selected {
+    background-color: $light;
+    background-image: linear-gradient(to top, $light 0%, $light-highlight 100%);
+    .tagCount {
+      color: $light;
+    }
+  }
+}
+
+.tagCount {
+  background-color: $base;
+  border-radius: 10px;
+  font-size: 11px;
+  padding: 0px 3px;
+  color: $deep;
+  text-shadow: 0px 0px 1px $lighter-deep;
+}
+
+// tag list styles
+.tag-item {
+  display: inline-block;
+  max-width: 100%;
+  .tag:hover {
+    cursor: pointer;
+    background-color: $light;
+    background-image: linear-gradient(to top, $light 0%, $light-highlight 100%);
+    .tagCount {
+      color: $light;
+    }
+  }
+}
+
+// bookmark tag styles
+.bookmark__tag--is_editing:hover {
+  background-color: $deep;
+  background-image: linear-gradient(to top, $deep 0%, $deep-highlight 100%);
+  cursor: pointer;
+}
+
+.bookmark__tag {
+  padding: 2px 5px 1px;
+  background-color: $deep-accent;
+  background-image: linear-gradient(to top, $deep-accent 0%, $light-accent 100%);
+  font-size: 12px;
+}
+
+.bookmark__tag i {
+  font-size: 14px;
+}

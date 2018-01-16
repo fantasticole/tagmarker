@@ -67,7 +67,7 @@ export default class CreateBookmarkModal extends Component {
     return (
       <div className='create-bookmark__tags'>
         {tagsToAdd.map(tag => (
-          <button className='button create-bookmark__button create-bookmark__tag' key={tag.id} onClick={() => this.handleDeleteTag(tag.id)}>{tag.title} <i className='fa fa-times-circle'/></button>
+          <button className='button bookmark__button bookmark__tag bookmark__tag--is_editing' key={tag.id} onClick={() => this.handleDeleteTag(tag.id)}>{tag.title} <i className='fa fa-times-circle'/></button>
         ))}
       </div>
     );
