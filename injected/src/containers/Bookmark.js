@@ -10,11 +10,7 @@ import { connect } from 'react-redux';
  */
 
 const mapStateToProps = (state, ownProps) => {
-  // get the bookmark from the store based on the component's id
-  let bookmark = state.bookmarks[ownProps.id];
-
   return {
-    bookmark,
     tags: state.tags,
   };
 }

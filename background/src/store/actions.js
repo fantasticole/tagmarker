@@ -11,14 +11,11 @@ export function createOrUpdateBookmark (bookmark) {
   return (dispatch, getState) => {
     let { bookmarks, selected } = getState(),
         // get updated bookmarks to pass into filterTags function
-        updatedBookmarks = Object.assign({}, bookmarks, { [bookmark.id]: bookmark }),
-        filteredTags = filterTags(bookmarks, selected),
-        filteredBookmarks = filterBookmarks(bookmarks, selected);
+        updatedBookmarks = Object.assign({}, bookmarks, { [bookmark.id]: bookmark });
 
     // update the bookmark in the store as well as filteredTags
     dispatch({ type: 'CREATE_OR_UPDATE_BOOKMARK', bookmarks: updatedBookmarks });
-    dispatch(updateFilteredBookmarks(filteredBookmarks));
-    return dispatch(updateFilteredTags(filteredTags));
+    return dispatch(filterBookmarksAndTags(selected));
   };
 }
 
@@ -26,37 +23,35 @@ export function createOrUpdateTags (tags) {
   return { type: 'CREATE_OR_UPDATE_TAGS', tags: [...tags] };
 }
 
-export function filterTags (allBookmarks, selectedTags) {
-  // look at each bookmark object
-  let filteredBookmarks = Object.values(allBookmarks).filter(b => {
-        // include it if every selected tag is in its tags array
-        return selectedTags.every((id) => b.tags.includes(id));
-      }),
-      // get a list of all of the filtered bookmarks' tags
-      allTags = filteredBookmarks.reduce((tags, bookmark) => {
-        return tags.concat(bookmark.tags);
-      }, []),
-      // get a unique list of those tags
-      relatedTags = Array.from(new Set(allTags)).filter(id => {
-        // excluding those already selected
-        return !selectedTags.includes(id);
-      });
+export function filterBookmarksAndTags (selectedTags) {
+  return (dispatch, getState) => {
+    let { bookmarks, tags } = getState();
 
-  return relatedTags;
-}
+    // if we have tags selected, filter bookmarks and tags
+    if (selectedTags) {
+      // look at each bookmark object
+      let filteredBookmarks = Object.values(bookmarks).filter(b => {
+            // include it if every selected tag is in its tags array
+            return selectedTags.every((id) => b.tags.includes(id));
+          }),
+          // get a list of all of the filtered bookmarks' tags
+          allTags = filteredBookmarks.reduce((tags, bookmark) => {
+            return tags.concat(bookmark.tags);
+          }, []),
+          // get a unique list of those tags
+          relatedTags = Array.from(new Set(allTags)).filter(id => {
+            // excluding those already selected
+            return !selectedTags.includes(id);
+          });
 
-export function filterBookmarks (allBookmarks, selectedTags) {
-  // if there are tags selected, filter the bookmarks
-  if (selectedTags.length) {
-    // look at each bookmark object
-    return Object.values(allBookmarks).filter(b => {
-      // include it if every selected tag is in its tags array
-      return selectedTags.every((id) => b.tags.includes(id));
-    // return a list of ids
-    }).map(bookmark => bookmark.id);
+      dispatch(updateFilteredBookmarks(filteredBookmarks));
+      dispatch(updateFilteredTags(relatedTags));
+    }
+    else {
+      dispatch(updateFilteredBookmarks(Object.values(bookmarks)));
+      dispatch(updateFilteredTags(Object.values(tags)));
+    }
   }
-  // otherwise, return all the bookmarks
-  return Object.values(allBookmarks);
 }
 
 export function setFolder (folder) {

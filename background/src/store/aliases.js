@@ -1,12 +1,9 @@
 import {
   createOrUpdateBookmark,
   createOrUpdateTags,
-  filterBookmarks,
-  filterTags,
+  filterBookmarksAndTags,
   setFilteredTags,
   setFolder,
-  updateFilteredBookmarks,
-  updateFilteredTags,
   updateSelectedTags
 } from './actions';
 
@@ -158,18 +155,13 @@ function removeTag (originalAction) {
   return (dispatch, getState) => {
     let { bookmarks, selected } = getState(),
         // find id's index in selected tags array
-        index = selected.indexOf(id),
-        filteredTags,
-        filteredBookmarks;
+        index = selected.indexOf(id);
 
     selected.splice(index, 1);
-    // update filtered tags based on updated selections
-    filteredTags = filterTags(bookmarks, selected);
-    filteredBookmarks = filterBookmarks(bookmarks, selected);
     // update the store
     dispatch(updateSelectedTags(selected));
-    dispatch(updateFilteredBookmarks(filteredBookmarks));
-    return dispatch(updateFilteredTags(filteredTags));
+    // update filtered tags and bookmarks based on updated selections
+    return dispatch(filterBookmarksAndTags(selected));
   }
 }
 
@@ -179,15 +171,12 @@ function selectTag (originalAction) {
   return (dispatch, getState) => {
     let { bookmarks, selected } = getState(),
         // add id to selected tags array
-        selectedTags = [...selected, id],
-        // update filtered tags based on updated selections
-        filteredTags = filterTags(bookmarks, selectedTags),
-        filteredBookmarks = filterBookmarks(bookmarks, selectedTags);
+        selectedTags = [...selected, id];
 
     // update the store
     dispatch(updateSelectedTags(selectedTags));
-    dispatch(updateFilteredBookmarks(filteredBookmarks));
-    return dispatch(updateFilteredTags(filteredTags));
+    // update filtered tags and bookmarks based on updated selections
+    return dispatch(filterBookmarksAndTags(selectedTags));
   }
 }
 

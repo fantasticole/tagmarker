@@ -16,11 +16,8 @@ export default class BookmarkList extends Component {
         {
           this.props.filteredBookmarks.length ?
           <ul className='tagmarker-list bookmark-list'>
-            {this.props.filteredBookmarks.map(bookmarkId => (
-              <Bookmark
-                id={bookmarkId}
-                key={bookmarkId}
-                />
+            {this.props.filteredBookmarks.map(bookmark => (
+              <Bookmark bookmark={bookmark} key={bookmark.id} />
             ))}
           </ul> :
           <p className='bookmark__list-is_empty'>no bookmarks to display</p>
