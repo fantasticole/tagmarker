@@ -33,7 +33,7 @@ export default class CreateFolderModal extends Component {
   render () {
     return (
       <Modal.Modal className='create-folder-modal' ref='modal'>
-        <h1 className='create-folder__header'>Add folder in: {this.props.title}</h1>
+        <h1 className='modal__header create-folder__header'>Add folder in: {this.props.title}</h1>
         <input autoFocus className='create-folder__input modal__input' onChange={(e) => this.handleChange(e)} placeholder='folder name' type='text' />
         <span className='modal__actions create-folder__actions'>
           <button className='button modal-action__button create-folder-action__button action-button' onClick={() => this.handleClickSubmit()}>Submit <i className='fa fa-floppy-o'/></button>

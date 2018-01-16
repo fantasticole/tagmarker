@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
+import FolderSelection from './FolderSelection';
 import Modal from './Modal';
 
 export default class CreateBookmarkModal extends Component {
@@ -55,8 +56,17 @@ export default class CreateBookmarkModal extends Component {
         // get possible tag ideas from parent folder
         tagsToAdd = [ ...tags[parentId].parents, parentId ];
 
+    console.log('parent:', this.state.parent)
     // set those in the state
     this.setState({ tagsToAdd });
+  }
+
+  updateParent (selected) {
+    let { tags } = this.props,
+        parent = tags[selected.value];
+
+    // set the new parent in the state
+    this.setState({ parent });
   }
 
   renderTags () {
@@ -78,7 +88,8 @@ export default class CreateBookmarkModal extends Component {
 
     return (
       <Modal.Modal className='create-bookmark-modal' ref='modal'>
-        <h1 className='create-bookmark__header'>Add bookmark in: {parent.title}</h1>
+        <h1 className='modal__header create-bookmark__header'>Add bookmark in:</h1>
+        <FolderSelection onSelect={(selected) => this.updateParent(selected)} />
         <input
           autoFocus
           className='create-bookmark__input modal__input'
