@@ -11,3 +11,22 @@
     margin-top: 5px;
   }
 }
+
+.bookmark__button--is_add {
+  height: 18px;
+  width: 18px;
+  border-radius: 50%;
+  color: $base;
+  background-color: $light-light;
+  background-image: linear-gradient(to top, $light-light 0%, $lighter-light 100%);
+  cursor: pointer;
+  vertical-align: text-top;
+  .fa {
+    font-size: 11px;
+    width: 18.5px;
+  }
+  &:hover {
+    background-color: $light;
+    background-image: linear-gradient(to top, $light 0%, $light-highlight 100%);
+  }
+}
