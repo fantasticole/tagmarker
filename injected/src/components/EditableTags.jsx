@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import classNames from 'classnames';
 
 import Select from 'react-select';
+
+import ifTrue from '../utils/ifTrue';
 
 export default class EditableTags extends Component {
   constructor (props) {
@@ -102,6 +105,28 @@ export default class EditableTags extends Component {
     });
   }
 
+  renderTags (tags, type) {
+    if (tags.length) {
+      let tagClasses = classNames('button', 'bookmark__button', 'bookmark__tag', {
+            'bookmark__tag--is_editing': type === 'selected',
+            'bookmark__tag--is_suggested': type === 'suggested',
+          }),
+          iconClasses = classNames('fa', {
+            'fa-times-circle': type === 'selected',
+            'fa-plus-circle': type === 'suggested',
+          });
+
+      return (
+        <div className={`create-bookmark__tags--are_${type}`}>
+          {tags.map(tag => (
+            <button className={tagClasses} key={tag.id} onClick={() => {type === 'selected' ? this.handleDeleteTag(tag.id) : this.handleSelectSuggested(tag.id)}}>{tag.title} <i className={iconClasses}/></button>
+          ))}
+        </div>
+
+      )
+    }
+  }
+
   render () {
     let { isAdding, selected, suggested } = this.state,
         { tags } = this.props,
@@ -110,12 +135,8 @@ export default class EditableTags extends Component {
 
     return (
       <div className='create-bookmark__tags'>
-        {selectedTags.map(tag => (
-          <button className='button bookmark__button bookmark__tag bookmark__tag--is_editing' key={tag.id} onClick={() => this.handleDeleteTag(tag.id)}>{tag.title} <i className='fa fa-times-circle'/></button>
-        ))}
-        {suggestedTags.map(tag => (
-          <button className='button bookmark__button bookmark__tag bookmark__tag--is_suggested' key={tag.id} onClick={() => this.selectTag(tag.id)}>{tag.title} <i className='fa fa-times-circle'/></button>
-        ))}
+        {this.renderTags(selectedTags, 'selected')}
+        {this.renderTags(suggestedTags, 'suggested')}
         {
           isAdding ?
           <Select.Creatable
