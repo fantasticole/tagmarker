@@ -11,6 +11,7 @@ import { connect } from 'react-redux';
 const mapStateToProps = (state) => {
   return {
     tagMarkerFolder: state.tagMarkerFolder,
+    tags: state.tags,
   };
 }
 
@@ -22,7 +23,7 @@ const mapStateToProps = (state) => {
  */
 const mapDispatchToProps = (dispatch) => {
   return {
-    createBookmark: (bookmark) => {dispatch({ type: 'CREATE_BOOKMARK', bookmark })},
+    createBookmark: (bookmark, tagsToAdd) => {dispatch({ type: 'CREATE_BOOKMARK', bookmark, tagsToAdd })},
   };
 }
 
