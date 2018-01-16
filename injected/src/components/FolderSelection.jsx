@@ -9,7 +9,7 @@ export default class FolderSelection extends Component {
 
     this.state = {
       options: [],
-      selected: '',
+      selected: this.props.parentId,
     };
   }
 
@@ -57,7 +57,7 @@ export default class FolderSelection extends Component {
   }
 
   selectFolder (selected) {
-    if (!selected) selected = '';
+    if (!selected) selected = { value: '' };
     this.setState({ selected });
     this.props.onSelect(selected);
   }

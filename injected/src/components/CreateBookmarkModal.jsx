@@ -12,9 +12,7 @@ export default class CreateBookmarkModal extends Component {
 
     this.state = {
       addedTags: [],
-      isAdding: false,
-      options: [],
-      parent: this.props.tagMarkerFolder,
+      parentId: this.props.tagMarkerFolder.id,
       suggested: [],
       tagsToAdd: [],
       title: this.props.title,
@@ -31,8 +29,7 @@ export default class CreateBookmarkModal extends Component {
   }
 
   handleClickSubmit () {
-    let { addedTags, parent, tagsToAdd, title, url } = this.state,
-        parentId = parent.id,
+    let { addedTags, parentId, tagsToAdd, title, url } = this.state,
         tags = [...addedTags, ...tagsToAdd];
 
     chrome.bookmarks.create({ parentId, title, url }, bookmark => {
@@ -45,22 +42,26 @@ export default class CreateBookmarkModal extends Component {
     this.refs.modal.deactivate();
   }
 
-  setParent (id) {
+  setParent (parentId) {
     let { tags } = this.props,
-        parent = tags[id],
-        suggested = [ ...parent.parents, parent.id ];
+        parent = tags[parentId],
+        // if we have an id, get suggestions, otherwise return none
+        suggested = parentId ? [ ...parent.parents, parent.id ] : [];
 
     // set the new parent in the state
-    this.setState({ parent, suggested });
+    this.setState({ parentId, suggested });
   }
 
   render () {
-    let { parent, suggested } = this.state;
+    let { parentId, suggested } = this.state;
 
     return (
       <Modal.Modal className='create-bookmark-modal' ref='modal'>
         <h1 className='modal__header create-bookmark__header'>Add bookmark in:</h1>
-        <FolderSelection onSelect={(selected) => this.setParent(selected.value)} />
+        <FolderSelection
+          onSelect={(selected) => this.setParent(selected.value)}
+          parentId={parentId}
+          />
         <input
           autoFocus
           className='create-bookmark__input modal__input'
