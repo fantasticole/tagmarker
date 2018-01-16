@@ -1,7 +1,10 @@
 export function initialize (data) {
   return (dispatch, getState) => {
+    // set initial tags and bookmarks
     dispatch(setBookmarks(data.bookmarks));
     dispatch(setTags(data.tags));
+    // set initial filtered tags and bookmarks
+    dispatch(updateFilteredBookmarks(Object.keys(data.bookmarks)));
     dispatch(updateFilteredTags(Object.keys(data.tags)));
     dispatch({ type: 'SET_SORT', sort: 'alpha' });
   };
@@ -42,7 +45,8 @@ export function filterBookmarksAndTags (selectedTags) {
             return !selectedTags.includes(id);
           });
 
-      dispatch(updateFilteredBookmarks(filteredBookmarks));
+      // set filtered bookmark and tag ids
+      dispatch(updateFilteredBookmarks(filteredBookmarks.map(b => b.id)));
       dispatch(updateFilteredTags(relatedTags));
     }
     else {
