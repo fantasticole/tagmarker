@@ -55,12 +55,12 @@
 .modal__actions {
   display: flex;
   flex-direction: row;
+  margin-top: 10px;
 }
 
 .modal-action__button {
   flex: 1;
   padding: 5px;
-  margin-top: 10px;
 }
 
 .modal__warning {
@@ -70,6 +70,7 @@
   padding-top: 0;
   height: 0;
   transition: height 0.3s ease;
+  margin: 10px 0;
   &.visible {
     padding-top: 3px;
     height: 20px;
