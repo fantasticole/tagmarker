@@ -12,7 +12,6 @@ export default class EditableTags extends Component {
       isAdding: false,
       options: [],
       selected: [],
-      suggested: [...this.props.suggested],
     };
   }
 
@@ -32,8 +31,6 @@ export default class EditableTags extends Component {
 
     // if the suggested ids have changed
     if (lengthChanged || propsChanged) {
-      // update the state
-      this.setState({ suggested });
       // update the options
       this.setOptions();
     }
@@ -44,7 +41,7 @@ export default class EditableTags extends Component {
   }
 
   handleDeleteTag (id) {
-    let { options, selected, suggested } = this.state,
+    let { options, selected } = this.state,
         { tags } = this.props,
         // find index of tag to remove
         tagIndex = selected.indexOf(id),
@@ -56,22 +53,9 @@ export default class EditableTags extends Component {
     options.push({ label: tags[id].title, value: id });
     // sort the options to appear alphabetically
     sortedOptions = this.sortOptions(options);
-    // if it was passed in as a suggestion, add it back
-    if (this.props.suggested.includes(id)) suggested.push(id)
     // update the state
-    this.setState({ options: sortedOptions, selected, suggested });
+    this.setState({ options: sortedOptions, selected });
     this.props.selectTags(selected)
-  }
-
-  handleSelectSuggested (id) {
-    let { suggested } = this.state;
-
-    // remove the tag from suggestions
-    suggested.splice(suggested.indexOf(id), 1);
-    // update the state
-    this.setState({ suggested });
-    // add to selected
-    this.selectTag(id);
   }
 
   selectTag (id) {
@@ -86,8 +70,8 @@ export default class EditableTags extends Component {
   }
 
   setOptions () {
-    let { selected, suggested } = this.state,
-        { tags } = this.props,
+    let { selected } = this.state,
+        { suggested, tags } = this.props,
         toIgnore = [...selected, ...suggested],
         options = [],
         sortedOptions;
@@ -127,19 +111,19 @@ export default class EditableTags extends Component {
       return (
         <div className={`create-bookmark__tags--are_${type}`}>
           {tags.map(tag => (
-            <button className={tagClasses} key={tag.id} onClick={() => {type === 'selected' ? this.handleDeleteTag(tag.id) : this.handleSelectSuggested(tag.id)}}>{tag.title} <i className={iconClasses}/></button>
+            <button className={tagClasses} key={tag.id} onClick={() => {type === 'selected' ? this.handleDeleteTag(tag.id) : this.selectTag(tag.id)}}>{tag.title} <i className={iconClasses}/></button>
           ))}
         </div>
-
       )
     }
   }
 
   render () {
-    let { isAdding, selected, suggested } = this.state,
-        { tags } = this.props,
+    let { isAdding, selected } = this.state,
+        { suggested, tags } = this.props,
         selectedTags = selected.map(id => tags[id]),
-        suggestedTags = suggested.map(id => tags[id]);
+        // render suggested tags that aren't already selected
+        suggestedTags = suggested.filter(id => !selected.includes(id)).map(id => tags[id]);
 
     return (
       <div className='create-bookmark__tags'>
