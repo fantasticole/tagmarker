@@ -4,6 +4,8 @@ import classNames from 'classnames';
 
 import Select from 'react-select';
 
+import ifTrue from '../utils/ifTrue';
+
 export default class EditableTags extends Component {
   constructor (props) {
     super(props);
@@ -98,8 +100,10 @@ export default class EditableTags extends Component {
   }
 
   renderTags (tags, type) {
-    if (tags.length) {
-      let tagClasses = classNames('button', 'bookmark__button', 'bookmark__tag', {
+    // always render if the type is suggested or if there are tags
+    if (type === 'suggested' || tags.length) {
+      let { isAdding } = this.state,
+          tagClasses = classNames('button', 'bookmark__button', 'bookmark__tag', {
             'bookmark__tag--is_editing': type === 'selected',
             'bookmark__tag--is_suggested': type === 'suggested',
           }),
@@ -112,6 +116,9 @@ export default class EditableTags extends Component {
         <div className={`create-bookmark__tags--are_${type}`}>
           {tags.map(tag => (
             <button className={tagClasses} key={tag.id} onClick={() => {type === 'selected' ? this.handleDeleteTag(tag.id) : this.selectTag(tag.id)}}>{tag.title} <i className={iconClasses}/></button>
+          ))}
+          {ifTrue(type === 'suggested' && !isAdding).render(() => (
+            <button className='button bookmark__button bookmark__button--is_add' onClick={() => this.handleAddTags()}><i className='fa fa-plus'/></button>
           ))}
         </div>
       )
@@ -129,8 +136,7 @@ export default class EditableTags extends Component {
       <div className='create-bookmark__tags'>
         {this.renderTags(selectedTags, 'selected')}
         {this.renderTags(suggestedTags, 'suggested')}
-        {
-          isAdding ?
+        {ifTrue(isAdding).render(() => (
           <Select.Creatable
             autoFocus
             className='tag-selector'
@@ -140,9 +146,8 @@ export default class EditableTags extends Component {
             options={this.state.options}
             placeholder=''
             value=''
-            /> :
-          <button className='button bookmark__button bookmark__button--is_add' onClick={() => this.handleAddTags()}><i className='fa fa-plus-circle'/></button>
-        }
+            />
+        ))}
       </div>
     );
   }
