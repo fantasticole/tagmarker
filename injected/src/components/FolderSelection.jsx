@@ -57,6 +57,7 @@ export default class FolderSelection extends Component {
   }
 
   selectFolder (selected) {
+    if (!selected) selected = '';
     this.setState({ selected });
     this.props.onSelect(selected);
   }
