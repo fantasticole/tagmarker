@@ -20,11 +20,18 @@ export default class FolderSelection extends Component {
   getChildOptions (childNode, options, level) {
     return childNode.children.reduce((list, child) => {
       if (child.children) {
+        // create an indentation for each level down in the folder tree
         let indents = Array(level).fill(<span className='indent'/>),
+            // include those indentations in the label
             label = <span>{indents}{child.title}</span>,
+            // increase the level for when we go another level down
             nextLevel = level + 1;
 
-        list.push({ label, value: child.id, className: `level-${level}` });
+        list.push({
+          label,
+          value: child.id,
+          className: `level-${level}`,
+        });
         return this.getChildOptions(child, list, nextLevel);
       }
       return list;

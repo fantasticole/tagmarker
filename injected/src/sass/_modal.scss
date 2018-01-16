@@ -91,11 +91,6 @@
     white-space: nowrap;
     width: 100%;
     overflow: hidden;
-    .is-selected{
-      .indent {
-        border-bottom-color: #fff;
-      }
-    }
   }
   .indent {
     display: inline-block;
@@ -104,6 +99,11 @@
     height: 10px;
     margin-right: 6px;
     vertical-align: text-top;
+  }
+  .is-selected {
+    .indent {
+      border-bottom-color: #fff;
+    }
   }
 }
 

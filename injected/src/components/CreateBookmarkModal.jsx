@@ -9,6 +9,7 @@ export default class CreateBookmarkModal extends Component {
     super(props);
 
     this.state = {
+      addedTags: [],
       parent: this.props.tagMarkerFolder,
       tagsToAdd: [],
       title: this.props.title,
@@ -25,11 +26,12 @@ export default class CreateBookmarkModal extends Component {
   }
 
   handleClickSubmit () {
-    let { parent, tagsToAdd, title, url } = this.state,
-        parentId = parent.id;
+    let { addedTags, parent, tagsToAdd, title, url } = this.state,
+        parentId = parent.id,
+        tags = [...addedTags, ...tagsToAdd];
 
     chrome.bookmarks.create({ parentId, title, url }, bookmark => {
-      this.props.createBookmark(bookmark, tagsToAdd);
+      this.props.createBookmark(bookmark, tags);
       this.handleDeactivate();
     });
   }
@@ -39,40 +41,59 @@ export default class CreateBookmarkModal extends Component {
   }
 
   handleDeleteTag (id) {
-    let { tagsToAdd } = this.state,
+    let { addedTags, tagsToAdd } = this.state,
         // find index of tag to remove
-        tagIndex = tagsToAdd.indexOf(id);
+        tagIndex = tagsToAdd.indexOf(id),
+        addedTagIndex = addedTags.indexOf(id);
 
-    // remove the tag id
-    tagsToAdd.splice(tagIndex, 1);
-    // update the state
-    this.setState({ tagsToAdd });
+    // if it was in tagsToAdd
+    if (tagIndex > -1) {
+      // remove the tag id
+      tagsToAdd.splice(tagIndex, 1);
+      // update the state
+      this.setState({ tagsToAdd });
+    }
+
+    // if it was in tagsToAdd
+    else if (addedTagIndex > -1) {
+      // remove the tag id
+      addedTags.splice(addedTagIndex, 1);
+      // update the state
+      this.setState({ addedTags });
+    }
   }
 
-  setPossibleTags () {
-    // get all tag objects from the store
-    let { tags } = this.props,
-        parentId = this.state.parent.id,
-        // get possible tag ideas from parent folder
-        tagsToAdd = [ ...tags[parentId].parents, parentId ];
+  setPossibleTags (tagsToAdd) {
+    // if we don't have any tags to add passed in
+    if (!tagsToAdd) {
+      // get all tag objects from the store
+      let { tags } = this.props,
+          parentId = this.state.parent.id;
 
-    console.log('parent:', this.state.parent)
+      // get possible tag ideas from parent folder
+      tagsToAdd = [ ...tags[parentId].parents, parentId ];
+    }
+
     // set those in the state
     this.setState({ tagsToAdd });
   }
 
   updateParent (selected) {
-    let { tags } = this.props,
-        parent = tags[selected.value];
+    let { addedTags } = this.state,
+        { tags } = this.props,
+        parent = tags[selected.value],
+        tagsToAdd = [ ...addedTags, ...parent.parents, parent.id ];
 
     // set the new parent in the state
     this.setState({ parent });
+    // update the potential tags
+    this.setPossibleTags(tagsToAdd);
   }
 
   renderTags () {
     let { tagsToAdd } = this.state,
         { tags } = this.props,
-        tagObjects = tagsToAdd.map(id => tags[id]);;
+        tagObjects = tagsToAdd.map(id => tags[id]);
 
     return (
       <div className='create-bookmark__tags'>
