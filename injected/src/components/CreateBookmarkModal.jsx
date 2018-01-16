@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
 import Select from 'react-select';
+import EditableTags from './EditableTags';
 import FolderSelection from './FolderSelection';
 import Modal from './Modal';
 
@@ -14,6 +15,7 @@ export default class CreateBookmarkModal extends Component {
       isAdding: false,
       options: [],
       parent: this.props.tagMarkerFolder,
+      suggested: [],
       tagsToAdd: [],
       title: this.props.title,
       url: this.props.url,
@@ -21,12 +23,7 @@ export default class CreateBookmarkModal extends Component {
   }
 
   componentDidMount () {
-    this.setPossibleTags();
-  }
-
-  handleAddTags () {
-    this.setState({ isAdding: true });
-    this.setOptions();
+    this.setParent(this.props.tagMarkerFolder.id);
   }
 
   handleChange (bookmarkKey, event) {
@@ -48,113 +45,22 @@ export default class CreateBookmarkModal extends Component {
     this.refs.modal.deactivate();
   }
 
-  handleDeleteTag (id) {
-    let { addedTags, tagsToAdd } = this.state,
-        // find index of tag to remove
-        tagIndex = tagsToAdd.indexOf(id),
-        addedTagIndex = addedTags.indexOf(id);
-
-    // if it was in tagsToAdd
-    if (tagIndex > -1) {
-      // remove the tag id
-      tagsToAdd.splice(tagIndex, 1);
-      // update the state
-      this.setState({ tagsToAdd });
-    }
-
-    // if it was in tagsToAdd
-    else if (addedTagIndex > -1) {
-      // remove the tag id
-      addedTags.splice(addedTagIndex, 1);
-      // update the state
-      this.setState({ addedTags });
-    }
-  }
-
-  selectTag (selected) {
-    let { options, addedTags } = this.state,
-        { value } = selected,
-        index = options.findIndex(o => (o.value === value));
-
-    addedTags.push(value);
-    options.splice(index, 1);
-    this.setState({ options, addedTags });
-  }
-
-  setOptions () {
-    let { tagsToAdd, addedTags } = this.state,
-        tags = [...tagsToAdd, ...addedTags],
-        options = [];
-
-    Object.values(this.props.tags).forEach(tag => {
-      if (!tags.includes(tag.id)) {
-        options.push({ label: tag.title, value: tag.id });
-      }
-    })
-    this.setState({ options });
-  }
-
-  setPossibleTags (tagsToAdd) {
-    // if we don't have any tags to add passed in
-    if (!tagsToAdd) {
-      // get all tag objects from the store
-      let { tags } = this.props,
-          parentId = this.state.parent.id;
-
-      // get possible tag ideas from parent folder
-      tagsToAdd = [ ...tags[parentId].parents, parentId ];
-    }
-
-    // set those in the state
-    this.setState({ tagsToAdd });
-  }
-
-  updateParent (selected) {
-    let { addedTags } = this.state,
-        { tags } = this.props,
-        parent = tags[selected.value],
-        tagsToAdd = [ ...addedTags, ...parent.parents, parent.id ];
+  setParent (id) {
+    let { tags } = this.props,
+        parent = tags[id],
+        suggested = [ ...parent.parents, parent.id ];
 
     // set the new parent in the state
-    this.setState({ parent });
-    // update the potential tags
-    this.setPossibleTags(tagsToAdd);
-  }
-
-  renderTags () {
-    let { isAdding, tagsToAdd, addedTags } = this.state,
-        { tags } = this.props,
-        tagObjects = [...tagsToAdd, ...addedTags].map(id => tags[id]);
-
-    return (
-      <div className='create-bookmark__tags'>
-        {tagObjects.map(tag => (
-          <button className='button bookmark__button bookmark__tag bookmark__tag--is_editing' key={tag.id} onClick={() => this.handleDeleteTag(tag.id)}>{tag.title} <i className='fa fa-times-circle'/></button>
-        ))}
-        {
-          isAdding ?
-          <Select
-            className='tag-selector'
-            multi={false}
-            name='tag-select'
-            onChange={(selected) => this.selectTag(selected)}
-            options={this.state.options}
-            placeholder=''
-            value=''
-            /> :
-          <button className='button bookmark__button bookmark__button--is_add' onClick={() => this.handleAddTags()}><i className='fa fa-plus-circle'/></button>
-        }
-      </div>
-    );
+    this.setState({ parent, suggested });
   }
 
   render () {
-    let { parent } = this.state;
+    let { parent, suggested } = this.state;
 
     return (
       <Modal.Modal className='create-bookmark-modal' ref='modal'>
         <h1 className='modal__header create-bookmark__header'>Add bookmark in:</h1>
-        <FolderSelection onSelect={(selected) => this.updateParent(selected)} />
+        <FolderSelection onSelect={(selected) => this.setParent(selected.value)} />
         <input
           autoFocus
           className='create-bookmark__input modal__input'
@@ -172,7 +78,10 @@ export default class CreateBookmarkModal extends Component {
           placeholder='url'
           type='text'
           />
-        {this.renderTags()}
+        <EditableTags
+          suggested={suggested}
+          tags={this.props.tags}
+          />
         <span className='modal__actions create-bookmark__actions'>
           <button className='button modal-action__button create-bookmark-action__button action-button' onClick={() => this.handleClickSubmit()}>Submit <i className='fa fa-floppy-o'/></button>
           <button className='button modal-action__button create-bookmark-action__button action-button' onClick={() => this.handleDeactivate()}>Cancel <i className='fa fa-ban'/></button>
