@@ -72,7 +72,13 @@ export default class CreateBookmarkModal extends Component {
   }
 
   selectTag (selected) {
-    console.log('selected:', selected);
+    let { options, addedTags } = this.state,
+        { value } = selected,
+        index = options.findIndex(o => (o.value === value));
+
+    addedTags.push(value);
+    options.splice(index, 1);
+    this.setState({ options, addedTags });
   }
 
   setOptions () {
@@ -116,9 +122,9 @@ export default class CreateBookmarkModal extends Component {
   }
 
   renderTags () {
-    let { isAdding, tagsToAdd } = this.state,
+    let { isAdding, tagsToAdd, addedTags } = this.state,
         { tags } = this.props,
-        tagObjects = tagsToAdd.map(id => tags[id]);
+        tagObjects = [...tagsToAdd, ...addedTags].map(id => tags[id]);
 
     return (
       <div className='create-bookmark__tags'>
