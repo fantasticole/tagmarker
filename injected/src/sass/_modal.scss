@@ -32,3 +32,47 @@
 .modal__content {
   margin-bottom: 18px;
 }
+
+.modal__input {
+  width: 100%;
+  font-size: 14px;
+  color: $deep;
+  margin-bottom: 10px;
+  border: none;
+  border-bottom: 1px solid $light-light;
+  transition: border 0.2s ease;
+  &:focus {
+    border-bottom-color: $light;
+    outline: none;
+  }
+}
+
+.modal__actions {
+  display: flex;
+  flex-direction: row;
+}
+
+.modal-action__button {
+  flex: 1;
+  padding: 5px;
+  margin-top: 10px;
+}
+
+// bookmark modal
+.create-bookmark-action__button {
+  width: 33%;
+  margin-top: 10px;
+  padding: 5px;
+  margin-right: 0;
+}
+
+.create-bookmark__tags {
+  padding: 3px;
+  border: 1px solid $mid-accent;
+}
+
+// folder modal
+.create-folder-action__button {
+  width: 50%;
+  margin-right: 0;
+}

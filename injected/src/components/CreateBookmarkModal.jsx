@@ -42,7 +42,6 @@ export default class CreateBookmarkModal extends Component {
         // find index of tag to remove
         tagIndex = tagsToAdd.indexOf(id);
 
-    
     // remove the tag id
     tagsToAdd.splice(tagIndex, 1);
     // update the state
@@ -81,10 +80,12 @@ export default class CreateBookmarkModal extends Component {
       <Modal.Modal className='create-bookmark-modal' ref='modal'>
         <h1 className='create-bookmark__header'>Add bookmark in: {parent.title}</h1>
         <input
+          autoFocus
           className='create-bookmark__input modal__input'
           defaultValue={this.props.title}
           name='title'
           onChange={(e) => this.handleChange('title', e)}
+          placeholder='bookmark name'
           type='text'
           />
         <input
@@ -92,12 +93,13 @@ export default class CreateBookmarkModal extends Component {
           defaultValue={this.props.url}
           name='url'
           onChange={(e) => this.handleChange('url', e)}
+          placeholder='url'
           type='text'
           />
         {this.renderTags()}
-        <span className='create-bookmark__actions'>
-          <button className='button create-bookmark-action__button action-button' onClick={() => this.handleClickSubmit()}>Submit <i className='fa fa-floppy-o'/></button>
-          <button className='button create-bookmark-action__button action-button' onClick={() => this.handleDeactivate()}>Cancel <i className='fa fa-ban'/></button>
+        <span className='modal__actions create-bookmark__actions'>
+          <button className='button modal-action__button create-bookmark-action__button action-button' onClick={() => this.handleClickSubmit()}>Submit <i className='fa fa-floppy-o'/></button>
+          <button className='button modal-action__button create-bookmark-action__button action-button' onClick={() => this.handleDeactivate()}>Cancel <i className='fa fa-ban'/></button>
         </span>
       </Modal.Modal>
     );
