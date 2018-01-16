@@ -4,8 +4,6 @@ import classNames from 'classnames';
 
 import Select from 'react-select';
 
-import ifTrue from '../utils/ifTrue';
-
 export default class EditableTags extends Component {
   constructor (props) {
     super(props);
@@ -46,7 +44,7 @@ export default class EditableTags extends Component {
   }
 
   handleDeleteTag (id) {
-    let { options, selected } = this.state,
+    let { options, selected, suggested } = this.state,
         { tags } = this.props,
         // find index of tag to remove
         tagIndex = selected.indexOf(id),
@@ -58,8 +56,11 @@ export default class EditableTags extends Component {
     options.push({ label: tags[id].title, value: id });
     // sort the options to appear alphabetically
     sortedOptions = this.sortOptions(options);
+    // if it was passed in as a suggestion, add it back
+    if (this.props.suggested.includes(id)) suggested.push(id)
     // update the state
-    this.setState({ selected, options: sortedOptions });
+    this.setState({ options: sortedOptions, selected, suggested });
+    this.props.selectTags(selected)
   }
 
   handleSelectSuggested (id) {
