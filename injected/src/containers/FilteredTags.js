@@ -13,8 +13,8 @@ const mapStateToProps = (state) => {
       tagObjects = filteredTags.map(id => tags[id]);
 
   return {
-    ascending: sort.ascending,
-    sortBy: sort.sortBy,
+    ascending: sort.tags.ascending,
+    sortBy: sort.tags.sortBy,
     tags: tagObjects,
   };
 }

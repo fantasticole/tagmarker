@@ -6,7 +6,6 @@ export function initialize (data) {
     // set initial filtered tags and bookmarks
     dispatch(updateFilteredBookmarks(Object.keys(data.bookmarks)));
     dispatch(updateFilteredTags(Object.keys(data.tags)));
-    dispatch({ type: 'SET_SORT', sort: 'alpha' });
   };
 }
 

@@ -56,13 +56,13 @@ export function sort (state = {}, action) {
       let updated = Object.assign({}, state);
 
       // if sortBy stays the same, just change the direction
-      if (action.sort === state.sortBy) {
-        updated.ascending = !state.ascending;
+      if (action.sort === state[action.list].sortBy) {
+        updated[action.list].ascending = !state[action.list].ascending;
       }
       else {
         // otherwise, update sortBy and set default direction
-        updated.sortBy = action.sort;
-        updated.ascending = true;
+        updated[action.list].sortBy = action.sort;
+        updated[action.list].ascending = true;
       }
 
       return updated;

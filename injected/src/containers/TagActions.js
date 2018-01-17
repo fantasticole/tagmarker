@@ -13,8 +13,8 @@ const mapStateToProps = (state) => {
       tagObjects = filteredTags.map(id => tags[id]);
 
   return {
-    ascending: sort.ascending,
-    sortBy: sort.sortBy,
+    ascending: sort.tags.ascending,
+    sortBy: sort.tags.sortBy,
     filteredTags: tagObjects,
   };
 }
@@ -27,7 +27,7 @@ const mapStateToProps = (state) => {
  */
 const mapDispatchToProps = (dispatch) => {
   return {
-    onSort: (sort) => {dispatch({ type: 'SET_SORT', sort })},
+    onSort: (sort) => {dispatch({ type: 'SET_SORT', list: 'tags', sort })},
     selectTag: (id) => {dispatch({ type: 'SELECT_TAG', id })},
   };
 }
