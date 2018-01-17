@@ -12,9 +12,11 @@ function createBookmark (originalAction) {
   return (dispatch, getState) => {
     let { parentId } = bookmark,
         { tags } = getState(),
-        tagsToUpdate = getTagsToUpdate(tagsToAdd, [], tags, bookmark.id);
+        tagsToUpdate = getTagsToUpdate(tagsToAdd, [], tags, bookmark.id),
+        // get ids to set on bookmark
+        idsToAdd = tagsToUpdate.map(tag => tag.id);
 
-    bookmark.tags = tagsToAdd;
+    bookmark.tags = idsToAdd;
     dispatch(createOrUpdateTags(tagsToUpdate));
     return dispatch(createOrUpdateBookmark(bookmark));
   }
@@ -86,7 +88,7 @@ function getTagsToUpdate (tagsToAdd, tagsToDelete, alltags, bookmarkId) {
     updatedTag.bookmarks.splice(bookmarkIndex, 1);
     // add tag to list of tags to update
     tagsToUpdate.push(updatedTag);
-  })
+  });
 
   return tagsToUpdate;
 }
@@ -140,10 +142,24 @@ function updateBookmark (originalAction) {
   return (dispatch, getState) => {
     let { bookmarks, tags } = getState(),
         oldTags = bookmarks[bookmark.id].tags,
+        // figure out which tags are being added
         tagsToAdd = bookmark.tags.filter(t => (!oldTags.includes(t))),
-        tagsToDelete = oldTags.filter(t => (!bookmark.tags.includes(t)))
-        tagsToUpdate = getTagsToUpdate(tagsToAdd, tagsToDelete, tags, bookmark.id);
+        // and which are being deleted
+        tagsToDelete = oldTags.filter(t => (!bookmark.tags.includes(t))),
+        // get the tag objects for each to update
+        tagsToUpdate = getTagsToUpdate(tagsToAdd, tagsToDelete, tags, bookmark.id),
+        // get the newly created ids
+        tagIds = bookmark.tags.map(idOrTitle => {
+          // if the tag exists, return the id
+          if (tags[idOrTitle]) return idOrTitle;
+          // otherwise it's a title
+          else {
+            // so find the newly created tag and return its id
+            return tagsToUpdate.find(tag => tag.title === idOrTitle).id;
+          }
+        });
 
+    bookmark.tags = tagIds;
     dispatch(createOrUpdateTags(tagsToUpdate));
     return dispatch(createOrUpdateBookmark(bookmark));
   }
