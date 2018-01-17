@@ -4,6 +4,17 @@ import ReactDOM from 'react-dom';
 import EditableTags from './EditableTags';
 import MarqueeWrapper from './MarqueeWrapper';
 
+/**
+ * Bookmark
+ *
+ * @param {object} bookmark - bookmark to be rendered
+ * @param {bool} isEditing - whether the bookmark is being edited or not
+ * @param {function} onChange - function to run when input changes
+ * @param {array} selected - list of selected tag ids
+ * @param {function} setSelectedTags - function to run when tag is selected
+ * @param {array} [suggested] - optional list of suggested tag ids
+ * @param {object} tags - all tags from store
+ */
 export default class Bookmark extends Component {
   constructor (props) {
     super(props);

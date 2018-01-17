@@ -5,6 +5,15 @@ import classNames from 'classnames';
 import MarqueeWrapper from './MarqueeWrapper';
 import Select from 'react-select';
 
+/**
+ * TagActions
+ *
+ * @param {bool} ascending - direction of sort
+ * @param {function} filteredTags - list of tag ids
+ * @param {function} onSort - function to run when sort is clicked
+ * @param {function} selectTag - function to run when tag is selected
+ * @param {string} sortBy - key to sort by
+ */
 export default class TagActions extends Component {
   constructor (props) {
     super(props);

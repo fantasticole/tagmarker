@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
+/**
+ * MarqueeWrapper
+ *
+ * @param {jsx} children - elements to wrap in the marquee
+ */
 export default class MarqueeWrapper extends Component {
   constructor (props) {
     super(props);

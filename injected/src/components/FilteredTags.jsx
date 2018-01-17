@@ -3,6 +3,14 @@ import ReactDOM from 'react-dom';
 
 import Tag from './Tag';
 
+/**
+ * FilteredTags
+ *
+ * @param {bool} ascending - direction of sort
+ * @param {function} selectTag - function to select a tag
+ * @param {string} sortBy - key to sort by
+ * @param {array} tags - tags to render
+ */
 export default class FilteredTags extends Component {
   constructor (props) {
     super(props);

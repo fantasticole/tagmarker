@@ -8,6 +8,13 @@ import Modal from './Modal';
 
 import ifTrue from '../utils/ifTrue';
 
+/**
+ * SettingsView
+ * 
+ * @param {function} createFolder - function to create a folder
+ * @param {function} setBookmarkFolder - function to set default folder
+ * @param {object} tagMarkerFolder - default folder for new bookmarks
+ */
 export default class SettingsView extends Component {
   constructor (props) {
     super(props);

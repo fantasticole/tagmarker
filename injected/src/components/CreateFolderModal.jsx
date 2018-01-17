@@ -3,6 +3,13 @@ import ReactDOM from 'react-dom';
 
 import Modal from './Modal';
 
+/**
+ * CreateFolderModal
+ *
+ * @param {function} createFolder - function save folder
+ * @param {number} parentId - parent folder title
+ * @param {string} title - parent folder title
+ */
 export default class CreateFolderModal extends Component {
   constructor (props) {
     super(props);

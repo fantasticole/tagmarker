@@ -3,6 +3,12 @@ import ReactDOM from 'react-dom';
 
 import ifTrue from '../utils/ifTrue';
 
+/**
+ * DrawerActions
+ *
+ * @param {bool} folderIsSet - whether we have a default folder to save to
+ * @param {strong} view - current drawer view
+ */
 export default class DrawerActions extends Component {
   constructor (props) {
     super(props);

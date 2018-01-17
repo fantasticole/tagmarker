@@ -3,6 +3,12 @@ import ReactDOM from 'react-dom';
 
 import Select from 'react-select';
 
+/**
+ * FolderSelection
+ *
+ * @param {function} onSelect - function to select folder
+ * @param {number} parentId - parent folder title
+ */
 export default class FolderSelection extends Component {
   constructor (props) {
     super(props);

@@ -4,6 +4,13 @@ import ReactDOM from 'react-dom';
 import BookmarkListItem from '../containers/BookmarkListItem';
 import BookmarkActions from '../containers/BookmarkActions';
 
+/**
+ * BookmarkList
+ *
+ * @param {bool} ascending - direction of sort
+ * @param {function} filteredBookmarks - list of bookmark ids
+ * @param {string} sortBy - key to sort by
+ */
 export default class BookmarkList extends Component {
   constructor (props) {
     super(props);

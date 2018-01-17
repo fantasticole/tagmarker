@@ -4,6 +4,13 @@ import classNames from 'classnames';
 
 import MarqueeWrapper from './MarqueeWrapper';
 
+/**
+ * Tag
+ *
+ * @param {bool} isSelected - whether the tag is selected or not
+ * @param {function} onClick - function to run when tag is clicked
+ * @param {object} tag - tag to be rendered
+ */
 export default class Tag extends Component {
   constructor (props) {
     super(props);

@@ -5,6 +5,14 @@ import classNames from 'classnames';
 import MarqueeWrapper from './MarqueeWrapper';
 import Select from 'react-select';
 
+/**
+ * EditableTags
+ *
+ * @param {array} [selected] - optional list of selected tag ids
+ * @param {function} selectTags - function to run when tag is selected
+ * @param {array} [suggested] - optional list of suggested tag ids
+ * @param {object} tags - all tags from store
+ */
 export default class EditableTags extends Component {
   constructor (props) {
     super(props);

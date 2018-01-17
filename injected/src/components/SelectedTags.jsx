@@ -4,6 +4,12 @@ import classNames from 'classnames';
 
 import Tag from './Tag';
 
+/**
+ * SelectedTags
+ * 
+ * @param {function} removeTag - function to remove selected tag
+ * @param {array} tags - selected tag ids
+ */
 export default class SelectedTags extends Component {
   constructor (props) {
     super(props);

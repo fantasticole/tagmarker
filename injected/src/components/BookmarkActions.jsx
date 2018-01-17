@@ -5,6 +5,15 @@ import classNames from 'classnames';
 import MarqueeWrapper from './MarqueeWrapper';
 import Select from 'react-select';
 
+/**
+ * BookmarkActions
+ *
+ * @param {bool} ascending - direction of sort
+ * @param {function} filteredBookmarks - list of bookmark ids
+ * @param {function} onSort - function to run when sort is clicked
+ * @param {function} selectBookmark - function to run when bookmark is selected
+ * @param {string} sortBy - key to sort by
+ */
 export default class BookmarkActions extends Component {
   constructor (props) {
     super(props);

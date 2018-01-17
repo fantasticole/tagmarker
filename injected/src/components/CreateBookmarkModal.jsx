@@ -7,6 +7,15 @@ import EditableTags from './EditableTags';
 import FolderSelection from './FolderSelection';
 import Modal from './Modal';
 
+/**
+ * CreateBookmarkModal
+ *
+ * @param {function} createBookmark - function save bookmark
+ * @param {object} tagMarkerFolder - default folder for new bookmarks
+ * @param {object} tags - all tags from store
+ * @param {string} title - current page title
+ * @param {string} url - current page url
+ */
 export default class CreateBookmarkModal extends Component {
   constructor (props) {
     super(props);

@@ -7,6 +7,12 @@ import ListView from './ListView';
 import Modal from './Modal';
 import SettingsView from '../containers/SettingsView';
 
+/**
+ * Drawer
+ *
+ * @param {function} createBookmark - function save bookmark
+ * @param {object} tagMarkerFolder - default folder for new bookmarks
+ */
 export default class Drawer extends Component {
   constructor (props) {
     super(props);

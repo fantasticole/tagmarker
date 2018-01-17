@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
+/**
+ * Modal
+ *
+ * @param {jsx} children - elements to wrap in the marquee
+ * @param {function} [onClose] - optional function to run on close
+ */
 const Module = {};
 
 Module.Modal = class Modal extends Component {

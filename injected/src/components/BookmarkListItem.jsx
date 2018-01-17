@@ -6,6 +6,13 @@ import Bookmark from './Bookmark';
 
 import ifTrue from '../utils/ifTrue';
 
+/**
+ * BookmarkListItem
+ *
+ * @param {object} bookmark - bookmark to be rendered
+ * @param {object} tags - all tags from store
+ * @param {function} updateBookmark - function save bookmark updates
+ */
 export default class BookmarkListItem extends Component {
   constructor (props) {
     super(props);
