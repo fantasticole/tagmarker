@@ -3,6 +3,18 @@
 // // // // // // // // // // //
 // // // BOOKMARK STYLES // // //
 // // // // // // // // // //
+.bookmark__details--is_editing {
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  .create-bookmark__tags {
+    margin-top: 0;
+  }
+  .create-bookmark__tags-title {
+    display: none;
+  }
+}
+
 .create-bookmark-action__button {
   margin-right: 0;
 }
