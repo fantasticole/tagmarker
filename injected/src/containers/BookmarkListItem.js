@@ -10,10 +10,7 @@ import { connect } from 'react-redux';
  */
 
 const mapStateToProps = (state, ownProps) => {
-  let bookmark = state.bookmarks[ownProps.id];
-
   return {
-    bookmark,
     tags: state.tags,
   };
 }
