@@ -34,7 +34,8 @@
 }
 
 .modal__header {
-  font-size: 24px;
+  font-size: 20px;
+  text-transform: lowercase;
 }
 
 .modal__input {
@@ -60,6 +61,7 @@
 .modal-action__button {
   flex: 1;
   padding: 5px;
+  text-transform: lowercase;
 }
 
 .modal__warning {

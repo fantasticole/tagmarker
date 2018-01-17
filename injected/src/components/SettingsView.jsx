@@ -125,7 +125,9 @@ export default class SettingsView extends Component {
   render () {
     return (
       <div className='drawer__content settings'>
-        <h1 className='drawer__header settings__header'>Settings</h1>
+        <div className='drawer__header tags__header'>
+          <h1 className='drawer__header-text'>Settings</h1>
+        </div>
         <div className='settings__content'>
           <p className='settings__text'>Where do you want to save new bookmarks and tags?</p>
           {this.state.folderRoot.children ?

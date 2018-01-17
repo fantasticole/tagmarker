@@ -85,9 +85,19 @@ button:focus,
 }
 
 .drawer__header {
-  margin: 0;
-  text-transform: uppercase;
   border-bottom: 1px solid $light-light;
+  position: relative;
+  padding-top: 10px;
   text-align: center;
+  margin-bottom: 5px;
+}
+
+.drawer__header-text {
   font-size: 15px;
+  text-transform: lowercase;
+  display: inline-block;
+  margin: 0;
+  background-color: #fff;
+  padding: 0 3px;
+  margin-bottom: -8px;
 }

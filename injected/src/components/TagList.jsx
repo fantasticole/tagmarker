@@ -12,7 +12,9 @@ export default class TagList extends Component {
   render () {
     return (
       <div className='tag-list__container'>
-        <h1 className='drawer__header tags__header'>Tags</h1>
+        <div className='drawer__header tags__header'>
+          <h1 className='drawer__header-text'>Tags</h1>
+        </div>
         <TagActions />
         <ul className='tagmarker-list tag-list'>
           <SelectedTags />
