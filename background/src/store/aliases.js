@@ -12,15 +12,7 @@ function createBookmark (originalAction) {
   return (dispatch, getState) => {
     let { parentId } = bookmark,
         { tags } = getState(),
-        tagsToUpdate = [];
-
-    // add bookmark to each tag
-    tagsToAdd.forEach(id => {
-      let updatedTag = tags[id];
-
-      updatedTag.bookmarks.push(bookmark.id);
-      tagsToUpdate.push(updatedTag);
-    })
+        tagsToUpdate = getTagsToUpdate(tagsToAdd, [], tags, bookmark.id);
 
     bookmark.tags = tagsToAdd;
     dispatch(createOrUpdateTags(tagsToUpdate));
@@ -67,6 +59,36 @@ function createTag (title, tags, bookmarkId) {
     return createTag(title, tags, bookmarkId);
   }
   return newTag
+}
+
+function getTagsToUpdate tagsToAdd, tagsToDelete, alltags, bookmarkId(tagsToAdd, tagsToDelete, alltags, bookmarkId) {
+  let tagsToUpdate = [];
+
+  // add bookmark to each tag
+  tagsToAdd.forEach(id => {
+    let updatedTag = alltags[id];
+
+    // if the tag exists, add the bookmark id to its bookmarks
+    if (updatedTag) updatedTag.bookmarks.push(bookmarkId);
+    // otherwise, create the tag and add the id on creation
+    else updatedTag = createTag(id, alltags, bookmarkId);
+    // add tag to list of tags to update
+    tagsToUpdate.push(updatedTag);
+  });
+
+  tagsToDelete.forEach(id => {
+    // get the tag to update
+    let updatedTag = alltags[id],
+        // find the index of the bookmark to remove
+        bookmarkIndex = updatedTag.bookmarks.indexOf(bookmarkId);
+
+    // splice the bookmark id out
+    updatedTag.bookmarks.splice(bookmarkIndex, 1);
+    // add tag to list of tags to update
+    tagsToUpdate.push(updatedTag);
+  })
+
+  return tagsToUpdate;
 }
 
 function removeTag (originalAction) {
@@ -120,24 +142,7 @@ function updateBookmark (originalAction) {
         oldTags = bookmarks[bookmark.id].tags,
         tagsToAdd = bookmark.tags.filter(t => (!oldTags.includes(t))),
         tagsToDelete = oldTags.filter(t => (!bookmark.tags.includes(t)))
-        tagsToUpdate = [];
-
-    // add bookmark to each tag
-    tagsToAdd.forEach(id => {
-      let updatedTag = tags[id];
-
-      if (updatedTag) updatedTag.bookmarks.push(bookmark.id);
-      else updatedTag = createTag(id, tags, bookmark.id);
-      tagsToUpdate.push(updatedTag);
-    });
-
-    tagsToDelete.forEach(id => {
-      let updatedTag = tags[id],
-          bookmarkIndex = updatedTag.bookmarks.indexOf(bookmark.id);
-
-      updatedTag.bookmarks.splice(bookmarkIndex, 1);
-      tagsToUpdate.push(updatedTag);
-    })
+        tagsToUpdate = getTagsToUpdate(tagsToAdd, tagsToDelete, tags, bookmark.id);
 
     dispatch(createOrUpdateTags(tagsToUpdate));
     return dispatch(createOrUpdateBookmark(bookmark));
