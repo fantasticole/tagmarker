@@ -9,8 +9,8 @@ export default class Bookmark extends Component {
     super(props);
   }
 
-  renderTags () {
-    let { isEditing, selected, tags } = this.props,
+  render () {
+    let { bookmark, isEditing, selected, tags } = this.props,
         // get tag object for each id
         selectTags = selected.map(id => {
           // if a tag object exists for the id, return that
@@ -20,30 +20,34 @@ export default class Bookmark extends Component {
         });
 
     if (isEditing) {
-      // render each tag associated with the bookmark, plus
-      // the ones staged to be added to the bookmark
       return (
-        <EditableTags
-          selectTags={(tags) => this.props.setSelectedTags(tags)}
-          selected={selected}
-          tags={tags}
-          />
+        <div className='bookmark__details bookmark__details--is_editing'>
+          <input
+            className='create-bookmark__input modal__input'
+            defaultValue={bookmark.title}
+            name='title'
+            onChange={(e) => this.props.handleChange('title', e)}
+            placeholder='bookmark name'
+            type='text'
+            />
+          <input
+            className='create-bookmark__input modal__input'
+            defaultValue={bookmark.url}
+            name='url'
+            onChange={(e) => this.props.handleChange('url', e)}
+            placeholder='url'
+            type='text'
+            />
+          <EditableTags
+            selectTags={(tags) => this.props.setSelectedTags(tags)}
+            selected={selected}
+            tags={tags}
+            />
+        </div>
       );
     }
     return (
-      <MarqueeWrapper>
-        {selectTags.map(tag => (
-          <span className='bookmark__tag' key={tag.id}>{tag.title}</span>
-        ))}
-      </MarqueeWrapper>
-    );
-  }
-
-  render () {
-    let { bookmark } = this.props;
-    
-    return (
-      <div className='bookmark__details'>
+      <div className='bookmark__details bookmark__details--is_static'>
         <div className='bookmark-detail bookmark-detail__link'>
           <a className='bookmark-detail__link' href={bookmark.url} target='_parent'><img className='bookmark-favicon' src={`http://www.google.com/s2/favicons?domain=${bookmark.url}`}/>{bookmark.title || bookmark.url}</a>
         </div>
@@ -51,7 +55,11 @@ export default class Bookmark extends Component {
           <span className='detail-title'>Created:</span> { new Date(bookmark.dateAdded).toLocaleString() }
         </div>
         <div className='bookmark-detail bookmark-detail__tags'>
-          {this.renderTags()}
+          <MarqueeWrapper>
+            {selectTags.map(tag => (
+              <span className='bookmark__tag' key={tag.id}>{tag.title}</span>
+            ))}
+          </MarqueeWrapper>
         </div>
       </div>
     );
