@@ -16,7 +16,7 @@ function addTags (originalAction) {
         bookmark = bookmarks[bookmarkId],
         // TODO: make sure there is always a folder chosen
         tagMarkerFolderId = tagMarkerFolder.id ? tagMarkerFolder.id : "1",
-        tagPromises = tagIds.map(id => (createTag(tags, id, bookmark, tagMarkerFolder.id)));
+        tagPromises = tagIds.map(id => (createTag(tags, id, bookmark, tagMarkerFolderId)));
 
     Promise.all(tagPromises).then(tagsToUpdate => {
       let idsToAdd = tagsToUpdate.map(t => (t.id));
@@ -66,7 +66,8 @@ function createFolder (originalAction) {
           parents,
           title,
           bookmarks: [],
-        };  
+        };
+
     // updates tags
     dispatch(createOrUpdateTags([newTag]));
   }
@@ -187,7 +188,13 @@ function updateBookmark (originalAction) {
 
   return (dispatch, getState) => {
     let { bookmarks } = getState(),
-        oldTags = bookmarks[bookmark.id].tags;
+        oldTags = bookmarks[bookmark.id].tags,
+        tagsToAdd = bookmark.tags.filter(t => (!oldTags.includes(t))),
+        tagsToDelete = oldTags.filter(t => (!bookmark.tags.includes(t)));
+
+    dispatch(addTags({ bookmarkId: bookmark.id, tagIds: tagsToAdd }));
+    dispatch(deleteTags({ bookmarkId: bookmark.id, tagIds: tagsToDelete }));
+    return dispatch(createOrUpdateBookmark(bookmark));
   }
 }
 
