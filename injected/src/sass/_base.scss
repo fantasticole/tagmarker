@@ -82,6 +82,8 @@ button:focus,
   width: calc(100% - 30px);
   margin-left: 25px;
   height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .drawer__header {
