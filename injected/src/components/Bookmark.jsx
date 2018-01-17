@@ -26,7 +26,7 @@ export default class Bookmark extends Component {
             className='create-bookmark__input modal__input'
             defaultValue={bookmark.title}
             name='title'
-            onChange={(e) => this.props.handleChange('title', e)}
+            onChange={(e) => this.props.onChange('title', e)}
             placeholder='bookmark name'
             type='text'
             />
@@ -34,7 +34,7 @@ export default class Bookmark extends Component {
             className='create-bookmark__input modal__input'
             defaultValue={bookmark.url}
             name='url'
-            onChange={(e) => this.props.handleChange('url', e)}
+            onChange={(e) => this.props.onChange('url', e)}
             placeholder='url'
             type='text'
             />
