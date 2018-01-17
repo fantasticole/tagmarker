@@ -4,9 +4,11 @@
 // // // BOOKMARK STYLES // // //
 // // // // // // // // // //
 .bookmark__details--is_editing {
-  overflow: visible;
   display: flex;
   flex-direction: column;
+  &.bookmark__details {
+    overflow: visible;
+  }
   .create-bookmark__tags {
     margin-top: 0;
   }
