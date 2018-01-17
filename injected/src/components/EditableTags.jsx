@@ -11,7 +11,7 @@ export default class EditableTags extends Component {
 
     this.state = {
       options: [],
-      selected: [],
+      selected: [...this.props.selected],
     };
   }
 
@@ -21,11 +21,11 @@ export default class EditableTags extends Component {
 
   componentDidUpdate (prevProps) {
     let { suggested } = this.props,
-        lengthChanged = suggested.length !== prevProps.suggested.length,
+        lengthChanged = suggested ? suggested.length !== prevProps.suggested.length : false,
         propsChanged;
 
     // if the length didn't change and we get ids, see if they changed
-    if (!lengthChanged && suggested.length > 0) {
+    if (!lengthChanged && suggested && suggested.length > 0) {
       propsChanged = suggested.some((id, i) => (id !== prevProps.suggested[i]));
     }
 
@@ -110,8 +110,8 @@ export default class EditableTags extends Component {
       return (
         <div className={`create-bookmark__tags--are_${type}`}>
           {tags.map(tag => (
-            <MarqueeWrapper>
-              <button className={tagClasses} key={tag.id} onClick={() => {type === 'selected' ? this.handleDeleteTag(tag.id) : this.selectTag(tag.id)}}>{tag.title} <i className={iconClasses}/></button>
+            <MarqueeWrapper key={tag.id}>
+              <button className={tagClasses} onClick={() => {type === 'selected' ? this.handleDeleteTag(tag.id) : this.selectTag(tag.id)}}>{tag.title} <i className={iconClasses}/></button>
             </MarqueeWrapper>
           ))}
         </div>
@@ -130,8 +130,8 @@ export default class EditableTags extends Component {
           // otherwise, mock one
           else return { title: id, id }
         }),
-        // render suggested tags that aren't already selected
-        suggestedTags = suggested.filter(id => !selected.includes(id)).map(id => tags[id]);
+        // if we have suggestions, render those that aren't selected
+        suggestedTags = suggested ? suggested.filter(id => !selected.includes(id)).map(id => tags[id]) : [];
 
     return (
       <div className='create-bookmark__tags'>
