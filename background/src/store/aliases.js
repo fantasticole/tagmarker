@@ -86,38 +86,6 @@ function createTag (tags, tagId, bookmark, tagMarkerFolderId) {
   })
 }
 
-function deleteTags (originalAction) {
-  let { bookmarkId, tagIds } = originalAction;
-
-  return (dispatch, getState) => {
-    let { bookmarks, tags } = getState(),
-        // get object for each tag being deleted
-        tagsToDelete = tagIds.map(id => (tags[id])),
-        // get bookmark object to delete from
-        bookmark = bookmarks[bookmarkId],
-        // get bookmark's tags that aren't in the tagIds to be deleted
-        updatedTagList = bookmark.tags.filter(id => (!tagIds.includes(id))),
-        tagsToUpdate = [];
-
-    // remove the bookmark id from each tag's object
-    tagsToDelete.forEach(tag => {
-      // get bookmarks for the current tag, minus the one to be deleted
-      let tagBookmarks = tag.bookmarks.filter(id => (id !== bookmarkId));
-
-      // set the updated list on the tag object
-      tag.bookmarks = tagBookmarks;
-      // add to list of tags to update
-      tagsToUpdate.push(tag);
-    })
-    // update the store
-    dispatch(createOrUpdateTags(tagsToUpdate));
-    // update the bookmark's tags to remove the deleted ones
-    bookmark.tags = updatedTagList;
-    // update the store
-    return dispatch(createOrUpdateBookmark(bookmark));
-  }
-}
-
 function removeTag (originalAction) {
   let { id } = originalAction;
 
@@ -165,7 +133,7 @@ function updateBookmark (originalAction) {
   let { bookmark } = originalAction;
 
   return (dispatch, getState) => {
-    let { bookmarks } = getState(),
+    let { bookmarks, tags } = getState(),
         oldTags = bookmarks[bookmark.id].tags,
         tagsToAdd = bookmark.tags.filter(t => (!oldTags.includes(t))),
         tagsToDelete = oldTags.filter(t => (!bookmark.tags.includes(t)))
@@ -178,10 +146,17 @@ function updateBookmark (originalAction) {
       if (updatedTag) updatedTag.bookmarks.push(bookmark.id);
       else updatedTag = dispatch(createTag(id));
       tagsToUpdate.push(updatedTag);
+    });
+
+    tagsToDelete.forEach(id => {
+      let updatedTag = tags[id],
+          bookmarkIndex = updatedTag.bookmarks.indexOf(bookmark.id);
+
+      updatedTag.bookmarks.splice(bookmarkIndex, 1);
+      tagsToUpdate.push(updatedTag);
     })
 
     dispatch(createOrUpdateTags(tagsToUpdate));
-    dispatch(deleteTags({ bookmarkId: bookmark.id, tagIds: tagsToDelete }));
     return dispatch(createOrUpdateBookmark(bookmark));
   }
 }
@@ -189,7 +164,6 @@ function updateBookmark (originalAction) {
 export default {
   'CREATE_BOOKMARK': createBookmark,
   'CREATE_FOLDER': createFolder,
-  'DELETE_TAGS': deleteTags,
   'REMOVE_TAG': removeTag,
   'SELECT_TAG': selectTag,
   'SET_BOOKMARK_FOLDER': setBookmarkFolder,
