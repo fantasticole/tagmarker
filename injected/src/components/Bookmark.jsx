@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 
+import EditableTags from './EditableTags';
 import MarqueeWrapper from './MarqueeWrapper';
 import Select from 'react-select';
 
@@ -13,77 +14,34 @@ export default class Bookmark extends Component {
 
     this.state = {
       active: false,
-      isAdding: false,
       isEditing: false,
-      options: [],
-      tags: [...this.props.bookmark.tags],
+      selected: [...this.props.bookmark.tags],
     };
   }
 
-  handleAddTag (selectedOption) {
-    let { options, tags } = this.state,
-        { value } = selectedOption,
-        index = options.findIndex(o => (o.value === value));
-
-    tags.push(value);
-    if (index > -1) {
-      options.splice(index, 1);
-      this.setState({ options, tags });
-    }
-    else {
-      this.setState({ tags });
-    }
-  }
-
-  handleClickAdd () {
-    this.setState({ isAdding: true });
-  }
-
   handleClickEdit () {
-    // if we don't already have options, set them
-    if (!this.state.options.length) this.setOptions();
     this.setState({ isEditing: true });
   }
 
   handleClickSave () {
     let { bookmark } = this.props,
-        { tags } = this.state,
-        tagsToAdd = tags.filter(t => (!bookmark.tags.includes(t))),
-        tagsToDelete = bookmark.tags.filter(t => (!tags.includes(t)));
+        { selected } = this.state,
+        tagsToAdd = selected.filter(t => (!bookmark.tags.includes(t))),
+        tagsToDelete = bookmark.tags.filter(t => (!selected.includes(t)));
 
     // delete tags to be deleted if we have any
     if (tagsToDelete.length) this.props.deleteTags(bookmark.id, tagsToDelete);
     // add tags to be added if we have any
     if (tagsToAdd.length) this.props.addTags(bookmark.id, tagsToAdd);
     // exit editing state
-    this.setState({
-      isAdding: false,
-      isEditing: false,
-      options: [],
-    });
-  }
-
-  handleDeleteTag (tagId) {
-    let { options, tags } = this.state,
-        currentTag = this.props.tags[tagId],
-        sortedOptions;
-
-    // remove it from array of bookmark tags
-    tags.splice(tags.indexOf(tagId), 1);
-    // if we have a tag object, add it to the tag options
-    if (currentTag) options.push({ label: currentTag.title, value: currentTag.id })
-    sortedOptions = this.sortOptions(options);
-    // update the state
-    this.setState({ options: sortedOptions, tags });
+    this.setState({ isEditing: false });
   }
 
   handleExitEdit (reset) {
-    // reset options and tags and exit editing state
+    // reset tags and exit editing state
     this.setState({
-      isAdding: false,
       isEditing: false,
-      options: [],
-      tags: [...this.props.bookmark.tags],
+      selected: [...this.props.bookmark.tags],
     });
   }
 
@@ -91,39 +49,14 @@ export default class Bookmark extends Component {
     this.setState({ active: !this.state.active });
   }
 
-  setOptions () {
-    let { tags } = this.props,
-        allTags = Object.values(tags),
-        currentTags = this.state.tags,
-        options = [],
-        sortedOptions;
-
-    allTags.forEach(t => {
-      if (!currentTags.includes(t.id)) {
-        options.push({ label: t.title, value: t.id });
-      }
-    });
-    // sort the options to appear alphabetically
-    sortedOptions = this.sortOptions(options);
-    this.setState({ options: sortedOptions });
-  }
-
-  sortOptions (options) {
-    return options.sort((a, b) => {
-      let aLabel = a.label.toLowerCase(),
-          bLabel = b.label.toLowerCase();
-
-      if (aLabel < bLabel) return -1;
-      if (aLabel > bLabel) return 1;
-      return 0;
-    });
+  setSelectedTags (selected) {
+    this.setState({ selected });
   }
 
   renderBookmarkActions () {
     if (this.state.isEditing) {
       return (
         <span className='bookmark__actions'>
-          <button className='button bookmark-action__button action-button add-tag' onClick={() => this.handleClickAdd()}>Add Tag <i className='fa fa-plus-circle'/></button>
           <button className='button bookmark-action__button action-button' onClick={() => this.handleClickSave()}>Save <i className='fa fa-floppy-o'/></button>
           <button className='button bookmark-action__button action-button' onClick={() => this.handleExitEdit()}>Cancel <i className='fa fa-ban'/></button>
         </span>
@@ -134,27 +67,10 @@ export default class Bookmark extends Component {
     );
   }
 
-  renderInput () {
-    if (this.state.isAdding) {
-      return (
-        <div className='bookmark-detail bookmark-detail__select'>
-          <Select.Creatable
-            className='tag-selector'
-            multi={false}
-            name='tag-select'
-            onChange={(selected) => this.handleAddTag(selected)}
-            options={this.state.options}
-            value=''
-            />
-        </div>
-      );
-    }
-  }
-
   renderTags () {
-    let tagIds = this.state.tags,
+    let { selected } = this.state,
         // get tag object for each id
-        tags = tagIds.map(id => {
+        tags = selected.map(id => {
           // if a tag object exists for the id, return that
           if (this.props.tags[id]) return this.props.tags[id];
           // otherwise, create an object for the tag to be created
@@ -165,11 +81,11 @@ export default class Bookmark extends Component {
       // render each tag associated with the bookmark, plus
       // the ones staged to be added to the bookmark
       return (
-        <span className='bookmark-tags__editing'>
-          {tags.map(tag => (
-            <button className='button bookmark__button bookmark__tag bookmark__tag--is_editing' key={tag.id} onClick={() => this.handleDeleteTag(tag.id)}>{tag.title} <i className='fa fa-times-circle'/></button>
-          ))}
-        </span>
+        <EditableTags
+          selectTags={(tags) => this.setSelectedTags(tags)}
+          selected={selected}
+          tags={this.props.tags}
+          />
       );
     }
     return (
@@ -208,7 +124,6 @@ export default class Bookmark extends Component {
             <div className='bookmark-detail bookmark-detail__tags'>
               {this.renderTags()}
             </div>
-            {this.renderInput()}
             <div className='bookmark-detail bookmark-detail__actions'>
               {this.renderBookmarkActions()}
             </div>
