@@ -29,14 +29,14 @@ export default class BookmarkListItem extends Component {
 
   handleClickSave () {
     let { bookmark } = this.props,
-        { selected } = this.state,
-        tagsToAdd = selected.filter(t => (!bookmark.tags.includes(t))),
-        tagsToDelete = bookmark.tags.filter(t => (!selected.includes(t)));
+        { selected, title, url } = this.state,
+        updatedBookmark = Object.assign({}, bookmark, {
+          tags: selected,
+          title,
+          url,
+        });
 
-    // delete tags to be deleted if we have any
-    if (tagsToDelete.length) this.props.deleteTags(bookmark.id, tagsToDelete);
-    // add tags to be added if we have any
-    if (tagsToAdd.length) this.props.addTags(bookmark.id, tagsToAdd);
+    this.props.updateBookmark(updatedBookmark);
     // exit editing state
     this.setState({ isEditing: false });
   }

@@ -27,11 +27,8 @@ const mapStateToProps = (state, ownProps) => {
  */
 const mapDispatchToProps = (dispatch) => {
   return {
-    addTags: (bookmarkId, tagIds) => {
-      dispatch({ type: 'ADD_TAGS', bookmarkId, tagIds });
-    },
-    deleteTags: (bookmarkId, tagIds) => {
-      dispatch({ type: 'DELETE_TAGS', bookmarkId, tagIds });
+    updateBookmark: (bookmark) => {
+      dispatch({ type: 'UPDATE_BOOKMARK', bookmark });
     },
   };
 }

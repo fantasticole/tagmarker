@@ -67,7 +67,6 @@ function createFolder (originalAction) {
           title,
           bookmarks: [],
         };  
-
     // updates tags
     dispatch(createOrUpdateTags([newTag]));
   }
@@ -88,8 +87,7 @@ function createTag (tags, tagId, bookmark, tagMarkerFolderId) {
     chrome.bookmarks.create({
       parentId: tagMarkerFolderId,
       title: tagId
-    }, resolve);
-  }).then(folder => {
+    }, resolve);  }).then(folder => {
     // add the folder we just created to the store as a tag
     // with the bookmark as an item in its bookmarks array
     let  { dateAdded, dateGroupModified, id, parentId, title } = folder,
@@ -184,6 +182,15 @@ function setBookmarkFolder (originalAction) {
   }
 }
 
+function updateBookmark (originalAction) {
+  let { bookmark } = originalAction;
+
+  return (dispatch, getState) => {
+    let { bookmarks } = getState(),
+        oldTags = bookmarks[bookmark.id].tags;
+  }
+}
+
 export default {
   'ADD_TAGS': addTags,
   'CREATE_BOOKMARK': createBookmark,
@@ -192,4 +199,5 @@ export default {
   'REMOVE_TAG': removeTag,
   'SELECT_TAG': selectTag,
   'SET_BOOKMARK_FOLDER': setBookmarkFolder,
+  'UPDATE_BOOKMARK': updateBookmark,
 };
