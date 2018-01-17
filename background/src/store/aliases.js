@@ -61,7 +61,7 @@ function createTag (title, tags, bookmarkId) {
   return newTag
 }
 
-function getTagsToUpdate tagsToAdd, tagsToDelete, alltags, bookmarkId(tagsToAdd, tagsToDelete, alltags, bookmarkId) {
+function getTagsToUpdate (tagsToAdd, tagsToDelete, alltags, bookmarkId) {
   let tagsToUpdate = [];
 
   // add bookmark to each tag
