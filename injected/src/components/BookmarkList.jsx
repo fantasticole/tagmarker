@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
-import Bookmark from '../containers/Bookmark';
+import BookmarkListItem from '../containers/BookmarkListItem';
 
 
 export default class BookmarkList extends Component {
@@ -19,7 +19,7 @@ export default class BookmarkList extends Component {
           this.props.filteredBookmarks.length ?
           <ul className='tagmarker-list bookmark-list'>
             {this.props.filteredBookmarks.map(bookmarkId => (
-              <Bookmark id={bookmarkId} key={bookmarkId} />
+              <BookmarkListItem id={bookmarkId} key={bookmarkId} />
             ))}
           </ul> :
           <p className='bookmark__list-is_empty'>no bookmarks to display</p>

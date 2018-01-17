@@ -1,4 +1,4 @@
-import Bookmark from '../components/Bookmark';
+import BookmarkListItem from '../components/BookmarkListItem';
 
 import { connect } from 'react-redux';
 
@@ -36,4 +36,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Bookmark);
+export default connect(mapStateToProps, mapDispatchToProps)(BookmarkListItem);
