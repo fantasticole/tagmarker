@@ -2,7 +2,6 @@ import {
   createOrUpdateBookmark,
   createOrUpdateTags,
   filterBookmarksAndTags,
-  setFilteredTags,
   setFolder,
   updateSelectedTags
 } from './actions';
