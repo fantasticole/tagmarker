@@ -11,7 +11,7 @@ export default class EditableTags extends Component {
 
     this.state = {
       options: [],
-      selected: [...this.props.selected],
+      selected: this.props.selected ? this.props.selected : [],
     };
   }
 
