@@ -85,7 +85,7 @@ export default class BookmarkListItem extends Component {
           onClick={() => this.handleToggleDetails()}
           >
           <button className='show-more'><i className='fa fa-caret-right'/></button>
-          {bookmark.title}
+          {bookmark.title || bookmark.url}
         </p>
         {ifTrue(active).render(() => (
           <div className='bookmark__item'>
