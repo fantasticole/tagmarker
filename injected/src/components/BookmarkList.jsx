@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
 import BookmarkListItem from '../containers/BookmarkListItem';
-
+import BookmarkActions from '../containers/BookmarkActions';
 
 export default class BookmarkList extends Component {
   constructor (props) {
@@ -12,9 +12,7 @@ export default class BookmarkList extends Component {
   render () {
     return (
       <div className='bookmark-list__container'>
-        <div className='drawer__header tags__header'>
-          <h1 className='drawer__header-text'>Bookmarks</h1>
-        </div>
+        <BookmarkActions />
         {
           this.props.filteredBookmarks.length ?
           <ul className='tagmarker-list bookmark-list'>
