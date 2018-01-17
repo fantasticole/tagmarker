@@ -14,7 +14,13 @@ export default class BookmarkListItem extends Component {
       active: false,
       isEditing: false,
       selected: [...this.props.bookmark.tags],
+      title: this.props.bookmark.title,
+      url: this.props.bookmark.url,
     };
+  }
+
+  handleChange (field, event) {
+    this.setState({ [field]: event.target.value });
   }
 
   handleClickEdit () {
@@ -86,6 +92,7 @@ export default class BookmarkListItem extends Component {
             <Bookmark
               bookmark={bookmark}
               isEditing={isEditing}
+              onChange={(field, event) => this.handleChange(field, event)}
               selected={selected}
               setSelectedTags={(tags) => this.setSelectedTags(tags)}
               tags={tags}
