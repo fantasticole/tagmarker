@@ -95,8 +95,8 @@ export default class EditableTags extends Component {
   }
 
   renderTags (tags, type) {
-    // always render if the type is suggested or if there are tags
-    if (type === 'suggested' || tags.length) {
+    // always render if there are tags
+    if (tags.length) {
       let tagClasses = classNames('button', 'bookmark__button', 'bookmark__tag', {
             'bookmark__tag--is_editing': type === 'selected',
             'bookmark__tag--is_suggested': type === 'suggested',
@@ -132,18 +132,20 @@ export default class EditableTags extends Component {
 
     return (
       <div className='create-bookmark__tags'>
+        <p className='create-bookmark__tags-title'>tags</p>
         {this.renderTags(selectedTags, 'selected')}
         {this.renderTags(suggestedTags, 'suggested')}
-        <Select.Creatable
-          autoFocus
-          className='tag-selector'
-          multi={false}
-          name='tag-select'
-          onChange={(selected) => this.selectTag(selected.value)}
-          options={this.state.options}
-          placeholder='search for tags'
-          value=''
-          />
+        <div className='create-bookmark__tags-search'>
+          <Select.Creatable
+            className='tag-selector'
+            multi={false}
+            name='tag-select'
+            onChange={(selected) => this.selectTag(selected.value)}
+            options={this.state.options}
+            placeholder=''
+            value=''
+            />
+        </div>
       </div>
     );
   }

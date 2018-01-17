@@ -3,7 +3,24 @@
 // // // // // // // // // // //
 // // // BOOKMARK STYLES // // //
 // // // // // // // // // //
-.create-bookmark__tags--are_suggested {
+.create-bookmark__tags {
+  position: relative;
+  padding-top: 6px;
+}
+
+.create-bookmark__tags-title {
+  position: absolute;
+  top: -23px;
+  right: 5px;
+  color: $deep;
+  font-weight: bold;
+  background-color: $base;
+  padding: 0 5px;
+  font-size: 13px;
+}
+
+.create-bookmark__tags--are_suggested,
+.create-bookmark__tags-search {
   border-top: 1px dotted $deep-accent;
   padding-top: 10px;
   margin-top: 10px;
@@ -13,28 +30,16 @@
     color: $deep-accent;
     background: $base;
     position: absolute;
-    top: -7px;
+    padding: 0 3px;
+    top: -9px;
     left: 0;
     font-size: 12px;
     color: #aaa;
   }
 }
 
-.bookmark__button--is_add {
-  height: 18px;
-  width: 18px;
-  border-radius: 50%;
-  color: $base;
-  background-color: $light-light;
-  background-image: linear-gradient(to top, $light-light 0%, $lighter-light 100%);
-  cursor: pointer;
-  vertical-align: text-top;
-  .fa {
-    font-size: 11px;
-    width: 18.5px;
-  }
-  &:hover {
-    background-color: $light;
-    background-image: linear-gradient(to top, $light 0%, $light-highlight 100%);
+.create-bookmark__tags-search {
+  &:before {
+    content: 'search';
   }
 }
