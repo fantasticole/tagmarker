@@ -7,28 +7,6 @@ import {
   updateSelectedTags
 } from './actions';
 
-function addTags (originalAction) {
-  let { bookmarkId, tagIds } = originalAction;
-
-  return (dispatch, getState) => {
-    let { bookmarks, tagMarkerFolder, tags } = getState(),
-        // get bookmark object to add from
-        bookmark = bookmarks[bookmarkId],
-        // TODO: make sure there is always a folder chosen
-        tagMarkerFolderId = tagMarkerFolder.id ? tagMarkerFolder.id : "1",
-        tagPromises = tagIds.map(id => (createTag(tags, id, bookmark, tagMarkerFolderId)));
-
-    Promise.all(tagPromises).then(tagsToUpdate => {
-      let idsToAdd = tagsToUpdate.map(t => (t.id));
-
-      // update the bookmark's tags to add the new ones
-      bookmark.tags = bookmark.tags.concat(idsToAdd);
-      dispatch(createOrUpdateTags(tagsToUpdate));
-      return dispatch(createOrUpdateBookmark(bookmark));
-    });
-  }
-}
-
 function createBookmark (originalAction) {
   let { bookmark, tagsToAdd } = originalAction;
 
@@ -190,16 +168,25 @@ function updateBookmark (originalAction) {
     let { bookmarks } = getState(),
         oldTags = bookmarks[bookmark.id].tags,
         tagsToAdd = bookmark.tags.filter(t => (!oldTags.includes(t))),
-        tagsToDelete = oldTags.filter(t => (!bookmark.tags.includes(t)));
+        tagsToDelete = oldTags.filter(t => (!bookmark.tags.includes(t)))
+        tagsToUpdate = [];
 
-    dispatch(addTags({ bookmarkId: bookmark.id, tagIds: tagsToAdd }));
+    // add bookmark to each tag
+    tagsToAdd.forEach(id => {
+      let updatedTag = tags[id];
+
+      if (updatedTag) updatedTag.bookmarks.push(bookmark.id);
+      else updatedTag = dispatch(createTag(id));
+      tagsToUpdate.push(updatedTag);
+    })
+
+    dispatch(createOrUpdateTags(tagsToUpdate));
     dispatch(deleteTags({ bookmarkId: bookmark.id, tagIds: tagsToDelete }));
     return dispatch(createOrUpdateBookmark(bookmark));
   }
 }
 
 export default {
-  'ADD_TAGS': addTags,
   'CREATE_BOOKMARK': createBookmark,
   'CREATE_FOLDER': createFolder,
   'DELETE_TAGS': deleteTags,
