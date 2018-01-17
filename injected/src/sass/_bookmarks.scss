@@ -3,9 +3,16 @@
 // // // // // // // // // // //
 // // // BOOKMARK STYLES // // //
 // // // // // // // // // //
+.create-bookmark-action__button {
+  margin-right: 0;
+}
+
 .create-bookmark__tags {
+  margin-top: 20px;
+  padding: 3px;
+  padding-top: 7px;
+  border: 1px solid $mid-accent;
   position: relative;
-  padding-top: 6px;
 }
 
 .create-bookmark__tags-title {
@@ -17,6 +24,10 @@
   background-color: $base;
   padding: 0 5px;
   font-size: 13px;
+}
+
+.create-bookmark__tags--are_selected {
+  overflow: hidden;
 }
 
 .create-bookmark__tags--are_suggested,

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 
+import MarqueeWrapper from './MarqueeWrapper';
 import Select from 'react-select';
 
 export default class EditableTags extends Component {
@@ -109,7 +110,9 @@ export default class EditableTags extends Component {
       return (
         <div className={`create-bookmark__tags--are_${type}`}>
           {tags.map(tag => (
-            <button className={tagClasses} key={tag.id} onClick={() => {type === 'selected' ? this.handleDeleteTag(tag.id) : this.selectTag(tag.id)}}>{tag.title} <i className={iconClasses}/></button>
+            <MarqueeWrapper>
+              <button className={tagClasses} key={tag.id} onClick={() => {type === 'selected' ? this.handleDeleteTag(tag.id) : this.selectTag(tag.id)}}>{tag.title} <i className={iconClasses}/></button>
+            </MarqueeWrapper>
           ))}
         </div>
       )
