@@ -51,39 +51,23 @@ function createFolder (originalAction) {
   }
 }
 
-function createTag (tags, tagId, bookmark, tagMarkerFolderId) {
-  let tagToUpdate = tags[tagId];
+function createTag (title, tags, bookmarkId) {
+  let id = Math.random().toString(36).substr(2, 9),
+      newTag = {
+        dateAdded: Date.now(),
+        dateGroupModified: Date.now(),
+        id,
+        parentId: '',
+        parents: [],
+        title,
+        bookmarks: [ bookmarkId ],
+      },
+      existingTag = tags[id];
 
-  // if we have a tag for the id already
-  if (tagToUpdate) {
-    // add the bookmark's id to the tag's bookmarks array
-    tagToUpdate.bookmarks.push(bookmark.id);
-    return tagToUpdate;
+  if (existingTag) {
+    return createTag(title, tags, bookmarkId);
   }
-  // otherwise, create a folder for the new tag
-  // inside of the tagmarker folder
-  return new Promise((resolve, reject) => {
-    chrome.bookmarks.create({
-      parentId: tagMarkerFolderId,
-      title: tagId
-    }, resolve);  }).then(folder => {
-    // add the folder we just created to the store as a tag
-    // with the bookmark as an item in its bookmarks array
-    let  { dateAdded, dateGroupModified, id, parentId, title } = folder,
-        // get parents array and add immediate parent
-        parents = [...tags[parentId].parents, parentId],
-        newTag = {
-          dateAdded,
-          dateGroupModified,
-          id,
-          parentId,
-          parents,
-          title,
-          bookmarks: [ bookmark.id ],
-        };
-
-    return newTag;
-  })
+  return newTag
 }
 
 function removeTag (originalAction) {
@@ -144,7 +128,7 @@ function updateBookmark (originalAction) {
       let updatedTag = tags[id];
 
       if (updatedTag) updatedTag.bookmarks.push(bookmark.id);
-      else updatedTag = dispatch(createTag(id));
+      else updatedTag = createTag(id, tags, bookmark.id);
       tagsToUpdate.push(updatedTag);
     });
 
