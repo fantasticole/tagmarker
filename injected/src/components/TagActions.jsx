@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import MarqueeWrapper from './MarqueeWrapper';
 import Select from 'react-select';
 
-export default class FilteredTags extends Component {
+export default class TagActions extends Component {
   constructor (props) {
     super(props);
 
