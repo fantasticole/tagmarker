@@ -22,7 +22,7 @@ export default class Bookmark extends Component {
     super(props);
 
     this.state = {
-      suggested: [...this.props.suggested],
+      suggested: this.props.suggested ? this.props.suggested : [],
     }
   }
 
@@ -58,7 +58,7 @@ export default class Bookmark extends Component {
       return (
         <div className='bookmark__details bookmark__details--is_editing'>
           <input
-            className='create-bookmark__input modal__input'
+            className='bookmark__input modal__input'
             defaultValue={title}
             name='title'
             onChange={(e) => this.props.onChange('title', e)}
@@ -66,7 +66,7 @@ export default class Bookmark extends Component {
             type='text'
             />
           <input
-            className='create-bookmark__input modal__input'
+            className='bookmark__input modal__input'
             defaultValue={url}
             name='url'
             onChange={(e) => this.props.onChange('url', e)}

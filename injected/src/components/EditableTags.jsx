@@ -99,7 +99,7 @@ export default class EditableTags extends Component {
           });
 
       return (
-        <div className={`create-bookmark__tags--are_${type}`}>
+        <div className={`bookmark__tags--are_${type}`}>
           {tags.map(tag => (
             <MarqueeWrapper key={tag.id}>
               <button className={tagClasses} onClick={() => {type === 'selected' ? this.handleDeleteTag(tag.id) : this.selectTag(tag.id)}}>{tag.title} <i className={iconClasses}/></button>
@@ -130,11 +130,11 @@ export default class EditableTags extends Component {
         suggestedTags = suggested ? suggested.filter(id => !selected.includes(id)).map(id => tags[id]) : [];
 
     return (
-      <div className='create-bookmark__tags'>
-        <p className='create-bookmark__tags-title'>tags</p>
+      <div className='bookmark__tags'>
+        <p className='bookmark__tags-title'>tags</p>
         {this.renderTags(selectedTags, 'selected')}
         {this.renderTags(suggestedTags, 'suggested')}
-        <div className='create-bookmark__tags-search'>
+        <div className='bookmark__tags-search'>
           <Select.Creatable
             className='tag-selector'
             multi={false}

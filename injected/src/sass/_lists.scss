@@ -1,8 +1,8 @@
 @import 'colors';
 
-// // // // // // // // // // // //
+// // // // // // // // // //
 // // // LIST STYLES // // //
-// // // // // // // // // // //
+// // // // // // // // // //
 
 .list__actions {
   height: 35px;
@@ -140,71 +140,5 @@
   border-left: 1px dotted $light-light;
   .action-button {
     margin-top: 5px;
-  }
-}
-
-.bookmark__details {
-  font-size: 12px;
-  overflow: hidden;
-  padding-left: 3px;
-}
-
-.bookmark-detail {
-  margin: 4px 0;
-  width: 100%;
-  position: relative;
-}
-
-.bookmark-detail__link {
-  white-space: normal;
-}
-
-.bookmark-favicon {
-  height: 10px;
-  margin-right: 3px;
-  margin-bottom: -1px;
-}
-
-.bookmark-tags__editing {
-  white-space: normal;
-}
-
-.action-button {
-  border-radius: 1px;
-  border: 1px solid transparent;
-  padding: 1px 4px 2px;
-  margin-right: 5px;
-  text-transform: lowercase;
-  &:last-child {
-    margin-right: 0;
-  }
-  &:hover {
-    color: $light;
-    border-color: $light;
-  }
-}
-
-.detail-title {
-  font-weight: bold;
-  color: $mid-accent;
-  text-transform: uppercase;
-}
-
-.bookmark-detail__tags .marquee {
-  .bookmark__tag {
-    cursor: default;
-  }
-}
-
-.bookmark-detail__select {
-  position: absolute;
-  margin: 0;
-  width: 230px;
-  .Select-menu-outer {
-    max-height: 100px;
-    overflow: auto;
-  }
-  & + .bookmark-detail {
-    margin-top: 44px;
   }
 }

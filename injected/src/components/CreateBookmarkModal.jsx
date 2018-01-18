@@ -88,8 +88,8 @@ export default class CreateBookmarkModal extends Component {
         });
 
     return (
-      <Modal.Modal className='create-bookmark-modal' ref='modal'>
-        <h1 className='modal__header create-bookmark__header'>Add bookmark in:</h1>
+      <Modal.Modal className='bookmark-modal' ref='modal'>
+        <h1 className='modal__header bookmark__header'>Add bookmark in:</h1>
         <FolderSelection
           onSelect={(selected) => this.handleSelectFolder(selected.value)}
           parentId={parentId}
@@ -105,9 +105,9 @@ export default class CreateBookmarkModal extends Component {
           url={url}
           />
         <p className={warningClasses}>Are you sure you want to cancel?</p>
-        <span className='modal__actions create-bookmark__actions'>
-          <button className='button modal-action__button create-bookmark-action__button action-button' disabled={!parentId} onClick={() => this.handleClickSubmit()}>Submit <i className='fa fa-floppy-o'/></button>
-          <button className='button modal-action__button create-bookmark-action__button action-button' onClick={() => this.handleClickCancel()}>{cancelText} <i className='fa fa-ban'/></button>
+        <span className='modal__actions bookmark-modal__actions'>
+          <button className='button modal-action__button bookmark-action__button action-button' disabled={!parentId} onClick={() => this.handleClickSubmit()}>Submit <i className='fa fa-floppy-o'/></button>
+          <button className='button modal-action__button bookmark-action__button action-button' onClick={() => this.handleClickCancel()}>{cancelText} <i className='fa fa-ban'/></button>
         </span>
       </Modal.Modal>
     );

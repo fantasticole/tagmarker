@@ -78,6 +78,17 @@ button:focus,
   cursor: pointer;
 }
 
+.action-button {
+  border-radius: 1px;
+  border: 1px solid transparent;
+  padding: 1px 4px 2px;
+  text-transform: lowercase;
+  &:hover {
+    color: $light;
+    border-color: $light;
+  }
+}
+
 .drawer__content {
   width: calc(100% - 30px);
   margin-left: 25px;

@@ -9,19 +9,19 @@
   &.bookmark__details {
     overflow: visible;
   }
-  .create-bookmark__tags {
+  .bookmark__tags {
     margin-top: 0;
   }
-  .create-bookmark__tags-title {
+  .bookmark__tags-title {
     display: none;
   }
 }
 
-.create-bookmark-action__button {
+.bookmark-action__button {
   margin-right: 0;
 }
 
-.create-bookmark__tags {
+.bookmark__tags {
   margin-top: 20px;
   padding: 3px;
   padding-top: 7px;
@@ -32,7 +32,7 @@
   }
 }
 
-.create-bookmark__tags-title {
+.bookmark__tags-title {
   position: absolute;
   top: -23px;
   right: 5px;
@@ -43,13 +43,13 @@
   font-size: 13px;
 }
 
-.create-bookmark__tags--are_selected {
+.bookmark__tags--are_selected {
   overflow: hidden;
   white-space: pre-wrap;
 }
 
-.create-bookmark__tags--are_suggested,
-.create-bookmark__tags-search {
+.bookmark__tags--are_suggested,
+.bookmark__tags-search {
   border-top: 1px dotted $deep-accent;
   padding-top: 10px;
   margin-top: 10px;
@@ -67,8 +67,68 @@
   }
 }
 
-.create-bookmark__tags-search {
+.bookmark__tags-search {
   &:before {
     content: 'search';
+  }
+}
+
+.bookmark__actions {
+  .action-button {
+    margin-right: 5px;
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}
+
+.bookmark__details {
+  font-size: 12px;
+  overflow: hidden;
+  padding-left: 3px;
+}
+
+.bookmark-detail {
+  margin: 4px 0;
+  width: 100%;
+  position: relative;
+}
+
+.bookmark-detail__link {
+  white-space: normal;
+}
+
+.bookmark-favicon {
+  height: 10px;
+  margin-right: 3px;
+  margin-bottom: -1px;
+}
+
+.bookmark-tags__editing {
+  white-space: normal;
+}
+
+.detail-title {
+  font-weight: bold;
+  color: $mid-accent;
+  text-transform: uppercase;
+}
+
+.bookmark-detail__tags .marquee {
+  .bookmark__tag {
+    cursor: default;
+  }
+}
+
+.bookmark-detail__select {
+  position: absolute;
+  margin: 0;
+  width: 230px;
+  .Select-menu-outer {
+    max-height: 100px;
+    overflow: auto;
+  }
+  & + .bookmark-detail {
+    margin-top: 44px;
   }
 }
