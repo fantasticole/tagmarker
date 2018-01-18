@@ -59,6 +59,15 @@ describe('actions', () => {
   describe('setBookmarks', () => {
     it('should create an action to set the bookmarks object', () => {
       // SET_BOOKMARKS
+      const data = {
+        1: { id: 1, title: 'bookmark'},
+        2: { id: 2, title: 'other bookmark'},
+      };
+      const expectedAction = {
+        type: 'SET_BOOKMARKS',
+        data
+      }
+      expect(actions.setBookmarks(data)).toEqual(expectedAction)
     });
   })
 
