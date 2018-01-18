@@ -4,7 +4,7 @@ export function initialize (data) {
     dispatch(setBookmarks(data.bookmarks));
     dispatch(setTags(data.tags));
     // set initial filtered tags and bookmarks
-    dispatch(updateFilteredBookmarks(Object.keys(data.bookmarks)));
+    dispatch(updateFilteredBookmarks([]));
     dispatch(updateFilteredTags(Object.keys(data.tags)));
   };
 }
@@ -49,7 +49,8 @@ export function filterBookmarksAndTags (selectedTags) {
       dispatch(updateFilteredTags(relatedTags));
     }
     else {
-      dispatch(updateFilteredBookmarks(Object.keys(bookmarks)));
+      // if no tags are selected, show no bookmarks
+      dispatch(updateFilteredBookmarks([]));
       dispatch(updateFilteredTags(Object.keys(tags)));
     }
   }
