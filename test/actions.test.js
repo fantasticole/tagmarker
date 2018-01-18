@@ -101,6 +101,12 @@ describe('actions', () => {
   describe('updateFilteredTags', () => {
     it('should create an action to set the filtered tags array', () => {
       // UPDATE_FILTERED_TAGS
+      const tags = [1, 2, 3];
+      const expectedAction = {
+        type: 'UPDATE_FILTERED_TAGS',
+        tags
+      }
+      expect(actions.updateFilteredTags(tags)).toEqual(expectedAction)
     });
   })
 
