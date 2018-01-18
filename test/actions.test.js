@@ -22,24 +22,46 @@ const testState = {
     4: { id: 4, title: 'other tag', bookmarks: [ 1, 2 ] },
   },
 };
-const store = mockStore(testState);
 
 describe('actions', () => {
   describe('initialize', () => {
+    const store = mockStore(testState);
+    const storeActions = store.getActions()
+    const data = {
+      bookmarks: {
+        1: { id: 1, title: 'bookmark', tags: [ 3 ] },
+        2: { id: 2, title: 'other bookmark', tags: [ 3, 4 ] },
+      },
+      tags: {
+        3: { id: 3, title: 'tag', bookmarks: [ 1 ] },
+        4: { id: 4, title: 'other tag', bookmarks: [ 1, 2 ] },
+      },
+    };
+
+    store.dispatch(actions.initialize(data))
     it('should create an action to setBookmarks with bookmarks from data param', () => {
+      const setBookmarksAction = { type: 'SET_BOOKMARKS', data: data.bookmarks };
+      expect(storeActions[0]).toEqual(setBookmarksAction)
     });
 
     it('should create an action to setTags with tags from data param', () => {
+      const setTagsAction = { type: 'SET_TAGS', data: data.tags };
+      expect(storeActions[1]).toEqual(setTagsAction)
     });
 
     it('should create an action to updateFilteredBookmarks with an empty arrray', () => {
+      const filteredBookmarksAction = { type: 'UPDATE_FILTERED_BOOKMARKS', bookmarks: [] };
+      expect(storeActions[2]).toEqual(filteredBookmarksAction)
     });
 
     it('should create an action to updateFilteredTags with all tag ids', () => {
+      const filteredTagsAction = { type: 'UPDATE_FILTERED_TAGS', tags: Object.keys(data.tags) };
+      expect(storeActions[3]).toEqual(filteredTagsAction)
     });
   })
 
   describe('createOrUpdateBookmark', () => {
+    const store = mockStore(testState);
     const storeActions = store.getActions()
     const bookmark = { id: 5, title: 'new bookmark' };
 
