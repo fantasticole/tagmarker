@@ -87,20 +87,21 @@ describe('sort reducer', () => {
 })
 
 describe('tags reducer', () => {
+  const allTags = {
+    1: { id: 1, title: 'tag'},
+    2: { id: 2, title: 'other tag'},
+  };
+
+  const newTags = {
+    3: { id: 3, title: 'new tag'},
+    4: { id: 4, title: 'other new tag'},
+  };
+
   it('should return the initial state', () => {
     expect(reducers.tags(undefined, {})).toEqual(initialState.tags)
   })
 
   it('should handle SET_TAGS', () => {
-    let allTags = {
-          1: { title: 'tag'},
-          2: { title: 'other tag'},
-        },
-        newTags = {
-          3: { title: 'new tag'},
-          4: { title: 'other new tag'},
-        };
-
     // should set the tags object in the store
     expect(
       reducers.tags({}, { type: 'SET_TAGS', data: allTags})
@@ -112,6 +113,27 @@ describe('tags reducer', () => {
   })
 
   it('should handle CREATE_OR_UPDATE_TAGS', () => {
-    // adds or updates each tag in action.tags
+    const tag = newTags[3];
+    const tags = [ tag ];
+    const updatedTags = Object.assign({}, allTags, { [tag.id]: tag });
+
+    // adds a tag
+    expect(
+      reducers.tags(allTags, { type: 'CREATE_OR_UPDATE_TAGS', tags })
+    ).toEqual(updatedTags);
+
+    // add multiple tags
+    const allNewTags = Object.values(newTags);
+    const allUpdatedTags = Object.assign({}, allTags, newTags)
+    expect(
+      reducers.tags(allTags, { type: 'CREATE_OR_UPDATE_TAGS', tags: allNewTags })
+    ).toEqual(allUpdatedTags);
+
+    // updates a tag
+    tags[0].title = 'new title';
+    updatedTags[3].title = 'new title';
+    expect(
+      reducers.tags(allTags, { type: 'CREATE_OR_UPDATE_TAGS', tags })
+    ).toEqual(updatedTags);
   })
 })
