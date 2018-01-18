@@ -74,6 +74,15 @@ describe('actions', () => {
   describe('setTags', () => {
     it('should create an action to set the tags object', () => {
       // SET_TAGS
+      const data = {
+        1: { id: 1, title: 'tag'},
+        2: { id: 2, title: 'other tag'},
+      };
+      const expectedAction = {
+        type: 'SET_TAGS',
+        data
+      }
+      expect(actions.setTags(data)).toEqual(expectedAction)
     });
   })
 
