@@ -106,12 +106,14 @@ export default class BookmarkListItem extends Component {
         {ifTrue(active).render(() => (
           <div className='bookmark__item'>
             <Bookmark
-              bookmark={bookmark}
+              dateAdded={bookmark.dateAdded}
               isEditing={isEditing}
               onChange={(field, event) => this.handleChange(field, event)}
               selected={selected}
               setSelectedTags={(tags) => this.setSelectedTags(tags)}
               tags={tags}
+              title={bookmark.title}
+              url={bookmark.url}
               />
             {this.renderBookmarkActions()}
           </div>

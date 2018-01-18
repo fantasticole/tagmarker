@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 
 import Select from 'react-select';
-import EditableTags from './EditableTags';
+import Bookmark from './Bookmark';
 import FolderSelection from './FolderSelection';
 import Modal from './Modal';
 
@@ -80,7 +80,8 @@ export default class CreateBookmarkModal extends Component {
   }
 
   render () {
-    let { parentId, suggested, warn } = this.state,
+    let { parentId, suggested, tagsToAdd, title, url, warn } = this.state,
+        { tags } = this.props,
         cancelText = warn ? 'Yes, bye' : 'Cancel',
         warningClasses = classNames('modal__warning', {
           visible: warn,
@@ -93,27 +94,15 @@ export default class CreateBookmarkModal extends Component {
           onSelect={(selected) => this.handleSelectFolder(selected.value)}
           parentId={parentId}
           />
-        <input
-          autoFocus
-          className='create-bookmark__input modal__input'
-          defaultValue={this.props.title}
-          name='title'
-          onChange={(e) => this.handleChange('title', e)}
-          placeholder='bookmark name'
-          type='text'
-          />
-        <input
-          className='create-bookmark__input modal__input'
-          defaultValue={this.props.url}
-          name='url'
-          onChange={(e) => this.handleChange('url', e)}
-          placeholder='url'
-          type='text'
-          />
-        <EditableTags
-          selectTags={(tags) => this.setSelectedTags(tags)}
+        <Bookmark
+          isEditing={true}
+          onChange={(field, event) => this.handleChange(field, event)}
+          selected={tagsToAdd}
+          setSelectedTags={(selected) => this.setSelectedTags(selected)}
           suggested={suggested}
-          tags={this.props.tags}
+          tags={tags}
+          title={title}
+          url={url}
           />
         <p className={warningClasses}>Are you sure you want to cancel?</p>
         <span className='modal__actions create-bookmark__actions'>

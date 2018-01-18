@@ -10,7 +10,7 @@ import Select from 'react-select';
  *
  * @param {array} [selected] - optional list of selected tag ids
  * @param {function} selectTags - function to run when tag is selected
- * @param {array} [suggested] - optional list of suggested tag ids
+ * @param {array} suggested - optional list of suggested tag ids
  * @param {object} tags - all tags from store
  */
 export default class EditableTags extends Component {
@@ -25,23 +25,6 @@ export default class EditableTags extends Component {
 
   componentDidMount () {
     this.setOptions();
-  }
-
-  componentDidUpdate (prevProps) {
-    let { suggested } = this.props,
-        lengthChanged = suggested ? suggested.length !== prevProps.suggested.length : false,
-        propsChanged;
-
-    // if the length didn't change and we get ids, see if they changed
-    if (!lengthChanged && suggested && suggested.length > 0) {
-      propsChanged = suggested.some((id, i) => (id !== prevProps.suggested[i]));
-    }
-
-    // if the suggested ids have changed
-    if (lengthChanged || propsChanged) {
-      // update the options
-      this.setOptions();
-    }
   }
 
   handleDeleteTag (id) {
