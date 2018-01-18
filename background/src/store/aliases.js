@@ -2,7 +2,6 @@ import {
   createOrUpdateBookmark,
   createOrUpdateTags,
   filterBookmarksAndTags,
-  setFolder,
   updateFilteredBookmarks,
   updateFilteredTags,
   updateSelectedTags
@@ -141,18 +140,6 @@ function selectTag (originalAction) {
   }
 }
 
-function setBookmarkFolder (originalAction) {
-  let { id } = originalAction;
-
-  return (dispatch, getState) => {
-    // get folder corresponding to selected id
-    chrome.bookmarks.get(id, (arr) => {
-      // set it as the tagMarkerFolder
-      dispatch(setFolder(arr[0]));
-    })
-  }
-}
-
 function updateBookmark (originalAction) {
   let { bookmark } = originalAction;
 
@@ -188,6 +175,5 @@ export default {
   'REMOVE_TAG': removeTag,
   'SELECT_BOOKMARK': selectBookmark,
   'SELECT_TAG': selectTag,
-  'SET_BOOKMARK_FOLDER': setBookmarkFolder,
   'UPDATE_BOOKMARK': updateBookmark,
 };

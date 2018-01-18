@@ -10,7 +10,6 @@ import { connect } from 'react-redux';
  */
 const mapStateToProps = (state) => {
   return {
-    tagMarkerFolder: state.tagMarkerFolder,
     tags: state.tags,
   };
 }

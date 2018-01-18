@@ -11,7 +11,6 @@ import Modal from './Modal';
  * CreateBookmarkModal
  *
  * @param {function} createBookmark - function save bookmark
- * @param {object} tagMarkerFolder - default folder for new bookmarks
  * @param {object} tags - all tags from store
  * @param {string} title - current page title
  * @param {string} url - current page url
@@ -21,7 +20,7 @@ export default class CreateBookmarkModal extends Component {
     super(props);
 
     this.state = {
-      parentId: this.props.tagMarkerFolder.id,
+      parentId: null,
       preventClose: false,
       suggested: [],
       tagsToAdd: [],
@@ -29,10 +28,6 @@ export default class CreateBookmarkModal extends Component {
       url: this.props.url,
       warn: false,
     };
-  }
-
-  componentDidMount () {
-    this.setParent(this.props.tagMarkerFolder.id);
   }
 
   handleChange (bookmarkKey, event) {

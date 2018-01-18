@@ -90,21 +90,11 @@ export function tags (state = {}, action) {
   }
 };
 
-export function tagMarkerFolder (state = {}, action) {
-  switch (action.type) {
-    case 'SET_FOLDER':
-      return action.folder;
-    default:
-      return state;
-  }
-};
-
 export default combineReducers({
   bookmarks,
   filteredBookmarks,
   filteredTags,
   selected,
   sort,
-  tagMarkerFolder,
   tags,
 });

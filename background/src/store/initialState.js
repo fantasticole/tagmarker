@@ -13,6 +13,5 @@ export default {
       sortBy: 'alpha',
     },
   },
-  tagMarkerFolder: {},
   tags: {},
 };

@@ -1,7 +1,7 @@
 import store from './store';
 import { wrapStore } from 'react-chrome-redux';
 
-import { setFolder, initialize } from './store/actions';
+import { initialize } from './store/actions';
 
 import addBookmark from './utils/addBookmark';
 import getBookmarksAndFolders from './utils/getBookmarksAndFolders';
@@ -9,18 +9,6 @@ import getBookmarksAndFolders from './utils/getBookmarksAndFolders';
 wrapStore(store, {
   portName: 'tagmarker',
 });
-
-// see if there is a folder for tagmarker bookmarks
-chrome.bookmarks.search({ title: 'TagMarker Bookmarks' }, (arr) => {
-  // if the returned array has objects
-  if (arr.length) {
-    // find the folder that matches the query
-    let folder = arr.find(option => (option.dateGroupModified));
-
-    // if we found a folder, set that it in the store
-    if (folder) store.dispatch(setFolder(folder));
-  }
-})
 
 // open and close drawer on icon click
 chrome.browserAction.onClicked.addListener(tab => {

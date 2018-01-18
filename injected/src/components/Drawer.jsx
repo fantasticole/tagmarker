@@ -10,7 +10,6 @@ import Modal from './Modal';
  * Drawer
  *
  * @param {function} createBookmark - function save bookmark
- * @param {object} tagMarkerFolder - default folder for new bookmarks
  */
 export default class Drawer extends Component {
   constructor (props) {
@@ -22,12 +21,11 @@ export default class Drawer extends Component {
     chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
       if (req.ref === 'bookmark_data') {
         let { title, url } = req.data,
-            { tagMarkerFolder, createBookmark } = this.props;
+            { createBookmark } = this.props;
 
         Modal.render(
           <CreateBookmarkModal
             createBookmark={(bookmark, tags) => createBookmark(bookmark, tags)}
-            tagMarkerFolder={tagMarkerFolder}
             tags={this.props.tags}
             title={title}
             url={url}
