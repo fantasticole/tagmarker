@@ -28,6 +28,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     onSort: (sort) => {dispatch({ type: 'SET_SORT', list: 'bookmarks', sort })},
+    selectBookmark: (id) => {dispatch({ type: 'SELECT_BOOKMARK', id })},
   };
 }
 

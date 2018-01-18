@@ -3,6 +3,7 @@ import {
   createOrUpdateTags,
   filterBookmarksAndTags,
   setFolder,
+  updateFilteredBookmarks,
   updateSelectedTags
 } from './actions';
 
@@ -109,6 +110,14 @@ function removeTag (originalAction) {
   }
 }
 
+function selectBookmark (originalAction) {
+  let { id } = originalAction;
+
+  return (dispatch, getState) => {
+    return dispatch(updateFilteredBookmarks([id]));
+  }
+}
+
 function selectTag (originalAction) {
   let { id } = originalAction;
 
@@ -169,6 +178,7 @@ export default {
   'CREATE_BOOKMARK': createBookmark,
   'CREATE_FOLDER': createFolder,
   'REMOVE_TAG': removeTag,
+  'SELECT_BOOKMARK': selectBookmark,
   'SELECT_TAG': selectTag,
   'SET_BOOKMARK_FOLDER': setBookmarkFolder,
   'UPDATE_BOOKMARK': updateBookmark,
