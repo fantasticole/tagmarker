@@ -51,7 +51,12 @@ describe('filteredBookmarks reducer', () => {
   })
 
   it('should handle UPDATE_FILTERED_BOOKMARKS', () => {
+    const bookmarks = [1, 2, 3];
+
     // sets list to action.bookmarks
+    expect(
+      reducers.filteredBookmarks([], { type: 'UPDATE_FILTERED_BOOKMARKS', bookmarks})
+    ).toEqual(bookmarks);
   })
 })
 
