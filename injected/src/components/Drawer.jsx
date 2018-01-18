@@ -5,7 +5,6 @@ import CreateBookmarkModal from './CreateBookmarkModal';
 import DrawerActions from './DrawerActions';
 import ListView from './ListView';
 import Modal from './Modal';
-import SettingsView from '../containers/SettingsView';
 
 /**
  * Drawer
@@ -16,10 +15,6 @@ import SettingsView from '../containers/SettingsView';
 export default class Drawer extends Component {
   constructor (props) {
     super(props);
-
-    this.state = {
-      view: this.props.tagMarkerFolder.id ? 'tags' : 'settings',
-    };
   }
 
   componentDidMount () {
@@ -42,25 +37,12 @@ export default class Drawer extends Component {
     })
   }
 
-  toggleView () {
-    // get the current view
-    let current = this.state.view,
-        // set the new view to the only other option
-        view = current === 'tags' ? 'settings' : 'tags';
-
-    this.setState({ view });
-  }
-
   render () {
     return (
       <div className='drawer'>
         <div className='container'>
-          <DrawerActions
-            folderIsSet={this.props.tagMarkerFolder.id > -1}
-            toggleView={() => this.toggleView()}
-            view={this.state.view}
-            />
-          {this.state.view === 'tags' ? <ListView /> : <SettingsView />}
+          <DrawerActions />
+          <ListView />
         </div>
         <div className='modal-container' />
       </div>
