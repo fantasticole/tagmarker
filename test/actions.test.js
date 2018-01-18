@@ -58,7 +58,6 @@ describe('actions', () => {
 
   describe('setBookmarks', () => {
     it('should create an action to set the bookmarks object', () => {
-      // SET_BOOKMARKS
       const data = {
         1: { id: 1, title: 'bookmark'},
         2: { id: 2, title: 'other bookmark'},
@@ -73,7 +72,6 @@ describe('actions', () => {
 
   describe('setTags', () => {
     it('should create an action to set the tags object', () => {
-      // SET_TAGS
       const data = {
         1: { id: 1, title: 'tag'},
         2: { id: 2, title: 'other tag'},
@@ -88,7 +86,6 @@ describe('actions', () => {
 
   describe('updateFilteredBookmarks', () => {
     it('should create an action to set the filtered bookmarks array', () => {
-      // UPDATE_FILTERED_BOOKMARKS
       const bookmarks = [1, 2, 3];
       const expectedAction = {
         type: 'UPDATE_FILTERED_BOOKMARKS',
@@ -100,7 +97,6 @@ describe('actions', () => {
 
   describe('updateFilteredTags', () => {
     it('should create an action to set the filtered tags array', () => {
-      // UPDATE_FILTERED_TAGS
       const tags = [1, 2, 3];
       const expectedAction = {
         type: 'UPDATE_FILTERED_TAGS',
@@ -112,7 +108,6 @@ describe('actions', () => {
 
   describe('updateSelectedTags', () => {
     it('should create an action to set the selected tags array', () => {
-      // UPDATE_SELECTED_TAGS
       const tags = [1, 2, 3];
       const expectedAction = {
         type: 'UPDATE_SELECTED_TAGS',
