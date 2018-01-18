@@ -62,11 +62,16 @@ describe('filteredBookmarks reducer', () => {
 
 describe('filteredTags reducer', () => {
   it('should return the initial state', () => {
-    expect(reducers.filteredTags(undefined, {})).toEqual(initialState.filteredTags)
+    expect(reducers.filteredTags(undefined, [])).toEqual(initialState.filteredTags)
   })
 
   it('should handle UPDATE_FILTERED_TAGS', () => {
+    const tags = [1, 2, 3];
+
     // sets list to action.tags
+    expect(
+      reducers.filteredTags([], { type: 'UPDATE_FILTERED_TAGS', tags })
+    ).toEqual(tags);
   })
 })
 
