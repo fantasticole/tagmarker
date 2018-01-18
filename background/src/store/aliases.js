@@ -4,6 +4,7 @@ import {
   filterBookmarksAndTags,
   setFolder,
   updateFilteredBookmarks,
+  updateFilteredTags,
   updateSelectedTags
 } from './actions';
 
@@ -114,6 +115,13 @@ function selectBookmark (originalAction) {
   let { id } = originalAction;
 
   return (dispatch, getState) => {
+    let { bookmarks, selected } = getState(),
+        // get tags associated with selected bookmark
+        { tags } = bookmarks[id],
+        // filter for those not selected
+        filteredTags = tags.filter(id => !selected.includes(id));
+
+    dispatch(updateFilteredTags(filteredTags));
     return dispatch(updateFilteredBookmarks([id]));
   }
 }
