@@ -89,6 +89,12 @@ describe('actions', () => {
   describe('updateFilteredBookmarks', () => {
     it('should create an action to set the filtered bookmarks array', () => {
       // UPDATE_FILTERED_BOOKMARKS
+      const bookmarks = [1, 2, 3];
+      const expectedAction = {
+        type: 'UPDATE_FILTERED_BOOKMARKS',
+        bookmarks
+      }
+      expect(actions.updateFilteredBookmarks(bookmarks)).toEqual(expectedAction)
     });
   })
 
