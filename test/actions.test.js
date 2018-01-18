@@ -40,11 +40,26 @@ describe('actions', () => {
   })
 
   describe('createOrUpdateBookmark', () => {
+    const storeActions = store.getActions()
+    const bookmark = { id: 5, title: 'new bookmark' };
+
+    store.dispatch(actions.createOrUpdateBookmark(bookmark))
+
     it('should create an action to create or update a bookmark object', () => {
-      // CREATE_OR_UPDATE_BOOKMARK
+      const createOrUpdateAction = { type: 'CREATE_OR_UPDATE_BOOKMARK', bookmark };
+      expect(storeActions[0]).toEqual(createOrUpdateAction)
     });
 
-    it('should create an action to filterBookmarksAndTags with currently selected tags', () => {
+    it('should create an action to filter bookmarks', () => {
+      // no tags are selected so no bookmarks should be filtered
+      const filteredBookmarksAction = { type: 'UPDATE_FILTERED_BOOKMARKS', bookmarks: [] };
+      expect(storeActions[1]).toEqual(filteredBookmarksAction)
+    });
+
+    it('should create an action to filter tags', () => {
+      // and all tags should be returned
+      const filteredTagsAction = { type: 'UPDATE_FILTERED_TAGS', tags: [ "3", "4"] };
+      expect(storeActions[2]).toEqual(filteredTagsAction)
     });
   })
 
