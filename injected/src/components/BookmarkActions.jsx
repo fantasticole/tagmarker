@@ -45,7 +45,10 @@ export default class BookmarkActions extends Component {
 
   setOptions () {
     let { filteredBookmarks } = this.props,
-        options = filteredBookmarks.map(bookmark => ({ label: `${bookmark.title}`, value: bookmark.id })),
+        options = filteredBookmarks.map(bookmark => {
+          let label = bookmark.title ? bookmark.title : bookmark.url;
+          return { label, value: bookmark.id }
+        }),
         // sort the options to appear alphabetically
         sortedOptions = this.sortOptions(options);
 
