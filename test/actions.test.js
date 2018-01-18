@@ -1,4 +1,11 @@
+import configureMockStore from 'redux-mock-store'
+import thunk from 'redux-thunk'
 import * as actions from '../background/src/store/actions';
+import initialState from '../background/src/store/initialState';
+
+const middlewares = [ thunk ];
+const mockStore = configureMockStore(middlewares);
+const store = mockStore(initialState);
 
 describe('actions', () => {
   // initialize
