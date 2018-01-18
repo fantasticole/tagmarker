@@ -108,6 +108,11 @@ export default class EditableTags extends Component {
         </div>
       )
     }
+    else if (type === 'selected') {
+      return (
+        <p className='empty-list__message'>no tags selected</p>
+      );
+    }
   }
 
   render () {

@@ -68,7 +68,7 @@ export default class BookmarkList extends Component {
     return (
       <div className='bookmark-list__container'>
         <BookmarkActions />
-        <p className='bookmark__list-is_empty'>no bookmarks to display</p>
+        <p className='empty-list__message'>no bookmarks to display</p>
       </div>
       )
   }

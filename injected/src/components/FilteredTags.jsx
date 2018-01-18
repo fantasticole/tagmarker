@@ -61,9 +61,11 @@ export default class FilteredTags extends Component {
     return (
       <div className='filtered-tags__list'>
         {
+          sortedTags.length ?
           sortedTags.map(tag => {
             return ( <Tag key={tag.id} onClick={() => this.props.selectTag(tag.id)} tag={tag} />);
-          })
+          }) :
+          <p className='empty-list__message'>no related tags to display</p>
         }
       </div>
     );
