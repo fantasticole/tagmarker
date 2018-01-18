@@ -81,7 +81,12 @@ describe('selected reducer', () => {
   })
 
   it('should handle UPDATE_SELECTED_TAGS', () => {
+    const tags = [1, 2, 3];
+
     // sets list to action.tags
+    expect(
+      reducers.selected([], { type: 'UPDATE_SELECTED_TAGS', tags })
+    ).toEqual(tags);
   })
 })
 
