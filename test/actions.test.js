@@ -113,6 +113,12 @@ describe('actions', () => {
   describe('updateSelectedTags', () => {
     it('should create an action to set the selected tags array', () => {
       // UPDATE_SELECTED_TAGS
+      const tags = [1, 2, 3];
+      const expectedAction = {
+        type: 'UPDATE_SELECTED_TAGS',
+        tags
+      }
+      expect(actions.updateSelectedTags(tags)).toEqual(expectedAction)
     });
   })
 })
