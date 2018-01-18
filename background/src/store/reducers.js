@@ -1,7 +1,6 @@
 import { combineReducers } from 'redux';
 
 export function bookmarks (state = {}, action) {
-  console.log('action:', action)
   switch (action.type) {
     case 'SET_BOOKMARKS':
       return action.data;
