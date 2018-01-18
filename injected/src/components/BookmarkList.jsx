@@ -51,14 +51,15 @@ export default class BookmarkList extends Component {
 
   render () {
     if (this.props.filteredBookmarks.length) {
-      let sortedBookmarks = this.props.filteredBookmarks.sort(this.sort());
+      let sortedBookmarks = this.props.filteredBookmarks.sort(this.sort()),
+          isActive = sortedBookmarks.length === 1;
 
       return (
         <div className='bookmark-list__container'>
           <BookmarkActions />
           <ul className='tagmarker-list bookmark-list'>
             {sortedBookmarks.map(bookmark => (
-              <BookmarkListItem bookmark={bookmark} key={bookmark.id} />
+              <BookmarkListItem bookmark={bookmark} isActive={isActive} key={bookmark.id} />
             ))}
           </ul>
         </div>

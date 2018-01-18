@@ -10,6 +10,7 @@ import ifTrue from '../utils/ifTrue';
  * BookmarkListItem
  *
  * @param {object} bookmark - bookmark to be rendered
+ * @param {bool} isActive - tells bookmark to be open by default or not
  * @param {object} tags - all tags from store
  * @param {function} updateBookmark - function save bookmark updates
  */
@@ -18,12 +19,20 @@ export default class BookmarkListItem extends Component {
     super(props);
 
     this.state = {
-      active: false,
+      active: this.props.isActive,
       isEditing: false,
       selected: [...this.props.bookmark.tags],
       title: this.props.bookmark.title,
       url: this.props.bookmark.url,
     };
+  }
+
+  componentDidUpdate (prevProps) {
+    // if the active status prop changes
+    if (this.props.isActive !== prevProps.isActive) {
+      // update the state
+      this.setState({ active: this.props.isActive });
+    }
   }
 
   handleChange (field, event) {
