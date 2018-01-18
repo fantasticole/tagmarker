@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import initialState from './initialState';
 
 export function bookmarks (state = {}, action) {
   switch (action.type) {
@@ -48,7 +49,7 @@ export function selected (state = [], action) {
   }
 };
 
-export function sort (state = {}, action) {
+export function sort (state = initialState.sort, action) {
   switch (action.type) {
     case 'SET_SORT':
       // get object holding current sort state
