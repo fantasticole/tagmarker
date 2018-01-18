@@ -82,6 +82,10 @@
   display: flex;
   flex-direction: column;
   flex-grow: 10;
+  .list__actions {
+    margin-top: 5px;
+    min-height: 35px;
+  }
 }
 
 .bookmark__list-is_empty {
@@ -129,10 +133,16 @@
   cursor: pointer;
 }
 
+.bookmark__item {
+  border-left: 1px dotted $light-light;
+  .action-button {
+    margin-top: 5px;
+  }
+}
+
 .bookmark__details {
   font-size: 12px;
   overflow: hidden;
-  border-left: 1px dotted $light-light;
   padding-left: 3px;
 }
 
