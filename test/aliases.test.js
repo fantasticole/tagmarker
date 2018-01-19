@@ -60,7 +60,6 @@ describe('aliases', () => {
 
     store.dispatch(aliases.createFolder({ folder }))
 
-    // { dateAdded, dateGroupModified, id, parentId, title } = folder
     it('should create an action to create a tag from a folder object', () => {
       const parentsList = storeState.tags[folder.parentId].parents;
       const tags = [Object.assign({}, folder, {
@@ -72,9 +71,20 @@ describe('aliases', () => {
     });
   })
 
-  // createTag (title, tags, bookmarkId)
   describe('createTag', () => {
+    const store = mockStore(testState);
+    const storeActions = store.getActions();
+    const storeState = store.getState();
+
     it('should create a tag with an id that does not already exist in the tags object in the store', () => {
+      const title = 'new Tag';
+      const { tags } = storeState;
+      const bookmarkId = 1;
+      const newTag = aliases.createTag(title, tags, bookmarkId);
+      // newTag's id should not exist in the store
+      expect(tags[newTag.id]).toEqual(undefined);
+      expect(newTag.title).toEqual(title);
+      expect(newTag.bookmarks).toEqual([bookmarkId]);
     });
   })
 
