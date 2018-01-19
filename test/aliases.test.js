@@ -18,7 +18,7 @@ const testState = {
     tags: { ascending: true, sortBy: 'alpha' },
   },
   tags: {
-    3: { id: 3, title: 'tag', bookmarks: [ 1 ] },
+    3: { id: 3, title: 'tag', bookmarks: [ 1 ], parents: [ 4 ] },
     4: { id: 4, title: 'other tag', bookmarks: [ 1, 2 ] },
   },
 };
@@ -46,11 +46,29 @@ describe('aliases', () => {
     });
   })
 
-  // createFolder
-  // { folder } = originalAction
   describe('createFolder', () => {
+    const store = mockStore(testState);
+    const storeActions = store.getActions();
+    const storeState = store.getState();
+    const folder = {
+      dateAdded: 1317956200396,
+      dateGroupModified: 1516230597434,
+      id: 6,
+      parentId: 3,
+      title: 'title',
+    };
+
+    store.dispatch(aliases.createFolder({ folder }))
+
+    // { dateAdded, dateGroupModified, id, parentId, title } = folder
     it('should create an action to create a tag from a folder object', () => {
-      // CREATE_FOLDER
+      const parentsList = storeState.tags[folder.parentId].parents;
+      const tags = [Object.assign({}, folder, {
+        bookmarks: [],
+        parents: [...parentsList, folder.parentId],
+      })];
+      const createOrUpdateTagsAction = { type: 'CREATE_OR_UPDATE_TAGS', tags };
+      expect(storeActions[0]).toEqual(createOrUpdateTagsAction)
     });
   })
 
