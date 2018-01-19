@@ -62,7 +62,7 @@ describe('actions', () => {
 
   describe('createOrUpdateBookmark', () => {
     const store = mockStore(testState);
-    const storeActions = store.getActions()
+    const storeActions = store.getActions();
     const bookmark = { id: 5, title: 'new bookmark' };
 
     store.dispatch(actions.createOrUpdateBookmark(bookmark))
@@ -97,16 +97,46 @@ describe('actions', () => {
   })
 
   describe('filterBookmarksAndTags', () => {
+    const store = mockStore(testState);
+    const storeActions = store.getActions();
+    const storeState = store.getState();
+    const newStore = mockStore(testState);
+    const newStoreActions = newStore.getActions();
+    const selectedTags = [ 3, 4 ];
+    
+    store.dispatch(actions.filterBookmarksAndTags([]))
+
     it('should create an action to updateFilteredBookmarks with an empty array if no tags are selected', () => {
+      const filterBookmarksAction = { type: 'UPDATE_FILTERED_BOOKMARKS', bookmarks: [] };
+      expect(storeActions[0]).toEqual(filterBookmarksAction)
     });
 
     it('should create an action to updateFilteredTags with all tag ids if no tags are selected', () => {
+      const filterTagsAction = { type: 'UPDATE_FILTERED_TAGS', tags: [ "3", "4"] };
+      expect(storeActions[1]).toEqual(filterTagsAction)
     });
 
+    newStore.dispatch(actions.filterBookmarksAndTags(selectedTags))
+
     it('should create an action to updateFilteredBookmarks with the ids for all bookmarks that have every selected tag in their tags array', () => {
+      const newFilterBookmarksAction = { type: 'UPDATE_FILTERED_BOOKMARKS', bookmarks: [ 2 ] };
+      const { bookmarks } = newStoreActions[0];
+
+      expect(newStoreActions[0]).toEqual(newFilterBookmarksAction)
+
+      // for each bookmark id
+      bookmarks.forEach(id => {
+        // get the tags associate with that bookmark
+        let { tags } = storeState.bookmarks[id];
+
+        // and make sure every selected tag is in that array
+        expect(selectedTags.every(tagId => tags.includes(tagId))).toEqual(true)
+      })
     });
 
     it('should create an action to updateFilteredTags with all tags related to the filtered bookmarks that are not selected', () => {
+      const newFilterTagsAction = { type: 'UPDATE_FILTERED_TAGS', tags: [] };
+      expect(newStoreActions[1]).toEqual(newFilterTagsAction)
     });
   })
 
