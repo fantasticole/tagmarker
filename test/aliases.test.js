@@ -24,14 +24,25 @@ const testState = {
 };
 
 describe('aliases', () => {
-  // createBookmark
-  // { bookmark, tagsToAdd } = originalAction
   describe('createBookmark', () => {
+    const store = mockStore(testState);
+    const storeActions = store.getActions();
+    const storeState = store.getState();
+    const bookmark = { id: 5, title: 'bookmark' };
+    const tagsToAdd = [ 3, 4 ];
+
+    store.dispatch(aliases.createBookmark({ bookmark, tagsToAdd }))
+
     it('should create an action to create or update tags', () => {
-      // CREATE_BOOKMARK
+      const tags = tagsToAdd.map(id => storeState.tags[id]);
+      const createOrUpdateTagsAction = { type: 'CREATE_OR_UPDATE_TAGS', tags };
+      expect(storeActions[0]).toEqual(createOrUpdateTagsAction)
     });
 
     it('should create an action to create or update a bookmark', () => {
+      const newBookmark = Object.assign({}, bookmark, { tags: tagsToAdd } )
+      const createOrUpdateBookmarkAction = { type: 'CREATE_OR_UPDATE_BOOKMARK', bookmark: newBookmark };
+      expect(storeActions[1]).toEqual(createOrUpdateBookmarkAction)
     });
   })
 
