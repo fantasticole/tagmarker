@@ -73,7 +73,6 @@ describe('aliases', () => {
 
   describe('createTag', () => {
     const store = mockStore(testState);
-    const storeActions = store.getActions();
     const storeState = store.getState();
 
     it('should create a tag with an id that does not already exist in the tags object in the store', () => {
@@ -88,18 +87,33 @@ describe('aliases', () => {
     });
   })
 
-  // getTagsToUpdate (tagsToAdd, tagsToDelete, alltags, bookmarkId)
   describe('getTagsToUpdate', () => {
+    const store = mockStore(testState);
+    const storeState = store.getState();
+    const tagsToAdd = [ 'test' ];
+    const tagsToDelete = [ 4 ];
+    const { tags } = storeState;
+    const bookmarkId = 2;
+    const tagsToUpdate = aliases.getTagsToUpdate(tagsToAdd, tagsToDelete, tags, bookmarkId);
+    const newTag = tagsToUpdate.find(tag => tag.title === 'test')
+
     it('should create a tag for any id we are adding that does not already exist', () => {
+      expect(tags[newTag.id]).toEqual(undefined);
     });
 
     it('should add the bookmark id to the tag object for any tag id we are adding', () => {
+      expect(newTag.bookmarks).toEqual([ bookmarkId ]);
     });
 
     it('should remove the bookmark id from the tag object for any tag id we are removing', () => {
+      const removedTagBookmarks = tagsToUpdate[1].bookmarks;
+      expect(removedTagBookmarks.includes(bookmarkId)).toEqual(false);
     });
 
     it('should return an array of tag objects', () => {
+      tagsToUpdate.forEach(tag => {
+        expect(typeof tag).toEqual("object");
+      })
     });
   })
 
