@@ -7,7 +7,7 @@ import {
   updateSelectedTags
 } from './actions';
 
-function createBookmark (originalAction) {
+export function createBookmark (originalAction) {
   let { bookmark, tagsToAdd } = originalAction;
 
   return (dispatch, getState) => {
@@ -23,7 +23,7 @@ function createBookmark (originalAction) {
   }
 }
 
-function createFolder (originalAction) {
+export function createFolder (originalAction) {
   let { folder } = originalAction;
 
   return (dispatch, getState) => {
@@ -45,7 +45,7 @@ function createFolder (originalAction) {
   }
 }
 
-function createTag (title, tags, bookmarkId) {
+export function createTag (title, tags, bookmarkId) {
   let id = Math.random().toString(36).substr(2, 9),
       newTag = {
         dateAdded: Date.now(),
@@ -64,7 +64,7 @@ function createTag (title, tags, bookmarkId) {
   return newTag
 }
 
-function getTagsToUpdate (tagsToAdd, tagsToDelete, alltags, bookmarkId) {
+export function getTagsToUpdate (tagsToAdd, tagsToDelete, alltags, bookmarkId) {
   let tagsToUpdate = [];
 
   // add bookmark to each tag
@@ -94,7 +94,7 @@ function getTagsToUpdate (tagsToAdd, tagsToDelete, alltags, bookmarkId) {
   return tagsToUpdate;
 }
 
-function removeTag (originalAction) {
+export function removeTag (originalAction) {
   let { id } = originalAction;
 
   return (dispatch, getState) => {
@@ -110,7 +110,7 @@ function removeTag (originalAction) {
   }
 }
 
-function selectBookmark (originalAction) {
+export function selectBookmark (originalAction) {
   let { id } = originalAction;
 
   return (dispatch, getState) => {
@@ -125,7 +125,7 @@ function selectBookmark (originalAction) {
   }
 }
 
-function selectTag (originalAction) {
+export function selectTag (originalAction) {
   let { id } = originalAction;
 
   return (dispatch, getState) => {
@@ -140,7 +140,7 @@ function selectTag (originalAction) {
   }
 }
 
-function updateBookmark (originalAction) {
+export function updateBookmark (originalAction) {
   let { bookmark } = originalAction;
 
   return (dispatch, getState) => {
