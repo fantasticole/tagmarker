@@ -83,6 +83,7 @@ export default class CreateBookmarkModal extends Component {
     let { parentId, suggested, tagsToAdd, title, url, warn } = this.state,
         { tags } = this.props,
         cancelText = warn ? 'Yes, bye' : 'Cancel',
+        canSubmit = parentId && tagsToAdd.length,
         warningClasses = classNames('modal__warning', {
           visible: warn,
         });
@@ -106,7 +107,7 @@ export default class CreateBookmarkModal extends Component {
           />
         <p className={warningClasses}>Are you sure you want to cancel?</p>
         <span className='modal__actions bookmark-modal__actions'>
-          <button className='button modal-action__button bookmark-action__button action-button' disabled={!parentId} onClick={() => this.handleClickSubmit()}>Submit <i className='fa fa-floppy-o'/></button>
+          <button className='button modal-action__button bookmark-action__button action-button' disabled={!canSubmit} onClick={() => this.handleClickSubmit()}>Submit <i className='fa fa-floppy-o'/></button>
           <button className='button modal-action__button bookmark-action__button action-button' onClick={() => this.handleClickCancel()}>{cancelText} <i className='fa fa-ban'/></button>
         </span>
       </Modal.Modal>
