@@ -155,17 +155,20 @@ describe('aliases', () => {
     });
   })
 
-  // selectBookmark
-  // { id } = originalAction
   describe('selectBookmark', () => {
-    it('should create an action to update filtered tags to the tags associated with the bookmark id that is passed in', () => {
-      // SELECT_BOOKMARK
-    });
+    const store = mockStore(testState);
+    const storeActions = store.getActions();
+
+    store.dispatch(aliases.selectBookmark({ id: 2 }));
 
     it('should create an action to update filtered tags with an array that does not include any selected tags', () => {
+      const filteredTagsAction = { type: 'UPDATE_FILTERED_TAGS', tags: [ 4 ] };
+      expect(storeActions[0]).toEqual(filteredTagsAction);
     });
 
     it('should create an action to set filtered bookmarks to an array of only the selected bookmark id', () => {
+      const filteredBookmarksAction = { type: 'UPDATE_FILTERED_BOOKMARKS', bookmarks: [ 2 ] };
+      expect(storeActions[1]).toEqual(filteredBookmarksAction);
     });
   })
 
