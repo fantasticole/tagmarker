@@ -25,6 +25,9 @@
 * ~~Listen for manually created bookmarks and folders~~
   * ~~Create bookmark in extension for new bookmark~~
   * ~~Create tag in extension for new folder~~
+* ~~Listen for manually updated bookmarks and folders~~
+  * ~~Update bookmark in extension for corresponding bookmark~~
+  * ~~Update tag in extension for corresponding folder~~
 * Listen for manually deleted bookmarks and folders
   * Delete bookmark in extension for deleted bookmark?
   * Delete tag in extension for deleted folder?

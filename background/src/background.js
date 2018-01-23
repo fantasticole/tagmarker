@@ -1,7 +1,7 @@
 import store from './store';
 import { wrapStore } from 'react-chrome-redux';
 
-import { initialize } from './store/actions';
+import { createOrUpdateBookmark, createOrUpdateTags, initialize } from './store/actions';
 import { createBookmark, createFolder } from './store/aliases';
 
 import addBookmark from './utils/addBookmark';
@@ -50,7 +50,27 @@ chrome.bookmarks.onCreated.addListener((id, bookmarkOrFolder) => {
   if (bookmarkOrFolder.url) store.dispatch(createBookmark({ bookmark: bookmarkOrFolder, tagsToAdd: [ bookmarkOrFolder.parentId ] }));
   // otherwise, it's a folder
   store.dispatch(createFolder({ folder: bookmarkOrFolder }));
-})
+});
+
+// fired when bookmark name or url changes
+chrome.bookmarks.onChanged.addListener((id, data) => {
+  let storeState = store.getState();
+
+  // if there's a url, it's a bookmark
+  if (data.url) {
+    let bookmark = Object.assign({}, storeState.bookmarks[id], data);
+
+    // update the bookmark in the store
+    store.dispatch(createOrUpdateBookmark(bookmark));
+  }
+  // otherwise, it's a folder
+  else {
+    let tag = Object.assign({}, storeState.tags[id], data);
+
+    // update the tag in the store
+    store.dispatch(createOrUpdateTags([tag]));
+  }
+});
 
 // get all bookmarks from chrome
 chrome.bookmarks.getTree(arr => {
