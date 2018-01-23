@@ -1,13 +1,19 @@
 export default function getBookmarksAndFolders (bookmarksAndFolders, data) {
   for (var x in bookmarksAndFolders) {
     let { dateAdded, dateGroupModified, id, parentId, title } = bookmarksAndFolders[x],
+        parentTag = data['tags'][parentId],
         // use parent's ID to get all previous parents IDs
         // if parent's ID is 0 or undefined, set parents as empty array
         // could hide 1 (Bookmarks Bar) and 2 (Other Bookmarks) as well
-        parents = Number(parentId) ? [ parentId, ...data['tags'][parentId].parents ] : [];
+        parents = Number(parentId) ? [ parentId, ...parentTag.parents ] : [];
 
     // if the current object has children, it's a folder
     if (bookmarksAndFolders[x].children) {
+      // if this folder is a child of the bookmarks bar or other bookmarks
+      if (parentTag && parentTag.title === ("Bookmarks Bar" || "Other Bookmarks")) {
+        // remove that parent folder's id from its 'parents' array
+        parents.splice(parents.indexOf(parentId), 1);
+      }
       // add folder's information to the data's tags object
       data['tags'][id] = {
         dateAdded,
@@ -34,14 +40,7 @@ export default function getBookmarksAndFolders (bookmarksAndFolders, data) {
       };
       // for each parent folder's corresponding tag
       for (var y in parents) {
-        // if the current parent is the bookmarks bar or
-        // other bookmarks folder
-        if (parents[y] === ("1" || "2")) {
-          // only push the bookmark id if it's a direct child
-          if (parentId === parents[y]) data['tags'][parents[y]]['bookmarks'].push(id);
-        }
-        // add bookmark id to its bookmarks folder
-        else data['tags'][parents[y]]['bookmarks'].push(id);
+        data['tags'][parents[y]]['bookmarks'].push(id);
       }
     };
   }
