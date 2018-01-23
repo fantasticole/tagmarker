@@ -5,6 +5,7 @@ import { initialize } from './store/actions';
 
 import addBookmark from './utils/addBookmark';
 import getBookmarksAndFolders from './utils/getBookmarksAndFolders';
+import toggleDrawer from './utils/toggleDrawer';
 
 wrapStore(store, {
   portName: 'tagmarker',
@@ -13,7 +14,7 @@ wrapStore(store, {
 // open and close drawer on icon click
 chrome.browserAction.onClicked.addListener(tab => {
   // send the action to the container
-  chrome.tabs.sendMessage(tab.id, { ref: 'toggle_drawer' });
+  toggleDrawer(tab.id);
 });
 
 // listen for commands from popup or component
@@ -22,7 +23,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.ref === 'toggle_drawer') {
     // pass the message along
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      chrome.tabs.sendMessage(tabs[0].id, { ref: 'toggle_drawer' });
+      toggleDrawer(tabs[0].id);
     });
   }
   // if the message is about adding a bookmark
@@ -30,7 +31,17 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 });
 
 chrome.commands.onCommand.addListener(command => {
-  if (command === "add-bookmark") addBookmark();
+  if (command === "add-bookmark") {
+    // check to see if drawer is open
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      chrome.tabs.sendMessage(tabs[0].id, { ref: 'check_drawer_status' }, drawerOpen => {
+        // if it's closed, open it
+        if (!drawerOpen) toggleDrawer(tabs[0].id);
+        // add bookmark
+        addBookmark();
+      });
+    });
+  }
 });
 
 // get all bookmarks from chrome
