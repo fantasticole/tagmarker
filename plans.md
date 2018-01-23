@@ -3,7 +3,9 @@
 ## To Do
 * Tests
   * components
-  * actions
+  * ~~actions~~
+  * ~~aliases~~
+  * ~~reducers~~
 * Delete tag functionality
   * ~~Remove from array of tags on bookmark in store~~
   * ~~Remove bookmark id from tag's bookmarks array in store~~
@@ -14,19 +16,17 @@
   * ~~Add bookmark id to tag's bookmarks array in store~~
   * Update db
 * Edit bookmark name functionality
+  * ~~Update bookmark name in extension~~
   * Update bookmark name in Chrome
 * Add bookmark functionality
-  * Ask where new folders/bookmarks should be created
-    * Bookmarks Bar or Other Bookmarks
-    * Choose folder name
-    * ~~Set this in settings~~
-  * Add bookmark to Chrome (where?)
-  * Listen for manually created bookmarks
-  * Get and save bookmark details on 'add' command
+  * ~~Ask where new bookmark should be created~~
+  * ~~Add bookmark to Chrome~~
+  * ~~Get and save bookmark details on 'add' command~~
+* Listen for manually created bookmarks and folders
+  * Create bookmark in extension for new bookmark
+  * Create tag in extension for new folder
 * ~~Add tag functionality~~
-  * ~~Add to selected folder if it exists~~
-  * ~~Otherwise, create custom folder in 'Other Bookmarks'~~
-  * ~~Check to see if it exists~~
+  * ~~Create new tag with custom id~~
 * Figure out where to store all of this so it persists
   * indexedDB? local storage?
 * ~~Make tags searchable~~
@@ -43,8 +43,7 @@
 * ~~Track drawer status by tab~~
   * ~~Make sure the drawer knows where to be open and where to be closed~~
   * ~~default to close on page load/refresh, only open when told~~
-* Make sure there's always a folder to write to
-  * ~~Load app on settings screen to select folder~~
+
 
 ## Tag Storage
 - Set an object somewhere (IndexedDB?) to hold folder and tag objects
