@@ -8,4 +8,4 @@ import aliases from './aliases';
 import initialState from './initialState';
 
 export default createStore(reducers, initialState, applyMiddleware(alias(aliases), thunk, logger));
-// export default createStore(reducers, {}, applyMiddleware(thunk));
+// export default createStore(reducers, initialState, applyMiddleware(alias(aliases), thunk));
