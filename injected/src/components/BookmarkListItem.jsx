@@ -39,6 +39,10 @@ export default class BookmarkListItem extends Component {
     this.setState({ [field]: event.target.value });
   }
 
+  handleClickDelete () {
+    this.props.removeBookmark(this.props.bookmark.id)
+  }
+
   handleClickEdit () {
     this.setState({ isEditing: true });
   }
@@ -79,6 +83,7 @@ export default class BookmarkListItem extends Component {
         <span className='bookmark__actions'>
           <button className='button bookmark-action__button action-button' onClick={() => this.handleClickSave()}>Save <i className='fa fa-floppy-o'/></button>
           <button className='button bookmark-action__button action-button' onClick={() => this.handleExitEdit()}>Cancel <i className='fa fa-ban'/></button>
+          <button className='button bookmark-action__button action-button' onClick={() => this.handleClickDelete()}>Delete <i className='fa fa-trash-o'/></button>
         </span>
       );
     }

@@ -24,6 +24,9 @@ const mapStateToProps = (state, ownProps) => {
  */
 const mapDispatchToProps = (dispatch) => {
   return {
+    removeBookmark: (id) => {
+      dispatch({ type: 'REMOVE_BOOKMARK', id });
+    },
     updateBookmark: (bookmark) => {
       dispatch({ type: 'UPDATE_BOOKMARK', bookmark });
     },

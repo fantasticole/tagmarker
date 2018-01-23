@@ -75,8 +75,12 @@
 
 .bookmark__actions {
   padding-left: 3px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
   .action-button {
     margin-right: 5px;
+    flex: 1;
     &:last-child {
       margin-right: 0;
     }
