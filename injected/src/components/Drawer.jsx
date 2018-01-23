@@ -10,6 +10,7 @@ import Modal from './Modal';
  * Drawer
  *
  * @param {function} createBookmark - function save bookmark
+ * @param {object} tags - all tags from store
  */
 export default class Drawer extends Component {
   constructor (props) {
@@ -17,16 +18,17 @@ export default class Drawer extends Component {
   }
 
   componentDidMount () {
-    // listen for flags to open and close drawer
+    // listen for flags to add bookmark
     chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
+      // if we're being sent bookmark data, open modal to add bookmark
       if (req.ref === 'bookmark_data') {
         let { title, url } = req.data,
-            { createBookmark } = this.props;
+            { createBookmark, tags } = this.props;
 
         Modal.render(
           <CreateBookmarkModal
-            createBookmark={(bookmark, tags) => createBookmark(bookmark, tags)}
-            tags={this.props.tags}
+            createBookmark={(bookmark, tagsToAdd) => createBookmark(bookmark, tagsToAdd)}
+            tags={tags}
             title={title}
             url={url}
             />
