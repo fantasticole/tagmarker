@@ -10,16 +10,30 @@ container.style.cssText = 'all: unset; height: 100vh; width: 300px; position: fi
 anchor.appendChild(container);
 document.body.appendChild(anchor);
 
-// listen for flags to open and close drawer
+function getDrawer () {
+  // get the action and the container DOM element
+  let frameContainer = document.getElementById('tagmarker-container'),
+      currentStyle = frameContainer.style.transform,
+      // get current drawer status
+      isOpen = currentStyle === 'translateX(0%)' ? true : false;
+
+  return { frameContainer, isOpen };
+}
+
+// listen for flags to open and close drawer or get drawer status
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  // make sure the message is about the drawer
-  if (request.ref === 'toggle_drawer') {
-    // get the action and the container DOM element
-    let { action } = request,
-        frameContainer = document.getElementById('tagmarker-container'),
-        currentStyle = frameContainer.style.transform,
-        // get current drawer status
-        isOpen = currentStyle === 'translateX(0%)' ? true : false;
+  // if we're checking the drawer status
+  if (request.ref === 'check_drawer_status') {
+    // figure out whether it's open or not
+    let { isOpen } = getDrawer();
+
+    // send that data back to the requester
+    sendResponse(isOpen);
+  }
+  // if we're toggling the drawer
+  else if (request.ref === 'toggle_drawer') {
+    // get the container DOM element and current status
+    let { frameContainer, isOpen } = getDrawer();
 
     // toggle the drawer's visibility
     frameContainer.style.transform=`translateX(${isOpen ? 105 : 0 }%)`
