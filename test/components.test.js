@@ -12,13 +12,12 @@ const storeState = store.getState();
 
 Enzyme.configure({ adapter: new Adapter() });
 
-function setup (filteredBookmarks) {
+function bookmarkListSetup (filteredBookmarks) {
   const props = {
     ascending: storeState.sort.bookmarks.ascending,
     filteredBookmarks,
     sortBy: storeState.sort.bookmarks.sortBy,
   }
-
 
   const enzymeWrapper = mount(
     <Provider store={store}>
@@ -35,7 +34,7 @@ function setup (filteredBookmarks) {
 describe('components', () => {
   describe('BookmarkList', () => {
     it('should render self and subcomponents', () => {
-      const { enzymeWrapper } = setup(Object.values(storeState.bookmarks))
+      const { enzymeWrapper } = bookmarkListSetup(Object.values(storeState.bookmarks))
 
       expect(enzymeWrapper.find('div').first().hasClass('bookmark-list__container')).toBe(true)
       expect(enzymeWrapper.find('ul').hasClass('tagmarker-list')).toBe(true)
@@ -54,14 +53,14 @@ describe('components', () => {
     })
 
     it('should render the first BookmarkListItem active if it is the only one', () => {
-      const { enzymeWrapper } = setup([storeState.bookmarks[1]])
+      const { enzymeWrapper } = bookmarkListSetup([storeState.bookmarks[1]])
 
       const BookmarkListItemProps = enzymeWrapper.find('BookmarkListItem').props()
       expect(BookmarkListItemProps.isActive).toBe(true)
     })
 
     it('should render empty state if there are no filteredBookmarks ', () => {
-      const { enzymeWrapper } = setup([])
+      const { enzymeWrapper } = bookmarkListSetup([])
 
       expect(enzymeWrapper.find('p').hasClass('empty-list__message')).toBe(true)
       expect(enzymeWrapper.find('p').text()).toBe('no bookmarks to display');
