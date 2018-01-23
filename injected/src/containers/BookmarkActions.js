@@ -13,6 +13,7 @@ const mapStateToProps = (state) => {
       bookmarkObjects = filteredBookmarks.map(id => bookmarks[id]);
 
   return {
+    bookmarks: Object.values(bookmarks),
     ascending: sort.bookmarks.ascending,
     sortBy: sort.bookmarks.sortBy,
     filteredBookmarks: bookmarkObjects,

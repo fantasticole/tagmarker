@@ -9,6 +9,7 @@ import Select from 'react-select';
  * BookmarkActions
  *
  * @param {bool} ascending - direction of sort
+ * @param {object} bookmarks - all bookmarks from store
  * @param {function} filteredBookmarks - list of bookmark ids
  * @param {function} onSort - function to run when sort is clicked
  * @param {function} selectBookmark - function to run when bookmark is selected
@@ -44,8 +45,10 @@ export default class BookmarkActions extends Component {
   }
 
   setOptions () {
-    let { filteredBookmarks } = this.props,
-        options = filteredBookmarks.map(bookmark => {
+    let { bookmarks, filteredBookmarks } = this.props,
+        // if there are no filtered bookmarks, all bookmarks are options
+        bookmarkOptions = filteredBookmarks.length ? filteredBookmarks : bookmarks,
+        options = bookmarkOptions.map(bookmark => {
           let label = bookmark.title ? bookmark.title : bookmark.url;
           return { label, value: bookmark.id }
         }),
