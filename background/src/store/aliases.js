@@ -99,14 +99,15 @@ export function removeTag (originalAction) {
 
   return (dispatch, getState) => {
     let { bookmarks, selected } = getState(),
-        // find id's index in selected tags array
-        index = selected.indexOf(id);
+        selectedTags = [...selected],
+        // find ids index in selected tags array
+        index = selectedTags.indexOf(id);
 
-    selected.splice(index, 1);
+    selectedTags.splice(index, 1);
     // update the store
-    dispatch(updateSelectedTags(selected));
+    dispatch(updateSelectedTags(selectedTags));
     // update filtered tags and bookmarks based on updated selections
-    return dispatch(filterBookmarksAndTags(selected));
+    return dispatch(filterBookmarksAndTags(selectedTags));
   }
 }
 
