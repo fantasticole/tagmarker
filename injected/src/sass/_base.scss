@@ -87,6 +87,13 @@ button:focus,
     color: $light;
     border-color: $light;
   }
+  &:disabled {
+    background-color: $light-light-accent;
+    color: $deep-accent;
+    &:hover {
+      border: none;
+    }
+  }
 }
 
 .drawer__content {

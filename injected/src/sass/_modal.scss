@@ -56,12 +56,14 @@
   display: flex;
   flex-direction: row;
   margin-top: 10px;
+  justify-content: space-between;
 }
 
 .modal-action__button {
   flex: 1;
   padding: 5px;
   text-transform: lowercase;
+  max-width: 48%;
 }
 
 .modal__warning {
