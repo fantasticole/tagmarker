@@ -49,7 +49,7 @@ chrome.bookmarks.onCreated.addListener((id, bookmarkOrFolder) => {
   // if we have a url, it's a bookmark
   if (bookmarkOrFolder.url) store.dispatch(createBookmark({ bookmark: bookmarkOrFolder, tagsToAdd: [ bookmarkOrFolder.parentId ] }));
   // otherwise, it's a folder
-  store.dispatch(createFolder({ folder: bookmarkOrFolder }));
+  else store.dispatch(createFolder({ folder: bookmarkOrFolder }));
 });
 
 // fired when bookmark name or url changes
