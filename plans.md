@@ -31,6 +31,9 @@
 * Listen for manually deleted bookmarks and folders
   * Delete bookmark in extension for deleted bookmark?
   * Delete tag in extension for deleted folder?
+* Add "All tags" option
+* Batch tagging
+  * Add or remove tags for multiple bookmarks at once
 * ~~Add tag functionality~~
   * ~~Create new tag with custom id~~
 * Figure out where to store all of this so it persists
