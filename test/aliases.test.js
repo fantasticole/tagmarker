@@ -172,14 +172,25 @@ describe('aliases', () => {
     });
   })
 
-  // selectTag
-  // { id } = originalAction
   describe('selectTag', () => {
+    const store = mockStore(testState);
+    const storeActions = store.getActions();
+
+    store.dispatch(aliases.selectTag({ id: 4 }));
+
     it('should create an action to update selected tags to include the tag id that was passed in', () => {
-      // SELECT_TAG
+      const selectedTagsAction = { type: 'UPDATE_SELECTED_TAGS', tags: [ 3, 4 ] };
+      expect(storeActions[0]).toEqual(selectedTagsAction);
     });
 
-    it('should create an action to filter bookmarks and tags based on the new array of selected tags', () => {
+    it('should create an action to filter bookmarks based on the new array of selected tags', () => {
+      const filteredBookmarksAction = { type: 'UPDATE_FILTERED_BOOKMARKS', bookmarks: [ 2 ] };
+      expect(storeActions[1]).toEqual(filteredBookmarksAction);
+    });
+
+    it('should create an action to filter tags based on the new array of selected tags', () => {
+      const filteredTagsAction = { type: 'UPDATE_FILTERED_TAGS', tags: [] };
+      expect(storeActions[2]).toEqual(filteredTagsAction);
     });
   })
 
