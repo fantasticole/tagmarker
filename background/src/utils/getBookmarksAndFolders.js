@@ -34,8 +34,14 @@ export default function getBookmarksAndFolders (bookmarksAndFolders, data) {
       };
       // for each parent folder's corresponding tag
       for (var y in parents) {
+        // if the current parent is the bookmarks bar or
+        // other bookmarks folder
+        if (parents[y] === ("1" || "2")) {
+          // only push the bookmark id if it's a direct child
+          if (parentId === parents[y]) data['tags'][parents[y]]['bookmarks'].push(id);
+        }
         // add bookmark id to its bookmarks folder
-        data['tags'][parents[y]]['bookmarks'].push(id);
+        else data['tags'][parents[y]]['bookmarks'].push(id);
       }
     };
   }
