@@ -4,29 +4,14 @@ import ReactDOM from 'react-dom';
 /**
  * Alert
  *
- * @param {jsx} children - elements to wrap in the marquee
- * @param {function} [onClose] - optional function to run on close
+ * @param {string} [text] - optional alert text
+ * @param {string} [title] - optional alert title
  */
 const Module = {};
 
 Module.Alert = class Alert extends Component {
   constructor (props) {
     super(props);
-  }
-
-  handleClickOk () {
-    console.log('ok!')
-  }
-
-  handleClickCancel () {
-    console.log('cancel!')
-  }
-  
-  handleClose (e) {
-    e.preventDefault();
-    e.stopPropagation();
-    if (this.props.onClose) this.props.onClose();
-    else this.deactivate();
   }
 
   deactivate () {
@@ -46,18 +31,13 @@ Module.Alert = class Alert extends Component {
   }
 
   render () {
-    let buttonText = (this.props.buttonText || 'ok');
-
     return (
       <div className="alert__fill">
         <div className="alert__viewport" ref="viewport">
           <div className="alert__content">
             {this.renderTitle()}
             {this.renderText()}
-            <div className='alert__actions'>
-              <button className="button action-button alert-action__button" onClick={() => this.handleClickOk()}>{buttonText}</button>
-              <button className="button action-button alert-action__button" onClick={() => this.handleClickCancel()}>Cancel</button>
-            </div>
+            {this.props.children}
           </div>
         </div>
       </div>
