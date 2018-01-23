@@ -45,6 +45,7 @@ export default class Drawer extends Component {
           <ListView />
         </div>
         <div className='modal-container' />
+        <div className='alert-container' />
       </div>
     );
   }

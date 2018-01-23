@@ -1,0 +1,52 @@
+@import 'colors';
+
+// // // // // // // // // // //
+// // // MODAL STYLES // // //
+// // // // // // // // // //
+
+.alert__fill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: $base-translucent;
+}
+
+.alert__viewport {
+  background-color: $base;
+  width: calc(100% - 40px);
+  padding: 10px;
+  box-sizing: border-box;
+  color: $deep;
+  box-shadow: 0 0 5px $light-deep;
+  margin: auto;
+  margin-top: 50px;
+}
+
+.alert__content {
+  margin-bottom: 18px;
+}
+
+.alert__header {
+  font-size: 20px;
+  text-transform: lowercase;
+}
+
+.alert__text {
+  font-size: 16px;
+}
+
+.alert__actions {
+  display: flex;
+  flex-direction: row;
+  margin-top: 10px;
+  justify-content: space-between;
+}
+
+.alert-action__button {
+  flex: 1;
+  padding: 5px;
+  text-transform: lowercase;
+  max-width: 48%;
+}
