@@ -1,27 +1,10 @@
 import configureMockStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
 import * as actions from '../background/src/store/actions';
-import initialState from '../background/src/store/initialState';
+import testState from './testState';
 
 const middlewares = [ thunk ];
 const mockStore = configureMockStore(middlewares);
-const testState = {
-  bookmarks: {
-    1: { id: 1, title: 'bookmark', tags: [ 3 ] },
-    2: { id: 2, title: 'other bookmark', tags: [ 3, 4 ] },
-  },
-  filteredBookmarks: [],
-  filteredTags: [],
-  selected: [],
-  sort: {
-    bookmarks: { ascending: true, sortBy: 'date' },
-    tags: { ascending: true, sortBy: 'alpha' },
-  },
-  tags: {
-    3: { id: 3, title: 'tag', bookmarks: [ 1 ] },
-    4: { id: 4, title: 'other tag', bookmarks: [ 1, 2 ] },
-  },
-};
 
 describe('actions', () => {
   describe('initialize', () => {
@@ -73,14 +56,13 @@ describe('actions', () => {
     });
 
     it('should create an action to filter bookmarks', () => {
-      // no tags are selected so no bookmarks should be filtered
-      const filteredBookmarksAction = { type: 'UPDATE_FILTERED_BOOKMARKS', bookmarks: [] };
+      const filteredBookmarksAction = { type: 'UPDATE_FILTERED_BOOKMARKS', bookmarks: [ 1, 2 ] };
       expect(storeActions[1]).toEqual(filteredBookmarksAction)
     });
 
     it('should create an action to filter tags', () => {
       // and all tags should be returned
-      const filteredTagsAction = { type: 'UPDATE_FILTERED_TAGS', tags: [ "3", "4"] };
+      const filteredTagsAction = { type: 'UPDATE_FILTERED_TAGS', tags: [ 4 ] };
       expect(storeActions[2]).toEqual(filteredTagsAction)
     });
   })
