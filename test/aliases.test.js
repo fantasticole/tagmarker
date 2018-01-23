@@ -194,14 +194,22 @@ describe('aliases', () => {
     });
   })
 
-  // updateBookmark
-  // { bookmark } = originalAction
   describe('updateBookmark', () => {
+    const store = mockStore(testState);
+    const storeActions = store.getActions();
+    const bookmark = Object.assign({}, testState.bookmarks[2], { title: 'new title' })
+
+    store.dispatch(aliases.updateBookmark({ bookmark }));
+
     it('should create an action to create or update tags', () => {
-      // UPDATE_BOOKMARK
+      const tags = [];
+      const createOrUpdateTagsAction = { type: 'CREATE_OR_UPDATE_TAGS', tags };
+      expect(storeActions[0]).toEqual(createOrUpdateTagsAction)
     });
 
     it('should create an action to update a bookmark', () => {
+      const createOrUpdateBookmarkAction = { type: 'CREATE_OR_UPDATE_BOOKMARK', bookmark };
+      expect(storeActions[1]).toEqual(createOrUpdateBookmarkAction)
     });
   })
 })
