@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
 /**
- * Alert
+ * AlertModule
  *
  * @param {string} [text] - optional alert text
  * @param {string} [title] - optional alert title
