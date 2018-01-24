@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 
+import Alert from './Alert';
 import Bookmark from './Bookmark';
 
 import ifTrue from '../utils/ifTrue';
@@ -40,7 +41,11 @@ export default class BookmarkListItem extends Component {
   }
 
   handleClickDelete () {
-    this.props.removeBookmark(this.props.bookmark.id)
+    Alert('are you sure you want to delete this bookmark?', 'confirm delete', 'yes, delete').then(isConfirmed => {
+      if (isConfirmed) {
+        this.props.removeBookmark(this.props.bookmark.id);
+      }
+    });
   }
 
   handleClickEdit () {
