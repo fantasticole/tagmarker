@@ -43,6 +43,8 @@ export default class BookmarkListItem extends Component {
   handleClickDelete () {
     Alert('are you sure you want to delete this bookmark?', 'confirm delete', 'yes, delete').then(isConfirmed => {
       if (isConfirmed) {
+        // delete the bookmark from chrome
+        chrome.bookmarks.remove(id);
         this.props.removeBookmark(this.props.bookmark.id);
       }
     });
