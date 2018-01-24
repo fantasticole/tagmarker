@@ -31,10 +31,13 @@
 .alert__header {
   font-size: 20px;
   text-transform: lowercase;
+  text-align: center;
 }
 
 .alert__text {
   font-size: 16px;
+  padding: 0 10px;
+  text-align: center;
 }
 
 .alert__actions {
