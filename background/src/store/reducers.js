@@ -11,6 +11,11 @@ export function bookmarks (state = {}, action) {
 
       // return the whole object
       return updated;
+    case 'DELETE_BOOKMARK':
+      let updatedState = Object.assign({}, state);
+
+      delete updatedState[action.id];
+      return updatedState;
     default:
       return state;
   }
