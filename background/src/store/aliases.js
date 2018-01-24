@@ -69,7 +69,7 @@ export function getTagsToUpdate (tagsToAdd, tagsToDelete, alltags, bookmarkId) {
 
   // add bookmark to each tag
   tagsToAdd.forEach(id => {
-    let updatedTag = alltags[id];
+    let updatedTag = Object.assign({}, alltags[id]);
 
     // if the tag exists, add the bookmark id to its bookmarks
     if (updatedTag) updatedTag.bookmarks.push(bookmarkId);
@@ -81,7 +81,7 @@ export function getTagsToUpdate (tagsToAdd, tagsToDelete, alltags, bookmarkId) {
 
   tagsToDelete.forEach(id => {
     // get the tag to update
-    let updatedTag = alltags[id],
+    let updatedTag = Object.assign({}, alltags[id]),
         // find the index of the bookmark to remove
         bookmarkIndex = updatedTag.bookmarks.indexOf(bookmarkId);
 
