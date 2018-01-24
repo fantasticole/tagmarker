@@ -83,10 +83,10 @@ export function getTagsToUpdate (tagsToAdd, tagsToDelete, alltags, bookmarkId) {
     // get the tag to update
     let updatedTag = Object.assign({}, alltags[id]),
         // filter bookmark ids for the ones to keep
-        newBookmarks = updatedTag.bookmarks.filter(bId => bId !== id);
+        newBookmarks = updatedTag.bookmarks.filter(bId => bId !== bookmarkId);
 
     // set the new bookmarks
-    updatedTag.bookmarks = newBookmarks
+    updatedTag.bookmarks = newBookmarks;
     // add tag to list of tags to update
     tagsToUpdate.push(updatedTag);
   });
