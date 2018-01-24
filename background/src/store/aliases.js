@@ -105,6 +105,8 @@ export function removeBookmark (originalAction) {
         tagsToUpdate = getTagsToUpdate([], tagsToDelete, tags, id),
         newFilteredBookmarks = [...filteredBookmarks];
 
+    // delete the bookmark from chrome
+    chrome.bookmarks.remove(id);
     // update the store
     dispatch(createOrUpdateTags(tagsToUpdate));
     // if the bookmark being deleted is in the filtered array, remove it
