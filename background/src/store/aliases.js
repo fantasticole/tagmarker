@@ -82,11 +82,11 @@ export function getTagsToUpdate (tagsToAdd, tagsToDelete, alltags, bookmarkId) {
   tagsToDelete.forEach(id => {
     // get the tag to update
     let updatedTag = Object.assign({}, alltags[id]),
-        // find the index of the bookmark to remove
-        bookmarkIndex = updatedTag.bookmarks.indexOf(bookmarkId);
+        // filter bookmark ids for the ones to keep
+        newBookmarks = updatedTag.bookmarks.filter(bId => bId !== id);
 
-    // splice the bookmark id out
-    updatedTag.bookmarks.splice(bookmarkIndex, 1);
+    // set the new bookmarks
+    updatedTag.bookmarks = newBookmarks
     // add tag to list of tags to update
     tagsToUpdate.push(updatedTag);
   });
