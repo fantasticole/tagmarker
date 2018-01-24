@@ -43,6 +43,15 @@ describe('bookmarks reducer', () => {
       reducers.bookmarks(allBookmarks, { type: 'CREATE_OR_UPDATE_BOOKMARK', bookmark })
     ).toEqual(updatedBookmarks);
   })
+
+  it('should handle DELETE_BOOKMARK', () => {
+    const oneBookmark = { 1: { id: 1, title: 'bookmark'} }
+
+    // deletes a bookmark
+    expect(
+      reducers.bookmarks(allBookmarks, { type: 'DELETE_BOOKMARK', id: 2 })
+    ).toEqual(oneBookmark);
+  })
 })
 
 describe('filteredBookmarks reducer', () => {
