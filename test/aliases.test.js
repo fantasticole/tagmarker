@@ -17,7 +17,10 @@ describe('aliases', () => {
     store.dispatch(aliases.createBookmark({ bookmark, tagsToAdd }))
 
     it('should create an action to create or update tags', () => {
-      const tags = tagsToAdd.map(id => storeState.tags[id]);
+      const tags = [
+        { id: 3, title: 'tag', bookmarks: [ 1, 2, 5 ], parents: [ 4 ] },
+        { id: 4, title: 'other tag', bookmarks: [ 1, 5 ] }
+      ];
       const createOrUpdateTagsAction = { type: 'CREATE_OR_UPDATE_TAGS', tags };
       expect(storeActions[0]).toEqual(createOrUpdateTagsAction)
     });
