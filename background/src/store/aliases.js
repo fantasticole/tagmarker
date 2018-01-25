@@ -72,7 +72,7 @@ export function getTagsToUpdate (tagsToAdd, tagsToDelete, alltags, bookmarkId) {
     let updatedTag = Object.assign({}, alltags[id]);
 
     // if the tag exists, add the bookmark id to its bookmarks
-    if (updatedTag) updatedTag.bookmarks.push(bookmarkId);
+    if (updatedTag.hasOwnProperty('title')) updatedTag.bookmarks.push(bookmarkId);
     // otherwise, create the tag and add the id on creation
     else updatedTag = createTag(id, alltags, bookmarkId);
     // add tag to list of tags to update
