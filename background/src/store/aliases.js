@@ -64,24 +64,26 @@ export function createTag (title, tags, bookmarkId) {
   return newTag
 }
 
-export function getTagsToUpdate (tagsToAdd, tagsToDelete, alltags, bookmarkId) {
+export function getTagsToUpdate (tagsToAdd, tagsToDelete, allTags, bookmarkId) {
   let tagsToUpdate = [];
 
   // add bookmark to each tag
   tagsToAdd.forEach(id => {
-    let updatedTag = Object.assign({}, alltags[id]);
+    let updatedTag = Object.assign({}, allTags[id]);
 
     // if the tag exists, add the bookmark id to its bookmarks
-    if (updatedTag.hasOwnProperty('title')) updatedTag.bookmarks.push(bookmarkId);
+    if (updatedTag.hasOwnProperty('title')) {
+      updatedTag.bookmarks = [...updatedTag.bookmarks, bookmarkId];
+    }
     // otherwise, create the tag and add the id on creation
-    else updatedTag = createTag(id, alltags, bookmarkId);
+    else updatedTag = createTag(id, allTags, bookmarkId);
     // add tag to list of tags to update
     tagsToUpdate.push(updatedTag);
   });
 
   tagsToDelete.forEach(id => {
     // get the tag to update
-    let updatedTag = Object.assign({}, alltags[id]),
+    let updatedTag = Object.assign({}, allTags[id]),
         // filter bookmark ids for the ones to keep
         newBookmarks = updatedTag.bookmarks.filter(bId => bId !== bookmarkId);
 
