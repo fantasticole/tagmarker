@@ -72,6 +72,18 @@ chrome.bookmarks.onChanged.addListener((id, data) => {
   }
 });
 
+chrome.bookmarks.onRemoved.addListener((id, data) => {
+  // node includes all children, if any
+  let { node, parentId } = data;
+
+  // if there's a url, it's a bookmark
+  if (node.url) store.dispatch({ type: 'REMOVE_BOOKMARK', id });
+  // otherwise, it's a tag
+  else {
+    console.log('tag!')
+  }
+});
+
 // get all bookmarks from chrome
 chrome.bookmarks.getTree(arr => {
   let data = getBookmarksAndFolders(arr, { bookmarks: {}, tags: {}, });
