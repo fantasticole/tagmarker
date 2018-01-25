@@ -103,6 +103,30 @@ describe('aliases', () => {
     });
   })
 
+  describe('removeBookmark', () => {
+    testState.filteredBookmarks.push(1);
+    const store = mockStore(testState);
+    const storeActions = store.getActions();
+
+    // test case where filtered bookmarks becomes an empty array
+    store.dispatch(aliases.removeBookmark({ id: 1 }));
+
+    it('should create an action to update the bookmark tags to not have the bookmark id', () => {
+      const updateTagsAction = { type: 'CREATE_OR_UPDATE_TAGS', tags: [ { id: 3, title: 'tag', bookmarks: [ 2 ], parents: [ 4 ] } ] };
+      expect(storeActions[0]).toEqual(updateTagsAction);
+    });
+
+    it('should create an action to update the filtered bookmarks to not have the bookmark id', () => {
+      const filteredBookmarksAction = { type: 'UPDATE_FILTERED_BOOKMARKS', bookmarks: [] };
+      expect(storeActions[1]).toEqual(filteredBookmarksAction);
+    });
+
+    it('should create an action to update the filtered bookmarks to not have the bookmark id', () => {
+      const deleteBookmarkAction = { type: 'DELETE_BOOKMARK', id: 1 };
+      expect(storeActions[2]).toEqual(deleteBookmarkAction);
+    });
+  })
+
   describe('removeTag', () => {
     const store = mockStore(testState);
     const storeActions = store.getActions();
