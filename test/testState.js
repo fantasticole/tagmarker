@@ -11,7 +11,7 @@ export default {
     tags: { ascending: true, sortBy: 'alpha' },
   },
   tags: {
-    3: { id: 3, title: 'tag', bookmarks: [ 1 ], parents: [ 4 ] },
-    4: { id: 4, title: 'other tag', bookmarks: [ 1, 2 ] },
+    3: { id: 3, title: 'tag', bookmarks: [ 1, 2 ], parents: [ 4 ] },
+    4: { id: 4, title: 'other tag', bookmarks: [ 1 ] },
   },
 };
