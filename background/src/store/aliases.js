@@ -27,7 +27,7 @@ export function createFolder (originalAction) {
   let { folder } = originalAction;
 
   return (dispatch, getState) => {
-    let { tags } = getState(),
+    let { selected, tags } = getState(),
         { dateAdded, dateGroupModified, id, parentId, title } = folder,
         parents = [...tags[parentId].parents, parentId],
         newTag = {
@@ -42,6 +42,8 @@ export function createFolder (originalAction) {
 
     // updates tags
     dispatch(createOrUpdateTags([newTag]));
+    // update filtered tags
+    return dispatch(filterBookmarksAndTags(selected));
   }
 }
 
