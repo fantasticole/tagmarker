@@ -138,6 +138,41 @@ export function removeBookmark (originalAction) {
   }
 }
 
+export function removeTag (originalAction) {
+  let { id } = originalAction;
+
+  return (dispatch, getState) => {
+    let { bookmarks, filteredTags, selected, tags } = getState(),
+        tag = tags[id],
+        // get a list of bookmarks with updated tags
+        bookmarksToUpdate = tag.bookmarks.map(bId => {
+          let bookmark = bookmarks[bId],
+              // filter out the tag id that's being deleted
+              updatedTags = {
+                tags: bookmark.tags.filter(tId => tId !== id),
+              };
+
+          // return a new bookmark object
+          return Object.assign({}, bookmark, updatedTags);
+        });
+
+    // remove the tag id from each bookmark associated with it
+    bookmarksToUpdate.forEach(bookmarkObj => {
+      dispatch(createOrUpdateBookmark(bookmarkObj));
+    })
+    // if the tag was selected, deselect it
+    if (selected.includes(id)) {
+      dispatch(updateSelectedTags(selected.filter(tId => tId !== id)));
+    }
+    // if the tag was in the filtered list, remove it
+    if (filteredTags.includes(id)) {
+      dispatch(updateFilteredTags(filteredTags.filter(tId => tId !== id)));
+    }
+    // delete tag from store
+    return dispatch({ type: 'DELETE_TAG', id });
+  }
+}
+
 export function selectBookmark (originalAction) {
   let { id } = originalAction;
 
@@ -202,6 +237,7 @@ export default {
   'CREATE_FOLDER': createFolder,
   'DESELECT_TAG': deselectTag,
   'REMOVE_BOOKMARK': removeBookmark,
+  'REMOVE_TAG': removeTag,
   'SELECT_BOOKMARK': selectBookmark,
   'SELECT_TAG': selectTag,
   'UPDATE_BOOKMARK': updateBookmark,
