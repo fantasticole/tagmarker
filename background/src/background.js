@@ -89,9 +89,30 @@ chrome.bookmarks.onRemoved.addListener((id, data) => {
   if (node.url) store.dispatch({ type: 'REMOVE_BOOKMARK', id });
   // otherwise, it's a tag
   else {
-    console.log('tag!')
+    // get all folders and tags to be removed
+    let toRemove = getChildren(node, { bookmarks: [], tags: [] }),
+        { bookmarks, tags } = toRemove;
+
+    bookmarks.forEach(id => {
+      store.dispatch({ type: 'REMOVE_BOOKMARK', id });
+    })
+
+    tags.forEach(id => {
+      store.dispatch({ type: 'REMOVE_TAG', id });
+    })
   }
 });
+
+function getChildren(node, all) {
+  if (node.children) {
+    all.tags = [...all.tags, node.id];
+    node.children.forEach(n => {
+      return getChildren(n, all);
+    })
+  }
+  else all.bookmarks = [...all.bookmarks, node.id];
+  return all;
+}
 
 // get all bookmarks from chrome
 chrome.bookmarks.getTree(arr => {
