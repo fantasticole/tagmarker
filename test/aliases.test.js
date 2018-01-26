@@ -83,6 +83,44 @@ describe('aliases', () => {
     });
   })
 
+  describe('deselectTag', () => {
+    const store = mockStore(testState);
+    const storeActions = store.getActions();
+
+    // set up for seleted to not be empty
+    const newState = Object.assign({}, testState, { selected: [3, 4] })
+    const newStore = mockStore(newState);
+    const newStoreActions = newStore.getActions();
+
+    // test case where selected tags becomes an empty array
+    store.dispatch(aliases.deselectTag({ id: 3 }));
+    // test case where selected tags goes down to one
+    newStore.dispatch(aliases.deselectTag({ id: 3 }));
+
+    it('should create an action to update selected tags with an array that does not have the id passed in', () => {
+      const selectedTagsAction = { type: 'UPDATE_SELECTED_TAGS', tags: [] };
+      const newSelectedTagsAction = { type: 'UPDATE_SELECTED_TAGS', tags: [ 4 ] };
+      expect(storeActions[0]).toEqual(selectedTagsAction);
+      expect(newStoreActions[0]).toEqual(newSelectedTagsAction);
+    });
+
+    it('should create an action to filter bookmarks based on the new array of selected tags', () => {
+      const filteredBookmarksAction = { type: 'UPDATE_FILTERED_BOOKMARKS', bookmarks: [] };
+      const newFilteredBookmarksAction = { type: 'UPDATE_FILTERED_BOOKMARKS', bookmarks: [ 2 ] };
+      expect(storeActions[1]).toEqual(filteredBookmarksAction);
+      expect(newStoreActions[1]).toEqual(newFilteredBookmarksAction);
+    });
+
+    it('should create an action to filter tags based on the new array of selected tags', () => {
+      // when no tags are selected, the tags are strings because
+      // they're the keys from the tags object
+      const filteredTagsAction = { type: 'UPDATE_FILTERED_TAGS', tags: [ "3", "4" ] };
+      const newFilteredTagsAction = { type: 'UPDATE_FILTERED_TAGS', tags: [ 3 ] };
+      expect(storeActions[2]).toEqual(filteredTagsAction);
+      expect(newStoreActions[2]).toEqual(newFilteredTagsAction);
+    });
+  })
+
   describe('getTagsToUpdate', () => {
     const store = mockStore(testState);
     const storeState = store.getState();
@@ -134,44 +172,6 @@ describe('aliases', () => {
     it('should create an action to update the filtered bookmarks to not have the bookmark id', () => {
       const deleteBookmarkAction = { type: 'DELETE_BOOKMARK', id: 1 };
       expect(storeActions[2]).toEqual(deleteBookmarkAction);
-    });
-  })
-
-  describe('removeTag', () => {
-    const store = mockStore(testState);
-    const storeActions = store.getActions();
-
-    // set up for seleted to not be empty
-    const newState = Object.assign({}, testState, { selected: [3, 4] })
-    const newStore = mockStore(newState);
-    const newStoreActions = newStore.getActions();
-
-    // test case where selected tags becomes an empty array
-    store.dispatch(aliases.removeTag({ id: 3 }));
-    // test case where selected tags goes down to one
-    newStore.dispatch(aliases.removeTag({ id: 3 }));
-
-    it('should create an action to update selected tags with an array that does not have the id passed in', () => {
-      const selectedTagsAction = { type: 'UPDATE_SELECTED_TAGS', tags: [] };
-      const newSelectedTagsAction = { type: 'UPDATE_SELECTED_TAGS', tags: [ 4 ] };
-      expect(storeActions[0]).toEqual(selectedTagsAction);
-      expect(newStoreActions[0]).toEqual(newSelectedTagsAction);
-    });
-
-    it('should create an action to filter bookmarks based on the new array of selected tags', () => {
-      const filteredBookmarksAction = { type: 'UPDATE_FILTERED_BOOKMARKS', bookmarks: [] };
-      const newFilteredBookmarksAction = { type: 'UPDATE_FILTERED_BOOKMARKS', bookmarks: [ 2 ] };
-      expect(storeActions[1]).toEqual(filteredBookmarksAction);
-      expect(newStoreActions[1]).toEqual(newFilteredBookmarksAction);
-    });
-
-    it('should create an action to filter tags based on the new array of selected tags', () => {
-      // when no tags are selected, the tags are strings because
-      // they're the keys from the tags object
-      const filteredTagsAction = { type: 'UPDATE_FILTERED_TAGS', tags: [ "3", "4" ] };
-      const newFilteredTagsAction = { type: 'UPDATE_FILTERED_TAGS', tags: [ 3 ] };
-      expect(storeActions[2]).toEqual(filteredTagsAction);
-      expect(newStoreActions[2]).toEqual(newFilteredTagsAction);
     });
   })
 
