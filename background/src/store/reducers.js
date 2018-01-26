@@ -90,6 +90,11 @@ export function tags (state = {}, action) {
       })
       // return all of the tags
       return updated;
+    case 'DELETE_TAG':
+      let updatedState = Object.assign({}, state);
+
+      delete updatedState[action.id];
+      return updatedState;
     default:
       return state;
   }
