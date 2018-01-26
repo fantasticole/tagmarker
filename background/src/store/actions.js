@@ -10,13 +10,7 @@ export function initialize (data) {
 }
 
 export function createOrUpdateBookmark (bookmark) {
-  return (dispatch, getState) => {
-    let { selected } = getState();
-
-    // update the bookmark in the store as well as filteredTags
-    dispatch({ type: 'CREATE_OR_UPDATE_BOOKMARK', bookmark });
-    return dispatch(filterBookmarksAndTags(selected));
-  };
+  return { type: 'CREATE_OR_UPDATE_BOOKMARK', bookmark };
 }
 
 export function createOrUpdateTags (tags) {
