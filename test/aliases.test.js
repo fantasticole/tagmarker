@@ -55,6 +55,16 @@ describe('aliases', () => {
       const createOrUpdateTagsAction = { type: 'CREATE_OR_UPDATE_TAGS', tags };
       expect(storeActions[0]).toEqual(createOrUpdateTagsAction)
     });
+
+    it('should create an action to update filtered bookmarks', () => {
+      const filteredBookmarksAction = { type: 'UPDATE_FILTERED_BOOKMARKS', bookmarks: [ 1, 2 ] };
+      expect(storeActions[1]).toEqual(filteredBookmarksAction);
+    });
+
+    it('should create an action to update filtered tags', () => {
+      const filteredTagsAction = { type: 'UPDATE_FILTERED_TAGS', tags: [ 4 ] };
+      expect(storeActions[2]).toEqual(filteredTagsAction);
+    });
   })
 
   describe('createTag', () => {
