@@ -169,7 +169,7 @@ describe('aliases', () => {
       expect(storeActions[1]).toEqual(filteredBookmarksAction);
     });
 
-    it('should create an action to update the filtered bookmarks to not have the bookmark id', () => {
+    it('should create an action to delete the bookmark from the store', () => {
       const deleteBookmarkAction = { type: 'DELETE_BOOKMARK', id: 1 };
       expect(storeActions[2]).toEqual(deleteBookmarkAction);
     });
