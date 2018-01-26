@@ -160,4 +160,13 @@ describe('tags reducer', () => {
       reducers.tags(allTags, { type: 'CREATE_OR_UPDATE_TAGS', tags })
     ).toEqual(updatedTags);
   })
+
+  it('should handle DELETE_TAG', () => {
+    const oneTag = { 1: { id: 1, title: 'tag'} }
+
+    // deletes a tag
+    expect(
+      reducers.tags(allTags, { type: 'DELETE_TAG', id: 2 })
+    ).toEqual(oneTag);
+  })
 })
