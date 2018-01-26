@@ -24,7 +24,7 @@ const mapStateToProps = (state) => {
  */
 const mapDispatchToProps = (dispatch) => {
   return {
-    removeTag: (id) => {dispatch({ type: 'REMOVE_TAG', id })},
+    removeTag: (id) => {dispatch({ type: 'DESELECT_TAG', id })},
   };
 }
 

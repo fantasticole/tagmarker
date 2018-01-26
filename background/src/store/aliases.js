@@ -66,6 +66,23 @@ export function createTag (title, tags, bookmarkId) {
   return newTag
 }
 
+export function deselectTag (originalAction) {
+  let { id } = originalAction;
+
+  return (dispatch, getState) => {
+    let { bookmarks, selected } = getState(),
+        selectedTags = [...selected],
+        // find ids index in selected tags array
+        index = selectedTags.indexOf(id);
+
+    selectedTags.splice(index, 1);
+    // update the store
+    dispatch(updateSelectedTags(selectedTags));
+    // update filtered tags and bookmarks based on updated selections
+    return dispatch(filterBookmarksAndTags(selectedTags));
+  }
+}
+
 export function getTagsToUpdate (tagsToAdd, tagsToDelete, allTags, bookmarkId) {
   let tagsToUpdate = [];
 
@@ -118,23 +135,6 @@ export function removeBookmark (originalAction) {
     }
     // delete bookmark from store
     return dispatch({ type: 'DELETE_BOOKMARK', id });
-  }
-}
-
-export function removeTag (originalAction) {
-  let { id } = originalAction;
-
-  return (dispatch, getState) => {
-    let { bookmarks, selected } = getState(),
-        selectedTags = [...selected],
-        // find ids index in selected tags array
-        index = selectedTags.indexOf(id);
-
-    selectedTags.splice(index, 1);
-    // update the store
-    dispatch(updateSelectedTags(selectedTags));
-    // update filtered tags and bookmarks based on updated selections
-    return dispatch(filterBookmarksAndTags(selectedTags));
   }
 }
 
@@ -200,8 +200,8 @@ export function updateBookmark (originalAction) {
 export default {
   'CREATE_BOOKMARK': createBookmark,
   'CREATE_FOLDER': createFolder,
+  'DESELECT_TAG': deselectTag,
   'REMOVE_BOOKMARK': removeBookmark,
-  'REMOVE_TAG': removeTag,
   'SELECT_BOOKMARK': selectBookmark,
   'SELECT_TAG': selectTag,
   'UPDATE_BOOKMARK': updateBookmark,
