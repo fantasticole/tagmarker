@@ -12,14 +12,18 @@ export function createBookmark (originalAction) {
 
   return (dispatch, getState) => {
     let { parentId } = bookmark,
-        { tags } = getState(),
+        { selected, tags } = getState(),
         tagsToUpdate = getTagsToUpdate(tagsToAdd, [], tags, bookmark.id),
         // get ids to set on bookmark
         idsToAdd = tagsToUpdate.map(tag => tag.id);
 
     bookmark.tags = idsToAdd;
     dispatch(createOrUpdateTags(tagsToUpdate));
-    return dispatch(createOrUpdateBookmark(bookmark));
+    dispatch(createOrUpdateBookmark(bookmark));
+    // give a quarter second for the store to update, then filter
+    return setTimeout(() => {
+      dispatch(filterBookmarksAndTags(selected));
+    }, 250)
   }
 }
 
@@ -42,8 +46,10 @@ export function createFolder (originalAction) {
 
     // updates tags
     dispatch(createOrUpdateTags([newTag]));
-    // update filtered tags
-    return dispatch(filterBookmarksAndTags(selected));
+    // give a quarter second for the store to update, then filter
+    return setTimeout(() => {
+      dispatch(filterBookmarksAndTags(selected));
+    }, 250)
   }
 }
 
@@ -207,7 +213,7 @@ export function updateBookmark (originalAction) {
   let { bookmark } = originalAction;
 
   return (dispatch, getState) => {
-    let { bookmarks, tags } = getState(),
+    let { bookmarks, selected, tags } = getState(),
         oldTags = bookmarks[bookmark.id].tags,
         // figure out which tags are being added
         tagsToAdd = bookmark.tags.filter(t => (!oldTags.includes(t))),
@@ -228,7 +234,11 @@ export function updateBookmark (originalAction) {
 
     bookmark.tags = tagIds;
     dispatch(createOrUpdateTags(tagsToUpdate));
-    return dispatch(createOrUpdateBookmark(bookmark));
+    dispatch(createOrUpdateBookmark(bookmark));
+    // give a quarter second for the store to update, then filter
+    return setTimeout(() => {
+      dispatch(filterBookmarksAndTags(selected));
+    }, 250)
   }
 }
 
