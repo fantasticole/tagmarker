@@ -21,9 +21,7 @@ export function createBookmark (originalAction) {
     dispatch(createOrUpdateTags(tagsToUpdate));
     dispatch(createOrUpdateBookmark(bookmark));
     // give a quarter second for the store to update, then filter
-    return setTimeout(() => {
-      dispatch(filterBookmarksAndTags(selected));
-    }, 250)
+    return dispatch(filterBookmarksAndTags(selected));
   }
 }
 
@@ -47,9 +45,7 @@ export function createFolder (originalAction) {
     // updates tags
     dispatch(createOrUpdateTags([newTag]));
     // give a quarter second for the store to update, then filter
-    return setTimeout(() => {
-      dispatch(filterBookmarksAndTags(selected));
-    }, 250)
+    return dispatch(filterBookmarksAndTags(selected));
   }
 }
 
@@ -236,9 +232,7 @@ export function updateBookmark (originalAction) {
     dispatch(createOrUpdateTags(tagsToUpdate));
     dispatch(createOrUpdateBookmark(bookmark));
     // give a quarter second for the store to update, then filter
-    return setTimeout(() => {
-      dispatch(filterBookmarksAndTags(selected));
-    }, 250)
+    return dispatch(filterBookmarksAndTags(selected));
   }
 }
 
