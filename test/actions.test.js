@@ -54,17 +54,6 @@ describe('actions', () => {
       const createOrUpdateAction = { type: 'CREATE_OR_UPDATE_BOOKMARK', bookmark };
       expect(storeActions[0]).toEqual(createOrUpdateAction)
     });
-
-    it('should create an action to filter bookmarks', () => {
-      const filteredBookmarksAction = { type: 'UPDATE_FILTERED_BOOKMARKS', bookmarks: [ 1, 2 ] };
-      expect(storeActions[1]).toEqual(filteredBookmarksAction)
-    });
-
-    it('should create an action to filter tags', () => {
-      // and all tags should be returned
-      const filteredTagsAction = { type: 'UPDATE_FILTERED_TAGS', tags: [ 4 ] };
-      expect(storeActions[2]).toEqual(filteredTagsAction)
-    });
   })
 
   describe('createOrUpdateTags', () => {
