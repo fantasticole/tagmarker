@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
-import BookmarkList from '../containers/BookmarkList';
+import BookmarkList from './BookmarkList';
 import TagList from './TagList';
 
 /**
@@ -44,6 +44,15 @@ export default class ListView extends Component {
     this.filter(selectedTags.map(tag => tag.id));
   }
 
+  handleSelectBookmark (id) {
+    let { bookmarks, tags } = this.props,
+        { selectedTags } = this.state,
+        selectedIds = selectedTags.map(tag => tag.id),
+        filteredTags = bookmarks[id].tags.filter(id => !selectedIds.includes(id)).map(id => tags[id]);
+
+    this.setState({ filteredBookmarks: [ bookmarks[id] ], filteredTags });
+  }
+
   filter (selectedIds) {
     let { bookmarks, tags } = this.props,
         filteredBookmarks = [],
@@ -84,7 +93,11 @@ export default class ListView extends Component {
           onDeselect={(id) => this.handleDeselect(id)}
           onSelect={(id) => this.handleSelect(id)}
           />
-        <BookmarkList bookmarks={bookmarks} filteredBookmarks={filteredBookmarks} />
+        <BookmarkList
+          bookmarks={bookmarks}
+          filteredBookmarks={filteredBookmarks}
+          selectBookmark={(id) => this.handleSelectBookmark(id)}
+          />
       </div>
     );
   }
