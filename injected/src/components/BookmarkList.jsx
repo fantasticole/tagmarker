@@ -69,7 +69,7 @@ export default class BookmarkList extends Component {
 
       return (
         <div className='bookmark-list__container'>
-          <BookmarkActions ascending={ascending} sortBy={sortBy} onSort={(sort) => this.handleSort(sort)}  />
+          <BookmarkActions ascending={ascending} sortBy={sortBy} onSort={(sort) => this.handleSort(sort)} />
           <ul className='tagmarker-list bookmark-list'>
             {sortedBookmarks.map(bookmark => (
               <BookmarkListItem bookmark={bookmark} isActive={isActive} key={bookmark.id} />
@@ -80,7 +80,7 @@ export default class BookmarkList extends Component {
     }
     return (
       <div className='bookmark-list__container'>
-        <BookmarkActions />
+        <BookmarkActions ascending={ascending} sortBy={sortBy} onSort={(sort) => this.handleSort(sort)} />
         <p className='empty-list__message'>no bookmarks to display</p>
       </div>
       )
