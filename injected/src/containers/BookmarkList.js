@@ -10,12 +10,25 @@ import { connect } from 'react-redux';
  */
 
 const mapStateToProps = (state) => {
-  let { filteredBookmarks, bookmarks } = state,
-      bookmarkObjects = filteredBookmarks.map(id => bookmarks[id]);
+  let { filteredBookmarks, bookmarks } = state;
 
   return {
-    filteredBookmarks: bookmarkObjects,
+    bookmarks,
+    filtered: filteredBookmarks,
   };
 }
 
-export default connect(mapStateToProps)(BookmarkList);
+/**
+ * Maps store actions to component props.
+ *
+ * @param {function} dispatch - Store dispatch
+ * @returns {object} Props for the connected component to dispatch actions
+ */
+const mapDispatchToProps = (dispatch) => {
+  return {
+    selectBookmark: (id) => {dispatch({ type: 'SELECT_BOOKMARK', id })},
+  };
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(BookmarkList);

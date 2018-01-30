@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
 import BookmarkListItem from '../containers/BookmarkListItem';
-import BookmarkActions from '../containers/BookmarkActions';
+import BookmarkActions from './BookmarkActions';
 
 /**
  * BookmarkList
  *
- * @param {function} filteredBookmarks - list of bookmark ids
+ * @param {object} bookmarks - all bookmarks from store
+ * @param {function} filtered - list of bookmark ids
+ * @param {function} selectBookmark - function to run when bookmark is selected
  */
 export default class BookmarkList extends Component {
   constructor (props) {
@@ -62,14 +64,27 @@ export default class BookmarkList extends Component {
   }
 
   render () {
-    if (this.props.filteredBookmarks.length) {
-      let { ascending, sortBy } = this.state,
-          sortedBookmarks = this.props.filteredBookmarks.sort(this.sort()),
+    let { ascending, sortBy } = this.state,
+        { bookmarks, filtered, selectBookmark } = this.props,
+        filteredBookmarks = filtered.map(id => bookmarks[id]),
+        bookmarkActions = (
+          <BookmarkActions
+            ascending={ascending}
+            bookmarks={Object.values(bookmarks)}
+            filteredBookmarks={filteredBookmarks}
+            onSort={(sort) => this.handleSort(sort)}
+            selectBookmark={(id) => selectBookmark(id)}
+            sortBy={sortBy}
+            />
+        );
+
+    if (filtered.length) {
+      let sortedBookmarks = filteredBookmarks.sort(this.sort()),
           isActive = sortedBookmarks.length === 1;
 
       return (
         <div className='bookmark-list__container'>
-          <BookmarkActions ascending={ascending} sortBy={sortBy} onSort={(sort) => this.handleSort(sort)} />
+          {bookmarkActions}
           <ul className='tagmarker-list bookmark-list'>
             {sortedBookmarks.map(bookmark => (
               <BookmarkListItem bookmark={bookmark} isActive={isActive} key={bookmark.id} />
@@ -80,7 +95,7 @@ export default class BookmarkList extends Component {
     }
     return (
       <div className='bookmark-list__container'>
-        <BookmarkActions ascending={ascending} sortBy={sortBy} onSort={(sort) => this.handleSort(sort)} />
+        {bookmarkActions}
         <p className='empty-list__message'>no bookmarks to display</p>
       </div>
       )
