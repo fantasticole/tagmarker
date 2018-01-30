@@ -55,16 +55,6 @@ describe('aliases', () => {
       const createOrUpdateTagsAction = { type: 'CREATE_OR_UPDATE_TAGS', tags };
       expect(storeActions[0]).toEqual(createOrUpdateTagsAction)
     });
-
-    it('should create an action to update filtered bookmarks', () => {
-      const filteredBookmarksAction = { type: 'UPDATE_FILTERED_BOOKMARKS', bookmarks: [ 1, 2 ] };
-      expect(storeActions[1]).toEqual(filteredBookmarksAction);
-    });
-
-    it('should create an action to update filtered tags', () => {
-      const filteredTagsAction = { type: 'UPDATE_FILTERED_TAGS', tags: [ 4 ] };
-      expect(storeActions[2]).toEqual(filteredTagsAction);
-    });
   })
 
   describe('createTag', () => {
@@ -114,11 +104,9 @@ describe('aliases', () => {
   })
 
   describe('removeBookmark', () => {
-    testState.filteredBookmarks.push(1);
     const store = mockStore(testState);
     const storeActions = store.getActions();
 
-    // test case where filtered bookmarks becomes an empty array
     store.dispatch(aliases.removeBookmark({ id: 1 }));
 
     it('should create an action to update the bookmark tags to not have the bookmark id', () => {
@@ -126,14 +114,9 @@ describe('aliases', () => {
       expect(storeActions[0]).toEqual(updateTagsAction);
     });
 
-    it('should create an action to update the filtered bookmarks to not have the bookmark id', () => {
-      const filteredBookmarksAction = { type: 'UPDATE_FILTERED_BOOKMARKS', bookmarks: [] };
-      expect(storeActions[1]).toEqual(filteredBookmarksAction);
-    });
-
     it('should create an action to delete the bookmark from the store', () => {
       const deleteBookmarkAction = { type: 'DELETE_BOOKMARK', id: 1 };
-      expect(storeActions[2]).toEqual(deleteBookmarkAction);
+      expect(storeActions[1]).toEqual(deleteBookmarkAction);
     });
   })
 
@@ -143,32 +126,16 @@ describe('aliases', () => {
 
     store.dispatch(aliases.removeTag({ id: 3 }));
 
-    it('should create an action to delete the tag from the store', () => {
-      const deleteTagAction = { type: 'DELETE_TAG', id: 3 };
-      expect(storeActions[0]).toEqual(deleteTagAction);
-    });
-
     it('should create an action to update each associated bookmark to not have the tag id', () => {
       const updateBookmarkAction = { type: 'CREATE_OR_UPDATE_BOOKMARK', bookmark: { id: 1, title: 'bookmark', tags: [] } };
       const updateBookmarkAction2 = { type: 'CREATE_OR_UPDATE_BOOKMARK', bookmark: { id: 2, title: 'other bookmark', tags: [ 4 ] } };
-      expect(storeActions[1]).toEqual(updateBookmarkAction);
-      expect(storeActions[2]).toEqual(updateBookmarkAction2);
+      expect(storeActions[0]).toEqual(updateBookmarkAction);
+      expect(storeActions[1]).toEqual(updateBookmarkAction2);
     });
 
-    it('should create an action to update selected tags if the tag being deleted was selected', () => {
-      const selectedTagsAction = { type: 'UPDATE_SELECTED_TAGS', tags: [] };
-      expect(storeActions[3]).toEqual(selectedTagsAction);
-    });
-
-    it('should create actions to filter bookmarks and tags for each updated bookmark', () => {
-      const filterBookmarksAction = { type: 'UPDATE_FILTERED_BOOKMARKS', bookmarks: [] };
-      // THIS IS WRONG
-      // not sure why the tags object isn't updating in time in the test,
-      // but the tags here should be Object.keys(tags), which should only
-      // include 4 at this point.
-      const filterTagsAction = { type: 'UPDATE_FILTERED_TAGS', tags: [ '3', '4' ] };
-      expect(storeActions[4]).toEqual(filterBookmarksAction);
-      expect(storeActions[5]).toEqual(filterTagsAction);
+    it('should create an action to delete the tag from the store', () => {
+      const deleteTagAction = { type: 'DELETE_TAG', id: 3 };
+      expect(storeActions[2]).toEqual(deleteTagAction);
     });
   })
 
