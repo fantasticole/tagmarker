@@ -7,17 +7,29 @@ import BookmarkActions from '../containers/BookmarkActions';
 /**
  * BookmarkList
  *
- * @param {bool} ascending - direction of sort
  * @param {function} filteredBookmarks - list of bookmark ids
- * @param {string} sortBy - key to sort by
  */
 export default class BookmarkList extends Component {
   constructor (props) {
     super(props);
+
+    this.state = {
+      ascending: true,
+      sortBy: 'date',
+    };
+  }
+
+  handleSort (sortBy) {
+    if (sortBy === this.state.sortBy) {
+      this.setState({ ascending: !this.state.ascending });
+    }
+    else {
+      this.setState({ sortBy, ascending: true });
+    }
   }
 
   sort () {
-    let { ascending, sortBy } = this.props;
+    let { ascending, sortBy } = this.state;
 
     return (a, b) => {
       // make the sort direction dynamic
@@ -51,12 +63,13 @@ export default class BookmarkList extends Component {
 
   render () {
     if (this.props.filteredBookmarks.length) {
-      let sortedBookmarks = this.props.filteredBookmarks.sort(this.sort()),
+      let { ascending, sortBy } = this.state,
+          sortedBookmarks = this.props.filteredBookmarks.sort(this.sort()),
           isActive = sortedBookmarks.length === 1;
 
       return (
         <div className='bookmark-list__container'>
-          <BookmarkActions />
+          <BookmarkActions ascending={ascending} sortBy={sortBy} onSort={(sort) => this.handleSort(sort)}  />
           <ul className='tagmarker-list bookmark-list'>
             {sortedBookmarks.map(bookmark => (
               <BookmarkListItem bookmark={bookmark} isActive={isActive} key={bookmark.id} />

@@ -9,13 +9,11 @@ import { connect } from 'react-redux';
  * @returns {object} Map of state data to component props.
  */
 const mapStateToProps = (state) => {
-  let { filteredBookmarks, sort, bookmarks } = state,
+  let { filteredBookmarks, bookmarks } = state,
       bookmarkObjects = filteredBookmarks.map(id => bookmarks[id]);
 
   return {
     bookmarks: Object.values(bookmarks),
-    ascending: sort.bookmarks.ascending,
-    sortBy: sort.bookmarks.sortBy,
     filteredBookmarks: bookmarkObjects,
   };
 }
@@ -28,7 +26,6 @@ const mapStateToProps = (state) => {
  */
 const mapDispatchToProps = (dispatch) => {
   return {
-    onSort: (sort) => {dispatch({ type: 'SET_SORT', list: 'bookmarks', sort })},
     selectBookmark: (id) => {dispatch({ type: 'SELECT_BOOKMARK', id })},
   };
 }

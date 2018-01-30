@@ -10,12 +10,10 @@ import { connect } from 'react-redux';
  */
 
 const mapStateToProps = (state) => {
-  let { filteredBookmarks, sort, bookmarks } = state,
+  let { filteredBookmarks, bookmarks } = state,
       bookmarkObjects = filteredBookmarks.map(id => bookmarks[id]);
 
   return {
-    ascending: sort.bookmarks.ascending,
-    sortBy: sort.bookmarks.sortBy,
     filteredBookmarks: bookmarkObjects,
   };
 }
