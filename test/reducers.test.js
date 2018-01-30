@@ -99,17 +99,6 @@ describe('selected reducer', () => {
   })
 })
 
-describe('sort reducer', () => {
-  it('should return the initial state', () => {
-    expect(reducers.sort(undefined, {})).toEqual(initialState.sort)
-  })
-
-  it('should handle SET_SORT', () => {
-    // updates state.list.sortBy & state.list.ascending
-    // based on action.sort and action.list
-  })
-})
-
 describe('tags reducer', () => {
   const allTags = {
     1: { id: 1, title: 'tag'},
