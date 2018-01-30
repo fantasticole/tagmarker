@@ -8,7 +8,7 @@ import BookmarkActions from './BookmarkActions';
  * BookmarkList
  *
  * @param {object} bookmarks - all bookmarks from store
- * @param {function} filtered - list of bookmark ids
+ * @param {function} filteredBookmarks - list of bookmark objects
  * @param {function} selectBookmark - function to run when bookmark is selected
  */
 export default class BookmarkList extends Component {
@@ -65,8 +65,7 @@ export default class BookmarkList extends Component {
 
   render () {
     let { ascending, sortBy } = this.state,
-        { bookmarks, filtered, selectBookmark } = this.props,
-        filteredBookmarks = filtered.map(id => bookmarks[id]),
+        { bookmarks, filteredBookmarks, selectBookmark } = this.props,
         bookmarkActions = (
           <BookmarkActions
             ascending={ascending}
@@ -78,7 +77,7 @@ export default class BookmarkList extends Component {
             />
         );
 
-    if (filtered.length) {
+    if (filteredBookmarks.length) {
       let sortedBookmarks = filteredBookmarks.sort(this.sort()),
           isActive = sortedBookmarks.length === 1;
 

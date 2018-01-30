@@ -3,22 +3,6 @@ import BookmarkList from '../components/BookmarkList';
 import { connect } from 'react-redux';
 
 /**
- * Maps data from the store state to component props.
- *
- * @param {object} state - Store.getState() result to select data from
- * @returns {object} Map of state data to component props.
- */
-
-const mapStateToProps = (state) => {
-  let { filteredBookmarks, bookmarks } = state;
-
-  return {
-    bookmarks,
-    filtered: filteredBookmarks,
-  };
-}
-
-/**
  * Maps store actions to component props.
  *
  * @param {function} dispatch - Store dispatch
@@ -31,4 +15,4 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(BookmarkList);
+export default connect(null, mapDispatchToProps)(BookmarkList);

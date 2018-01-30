@@ -8,9 +8,9 @@ import SelectedTags from './SelectedTags';
  * TagList
  * 
  * @param {array} filteredTags - filtered tag objects
- * @param {function} removeTag - function to remove selected tag
+ * @param {function} onDeselect - function to remove selected tag
+ * @param {function} onSelect - function to run when tag is selected
  * @param {array} selectedTags - selected tag objects
- * @param {function} selectTag - function to run when tag is selected
  */
 export default class TagList extends Component {
   constructor (props) {
@@ -18,7 +18,7 @@ export default class TagList extends Component {
 
     this.state = {
       ascending: true,
-      sortBy: 'date',
+      sortBy: 'alpha',
     };
   }
 
@@ -33,7 +33,7 @@ export default class TagList extends Component {
 
   render () {
     let { ascending, sortBy } = this.state,
-    { filteredTags, removeTag, selectedTags, selectTag } = this.props;
+    { filteredTags, onDeselect, selectedTags, onSelect } = this.props;
 
     return (
       <div className='tag-list__container'>
@@ -41,12 +41,12 @@ export default class TagList extends Component {
           ascending={ascending}
           filteredTags={filteredTags}
           onSort={(sort) => this.handleSort(sort)}
-          selectTag={(id) => selectTag(id)}
+          selectTag={(id) => onSelect(id)}
           sortBy={sortBy}
           />
         <ul className='tagmarker-list tag-list'>
-          <SelectedTags removeTag={(id) => removeTag(id)} tags={selectedTags} />
-          <FilteredTags ascending={ascending} selectTag={(id) => selectTag(id)} sortBy={sortBy} tags={filteredTags} />
+          <SelectedTags removeTag={(id) => onDeselect(id)} tags={selectedTags} />
+          <FilteredTags ascending={ascending} selectTag={(id) => onSelect(id)} sortBy={sortBy} tags={filteredTags} />
         </ul>
       </div>
     );

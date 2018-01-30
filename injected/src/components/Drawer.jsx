@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 
 import CreateBookmarkModal from './CreateBookmarkModal';
 import DrawerActions from './DrawerActions';
-import ListView from './ListView';
+import ListView from '../containers/ListView';
 import Modal from './Modal';
 
 /**
