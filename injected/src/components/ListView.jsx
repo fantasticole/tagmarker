@@ -25,13 +25,19 @@ export default class ListView extends Component {
     let { bookmarks, tags } = this.props,
         oldBookmarks = prevProps.bookmarks,
         oldTags = prevProps.tags,
-        bookmarksChanged = Object.keys(bookmarks).length !== Object.keys(oldBookmarks).length,
-        tagsChanged = Object.keys(tags).length !== Object.keys(oldTags).length;
+        // see if the amount of bookmarks changed
+        bookmarksLengthChanged = Object.keys(bookmarks).length !== Object.keys(oldBookmarks).length,
+        // see if the amount of tags changed
+        tagsLengthChanged = Object.keys(tags).length !== Object.keys(oldTags).length,
+        // see if the filtered bookmarks' data changed
+        bookmarksChanged = this.state.filteredBookmarks.some(bookmark => {
+          return JSON.stringify(bookmark) !== JSON.stringify(bookmarks[bookmark.id]);
+        });
 
-    if (bookmarksChanged || tagsChanged) this.filter(this.state.selectedTags);
-    // TODO:
-    // see if we need to update when
-    // - bookmarks or tags are edited
+    // if we have any pertinent changes, filter the bookmarks
+    if (bookmarksLengthChanged || tagsLengthChanged || bookmarksChanged) {
+      this.filter(this.state.selectedTags);
+    }
   }
 
   handleDeselect (id) {
@@ -61,6 +67,8 @@ export default class ListView extends Component {
     let { bookmarks, tags } = this.props,
         { selectedTags } = this.state,
         selectedIds = selectedTags.map(tag => tag.id),
+        // set the filtered tags as those related to the selected
+        // bookmark but not in the selectedTags array
         filteredTags = bookmarks[id].tags.filter(id => !selectedIds.includes(id)).map(id => tags[id]);
 
     this.setState({ filteredBookmarks: [ bookmarks[id] ], filteredTags });
@@ -69,6 +77,7 @@ export default class ListView extends Component {
   filter (selectedTags) {
     let { bookmarks, tags } = this.props,
         selectedIds = selectedTags.map(tag => tag.id),
+        // set default values in case we have no selected ids
         filteredBookmarks = [],
         filteredTags = Object.values(tags),
         allTags;
