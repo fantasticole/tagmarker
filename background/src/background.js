@@ -50,10 +50,12 @@ chrome.bookmarks.onCreated.addListener((id, bookmarkOrFolder) => {
   setTimeout(() => {
     // if we have a url, it's a bookmark
     if (bookmarkOrFolder.url) {
+      let storeState = store.getState();
+
       // if the bookmark does not already exist (not created in extension)
-      if (!store.getState().bookmarks[id]) {
+      if (!storeState.bookmarks[id]) {
         // add it to the store
-        store.dispatch(createBookmark({ bookmark: bookmarkOrFolder, tagsToAdd: [ bookmarkOrFolder.parentId ] }));
+        store.dispatch(createBookmark({ bookmark: bookmarkOrFolder, tagsToAdd: [ bookmarkOrFolder.parentId, ...storeState.tags[bookmarkOrFolder.parentId].parents ] }));
       }
     }
     // otherwise, it's a folder
