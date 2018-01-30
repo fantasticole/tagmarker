@@ -21,12 +21,25 @@ export default class ListView extends Component {
     };
   }
 
+  componentDidUpdate (prevProps) {
+    let { bookmarks, tags } = this.props,
+        oldBookmarks = prevProps.bookmarks,
+        oldTags = prevProps.tags,
+        bookmarksChanged = Object.keys(bookmarks).length !== Object.keys(oldBookmarks).length,
+        tagsChanged = Object.keys(tags).length !== Object.keys(oldTags).length;
+
+    if (bookmarksChanged || tagsChanged) this.filter(this.state.selectedTags);
+    // TODO:
+    // see if we need to update when
+    // - bookmarks or tags are edited
+  }
+
   handleDeselect (id) {
     let selectedTags = this.state.selectedTags.filter(tag => tag.id !== id);
 
     if (selectedTags.length) {
       this.setState({ selectedTags });
-      this.filter(selectedTags.map(tag => tag.id));
+      this.filter(selectedTags);
     }
     else this.setState({
       filteredBookmarks: [],
@@ -41,7 +54,7 @@ export default class ListView extends Component {
 
     selectedTags.push(tags[id]);
     this.setState({ selectedTags });
-    this.filter(selectedTags.map(tag => tag.id));
+    this.filter(selectedTags);
   }
 
   handleSelectBookmark (id) {
@@ -53,8 +66,9 @@ export default class ListView extends Component {
     this.setState({ filteredBookmarks: [ bookmarks[id] ], filteredTags });
   }
 
-  filter (selectedIds) {
+  filter (selectedTags) {
     let { bookmarks, tags } = this.props,
+        selectedIds = selectedTags.map(tag => tag.id),
         filteredBookmarks = [],
         filteredTags = Object.values(tags),
         allTags;
