@@ -9,12 +9,10 @@ import { connect } from 'react-redux';
  * @returns {object} Map of state data to component props.
  */
 const mapStateToProps = (state) => {
-  let { filteredTags, sort, tags } = state,
+  let { filteredTags, tags } = state,
       tagObjects = filteredTags.map(id => tags[id]);
 
   return {
-    ascending: sort.tags.ascending,
-    sortBy: sort.tags.sortBy,
     filteredTags: tagObjects,
   };
 }
@@ -27,7 +25,6 @@ const mapStateToProps = (state) => {
  */
 const mapDispatchToProps = (dispatch) => {
   return {
-    onSort: (sort) => {dispatch({ type: 'SET_SORT', list: 'tags', sort })},
     selectTag: (id) => {dispatch({ type: 'SELECT_TAG', id })},
   };
 }

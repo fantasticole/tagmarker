@@ -9,12 +9,10 @@ import { connect } from 'react-redux';
  * @returns {object} Map of state data to component props.
  */
 const mapStateToProps = (state) => {
-  let { filteredTags, sort, tags } = state,
+  let { filteredTags, tags } = state,
       tagObjects = filteredTags.map(id => tags[id]);
 
   return {
-    ascending: sort.tags.ascending,
-    sortBy: sort.tags.sortBy,
     tags: tagObjects,
   };
 }
