@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
 import BookmarkList from '../containers/BookmarkList';
-import TagList from './TagList';
+import TagList from '../containers/TagList';
 
 /**
  * ListView

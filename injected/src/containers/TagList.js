@@ -1,4 +1,4 @@
-import SelectedTags from '../components/SelectedTags';
+import TagList from '../components/TagList';
 
 import { connect } from 'react-redux';
 
@@ -9,10 +9,12 @@ import { connect } from 'react-redux';
  * @returns {object} Map of state data to component props.
  */
 const mapStateToProps = (state) => {
-  let tags = state.selected.map(id => (state.tags[id]));
+  let filteredTags = state.filteredTags.map(id => state.tags[id]),
+      selectedTags = state.selected.map(id => (state.tags[id]));
 
   return {
-    tags,
+    filteredTags,
+    selectedTags,
   };
 }
 
@@ -25,7 +27,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     removeTag: (id) => {dispatch({ type: 'DESELECT_TAG', id })},
+    selectTag: (id) => {dispatch({ type: 'SELECT_TAG', id })},
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SelectedTags);
+export default connect(mapStateToProps, mapDispatchToProps)(TagList);
