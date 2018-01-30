@@ -66,23 +66,6 @@ export function createTag (title, tags, bookmarkId) {
   return newTag
 }
 
-export function deselectTag (originalAction) {
-  let { id } = originalAction;
-
-  return (dispatch, getState) => {
-    let { bookmarks, selected } = getState(),
-        selectedTags = [...selected],
-        // find ids index in selected tags array
-        index = selectedTags.indexOf(id);
-
-    selectedTags.splice(index, 1);
-    // update the store
-    dispatch(updateSelectedTags(selectedTags));
-    // update filtered tags and bookmarks based on updated selections
-    return dispatch(filterBookmarksAndTags(selectedTags));
-  }
-}
-
 export function getTagsToUpdate (tagsToAdd, tagsToDelete, allTags, bookmarkId) {
   let tagsToUpdate = [];
 
@@ -177,36 +160,6 @@ export function removeTag (originalAction) {
   }
 }
 
-export function selectBookmark (originalAction) {
-  let { id } = originalAction;
-
-  return (dispatch, getState) => {
-    let { bookmarks, selected } = getState(),
-        // get tags associated with selected bookmark
-        { tags } = bookmarks[id],
-        // filter for those not selected
-        filteredTags = tags.filter(id => !selected.includes(id));
-
-    dispatch(updateFilteredTags(filteredTags));
-    return dispatch(updateFilteredBookmarks([id]));
-  }
-}
-
-export function selectTag (originalAction) {
-  let { id } = originalAction;
-
-  return (dispatch, getState) => {
-    let { bookmarks, selected } = getState(),
-        // add id to selected tags array
-        selectedTags = [...selected, id];
-
-    // update the store
-    dispatch(updateSelectedTags(selectedTags));
-    // update filtered tags and bookmarks based on updated selections
-    return dispatch(filterBookmarksAndTags(selectedTags));
-  }
-}
-
 export function updateBookmark (originalAction) {
   let { bookmark } = originalAction;
 
@@ -241,10 +194,7 @@ export function updateBookmark (originalAction) {
 export default {
   'CREATE_BOOKMARK': createBookmark,
   'CREATE_FOLDER': createFolder,
-  'DESELECT_TAG': deselectTag,
   'REMOVE_BOOKMARK': removeBookmark,
   'REMOVE_TAG': removeTag,
-  'SELECT_BOOKMARK': selectBookmark,
-  'SELECT_TAG': selectTag,
   'UPDATE_BOOKMARK': updateBookmark,
 };
