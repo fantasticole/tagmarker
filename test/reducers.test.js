@@ -54,51 +54,6 @@ describe('bookmarks reducer', () => {
   })
 })
 
-describe('filteredBookmarks reducer', () => {
-  it('should return the initial state', () => {
-    expect(reducers.filteredBookmarks(undefined, {})).toEqual(initialState.filteredBookmarks)
-  })
-
-  it('should handle UPDATE_FILTERED_BOOKMARKS', () => {
-    const bookmarks = [1, 2, 3];
-
-    // sets list to action.bookmarks
-    expect(
-      reducers.filteredBookmarks([], { type: 'UPDATE_FILTERED_BOOKMARKS', bookmarks})
-    ).toEqual(bookmarks);
-  })
-})
-
-describe('filteredTags reducer', () => {
-  it('should return the initial state', () => {
-    expect(reducers.filteredTags(undefined, [])).toEqual(initialState.filteredTags)
-  })
-
-  it('should handle UPDATE_FILTERED_TAGS', () => {
-    const tags = [1, 2, 3];
-
-    // sets list to action.tags
-    expect(
-      reducers.filteredTags([], { type: 'UPDATE_FILTERED_TAGS', tags })
-    ).toEqual(tags);
-  })
-})
-
-describe('selected reducer', () => {
-  it('should return the initial state', () => {
-    expect(reducers.selected(undefined, {})).toEqual(initialState.selected)
-  })
-
-  it('should handle UPDATE_SELECTED_TAGS', () => {
-    const tags = [1, 2, 3];
-
-    // sets list to action.tags
-    expect(
-      reducers.selected([], { type: 'UPDATE_SELECTED_TAGS', tags })
-    ).toEqual(tags);
-  })
-})
-
 describe('tags reducer', () => {
   const allTags = {
     1: { id: 1, title: 'tag'},
