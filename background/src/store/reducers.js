@@ -21,39 +21,6 @@ export function bookmarks (state = {}, action) {
   }
 };
 
-export function filteredBookmarks (state = [], action) {
-  switch (action.type) {
-    case 'UPDATE_FILTERED_BOOKMARKS':
-      let updatedList = [...action.bookmarks];
-
-      return updatedList;
-    default:
-      return state;
-  }
-};
-
-export function filteredTags (state = [], action) {
-  switch (action.type) {
-    case 'UPDATE_FILTERED_TAGS':
-      let updatedList = [...action.tags];
-
-      return updatedList;
-    default:
-      return state;
-  }
-};
-
-export function selected (state = [], action) {
-  switch (action.type) {
-    case 'UPDATE_SELECTED_TAGS':
-      let selectedTags = [...action.tags];
-      
-      return selectedTags;
-    default:
-      return state;
-  }
-};
-
 export function tags (state = {}, action) {
   switch (action.type) {
     case 'SET_TAGS':
@@ -80,8 +47,5 @@ export function tags (state = {}, action) {
 
 export default combineReducers({
   bookmarks,
-  filteredBookmarks,
-  filteredTags,
-  selected,
   tags,
 });
