@@ -6,6 +6,7 @@ import { createBookmark, createFolder } from './store/aliases';
 
 import addBookmark from './utils/addBookmark';
 import getBookmarksAndFolders from './utils/getBookmarksAndFolders';
+import checkDrawerStatus from './utils/checkDrawerStatus';
 import toggleDrawer from './utils/toggleDrawer';
 
 wrapStore(store, {
@@ -33,15 +34,16 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
 chrome.commands.onCommand.addListener(command => {
   if (command === "add-bookmark") {
-    // check to see if drawer is open
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      chrome.tabs.sendMessage(tabs[0].id, { ref: 'check_drawer_status' }, drawerOpen => {
+    // see if the drawer is open
+    checkDrawerStatus()
+      .then((data) => {
+        let { drawerIsOpen, tabId } = data;
+
         // if it's closed, open it
-        if (!drawerOpen) toggleDrawer(tabs[0].id);
+        if (!drawerIsOpen) toggleDrawer(tabId);
         // add bookmark
         addBookmark();
       });
-    });
   }
 });
 
