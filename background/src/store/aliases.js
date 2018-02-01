@@ -41,7 +41,7 @@ export function createFolder (originalAction) {
 }
 
 export function createTag (title, tags, bookmarkId) {
-  let id = Math.random().toString(36).substr(2, 9),
+  let id = `tm-${Math.random().toString(36).substr(2, 9)}`,
       newTag = {
         dateAdded: Date.now(),
         dateGroupModified: Date.now(),
