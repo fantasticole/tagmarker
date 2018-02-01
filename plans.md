@@ -18,26 +18,29 @@
 * Edit bookmark name functionality
   * ~~Update bookmark name in extension~~
   * Update bookmark name in Chrome
-* ~~Add bookmark functionality~~
+* Add bookmark functionality
   * ~~Ask where new bookmark should be created~~
   * ~~Add bookmark to Chrome~~
   * ~~Get and save bookmark details on 'add' command~~
+  * Check page for keywords as suggested tags
 * ~~Listen for manually created bookmarks and folders~~
   * ~~Create bookmark in extension for new bookmark~~
   * ~~Create tag in extension for new folder~~
 * ~~Listen for manually updated bookmarks and folders~~
   * ~~Update bookmark in extension for corresponding bookmark~~
   * ~~Update tag in extension for corresponding folder~~
-* Listen for manually deleted bookmarks and folders
-  * Delete bookmark in extension for deleted bookmark?
-  * Delete tag in extension for deleted folder?
+* ~~Listen for manually deleted bookmarks and folders~~
+  * ~~Delete bookmark in extension for deleted bookmark~~
+  * ~~Delete tag in extension for deleted folder~~
 * Add "All tags" option
 * Batch tagging
   * Add or remove tags for multiple bookmarks at once
 * ~~Add tag functionality~~
   * ~~Create new tag with custom id~~
 * Figure out where to store all of this so it persists
-  * indexedDB? local storage?
+  * indexedDB?
+  * local storage?
+  * google drive?!
 * ~~Make tags searchable~~
   * ~~When one tag is selected, the only other tags that should show should be the ones that overlap.~~
 * Connect bookmarks
