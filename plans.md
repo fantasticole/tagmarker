@@ -9,7 +9,11 @@
 * Delete tag functionality
   * ~~Remove from array of tags on bookmark in store~~
   * ~~Remove bookmark id from tag's bookmarks array in store~~
+  * Check to see if the folder should be deleted as well
   * Update db
+* Delete bookmark functionality
+  * ~~Remove from bookmarks object in store~~
+  * Check to see if the chrome bookmark should be deleted as well
 * Add tag functionality
   * ~~Create/import dropdown/autocomplete with existing tags~~
   * ~~Add to array of tags on bookmark in store~~
@@ -23,26 +27,20 @@
   * ~~Add bookmark to Chrome~~
   * ~~Get and save bookmark details on 'add' command~~
   * Check page for keywords as suggested tags
-* ~~Listen for manually created bookmarks and folders~~
+* Listen for manually created bookmarks and folders
   * ~~Create bookmark in extension for new bookmark~~
   * ~~Create tag in extension for new folder~~
-* ~~Listen for manually updated bookmarks and folders~~
-  * ~~Update bookmark in extension for corresponding bookmark~~
-  * ~~Update tag in extension for corresponding folder~~
-* ~~Listen for manually deleted bookmarks and folders~~
-  * ~~Delete bookmark in extension for deleted bookmark~~
-  * ~~Delete tag in extension for deleted folder~~
+  * Ask for tags for new bookmarks
+* Listen for moved bookmarks and folders
+  * update bookmark's tags
+  * update tag's parents
 * Add "All tags" option
 * Batch tagging
   * Add or remove tags for multiple bookmarks at once
-* ~~Add tag functionality~~
-  * ~~Create new tag with custom id~~
 * Figure out where to store all of this so it persists
   * indexedDB?
   * local storage?
   * google drive?!
-* ~~Make tags searchable~~
-  * ~~When one tag is selected, the only other tags that should show should be the ones that overlap.~~
 * Connect bookmarks
   * link them manually/by date
 * FEATURE REQUEST: Page previews?
@@ -51,10 +49,24 @@
   * ~~bookmark count~~
   * Put parent folder name in parens after?
 * Add backup capability
-  * Download json file from settings page
+  * Download json file from settings page?
+  * Store all in google drive
+* Toggle tag selection mode
+  * ~~narrowing~~
+  * concatting
 * ~~Track drawer status by tab~~
   * ~~Make sure the drawer knows where to be open and where to be closed~~
   * ~~default to close on page load/refresh, only open when told~~
+* ~~Listen for manually updated bookmarks and folders~~
+  * ~~Update bookmark in extension for corresponding bookmark~~
+  * ~~Update tag in extension for corresponding folder~~
+* ~~Listen for manually deleted bookmarks and folders~~
+  * ~~Delete bookmark in extension for deleted bookmark~~
+  * ~~Delete tag in extension for deleted folder~~
+* ~~Make tags searchable~~
+  * ~~When one tag is selected, the only other tags that should show should be the ones that overlap.~~
+* ~~Add tag functionality~~
+  * ~~Create new tag with custom id~~
 
 
 ## Tag Storage
