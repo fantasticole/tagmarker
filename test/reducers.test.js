@@ -114,3 +114,18 @@ describe('tags reducer', () => {
     ).toEqual(oneTag);
   })
 })
+
+describe('token reducer', () => {
+  it('should return the initial state', () => {
+    expect(reducers.token(null, {})).toEqual(initialState.token)
+  })
+
+  it('should handle SET_TOKEN', () => {
+    const token = "test_token"
+
+    // should set the token in the store
+    expect(
+      reducers.token(null, { type: 'SET_TOKEN', token })
+    ).toEqual(token);
+  })
+})
