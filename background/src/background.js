@@ -7,11 +7,19 @@ import { createBookmark, createFolder } from './store/aliases';
 import addBookmark from './utils/addBookmark';
 import getBookmarksAndFolders from './utils/getBookmarksAndFolders';
 import checkDrawerStatus from './utils/checkDrawerStatus';
+import createSpreadsheet from './utils/createSpreadsheet';
 import toggleDrawer from './utils/toggleDrawer';
 
 wrapStore(store, {
   portName: 'tagmarker',
 });
+
+createSpreadsheet()
+  .then(data => {
+    console.log(data);
+  }, error => {
+    console.error(error);
+  });
 
 // open and close drawer on icon click
 chrome.browserAction.onClicked.addListener(tab => {

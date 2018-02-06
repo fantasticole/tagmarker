@@ -39,4 +39,5 @@ build/
 # Sublime
 .eslintrc
 
+api_key.json
 client_id.json
