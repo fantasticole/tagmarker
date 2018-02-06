@@ -54,6 +54,21 @@ describe('bookmarks reducer', () => {
   })
 })
 
+describe('spreadsheet reducer', () => {
+  it('should return the initial state', () => {
+    expect(reducers.spreadsheet({}, {})).toEqual({})
+  })
+
+  it('should handle SET_SPREADSHEET', () => {
+    const spreadsheet = { id: 'abc', url: 'www.spreadsheet.com' }
+
+    // should set the spreadsheet in the store
+    expect(
+      reducers.spreadsheet({}, { type: 'SET_SPREADSHEET', spreadsheet })
+    ).toEqual(spreadsheet);
+  })
+})
+
 describe('tags reducer', () => {
   const allTags = {
     1: { id: 1, title: 'tag'},
@@ -112,20 +127,5 @@ describe('tags reducer', () => {
     expect(
       reducers.tags(allTags, { type: 'DELETE_TAG', id: 2 })
     ).toEqual(oneTag);
-  })
-})
-
-describe('token reducer', () => {
-  it('should return the initial state', () => {
-    expect(reducers.token(null, {})).toEqual(initialState.token)
-  })
-
-  it('should handle SET_TOKEN', () => {
-    const token = "test_token"
-
-    // should set the token in the store
-    expect(
-      reducers.token(null, { type: 'SET_TOKEN', token })
-    ).toEqual(token);
   })
 })
