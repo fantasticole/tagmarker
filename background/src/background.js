@@ -19,25 +19,34 @@ wrapStore(store, {
 // get all bookmarks from chrome
 chrome.bookmarks.getTree(arr => {
   let data = getBookmarksAndFolders(arr, { bookmarks: {}, tags: {}, });
-  // set data as variable on the window for debugging purposes
-  window.bookmarkData = data;
-  chrome.storage.local.set({'TagMarker': data}, () => {
-    if (chrome.runtime.lastError) {
-      console.log("Error Storing: " + chrome.runtime.lastError);
-    }
-  });
   // initialize data in the store
   store.dispatch(initialize(data));
 });
 
-createSpreadsheet()
-  .then(data => {
-    console.log(data);
-    store.dispatch({ type: 'SET_SPREADSHEET', spreadsheet: data.spreadsheetId });
-  }, error => {
-    console.error(error);
-  });
+chrome.storage.sync.get('TagMarker', response => {
+  let spreadsheet = response.TagMarker;
+  console.log({spreadsheet})
 
+  // if we have a spreadsheet id, set it in the store
+  // TODO: confirm that the spreadsheet exists
+  if (spreadsheet) store.dispatch({ type: 'SET_SPREADSHEET', spreadsheet });
+  // otherwise, create one
+  else {
+    createSpreadsheet()
+      .then(data => {
+        spreadsheet = data.spreadsheetId;
+        // add it to the store
+        store.dispatch({ type: 'SET_SPREADSHEET', spreadsheet });
+        chrome.storage.sync.set({'TagMarker': spreadsheet}, () => {
+          if (chrome.runtime.lastError) {
+            console.log("Error Storing: " + chrome.runtime.lastError);
+          }
+        });
+      }, error => {
+        console.error(error);
+      });
+  }
+})
 
 // SET UP LISTENERS
 // open and close drawer on icon click
