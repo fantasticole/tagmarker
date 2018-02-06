@@ -1,5 +1,5 @@
 export default {
   bookmarks: {},
-  spreadsheet: null,
+  spreadsheetId: null,
   tags: {},
 };

@@ -10,7 +10,7 @@ export default {
     bookmarks: { ascending: true, sortBy: 'date' },
     tags: { ascending: true, sortBy: 'alpha' },
   },
-  spreadsheet: null,
+  spreadsheetId: null,
   tags: {
     3: { id: 3, title: 'tag', bookmarks: [ 1, 2 ], parents: [ 4 ] },
     4: { id: 4, title: 'other tag', bookmarks: [ 1 ] },

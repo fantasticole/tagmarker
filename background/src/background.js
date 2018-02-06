@@ -24,19 +24,19 @@ chrome.bookmarks.getTree(arr => {
 });
 
 chrome.storage.sync.get('TagMarker', response => {
-  let spreadsheet = response.TagMarker;
+  let spreadsheetId = response.TagMarker;
 
   // if we have a spreadsheet id, set it in the store
   // TODO: confirm that the spreadsheet exists
-  if (spreadsheet) store.dispatch({ type: 'SET_SPREADSHEET', spreadsheet });
+  if (spreadsheetId) store.dispatch({ type: 'SET_SPREADSHEET', spreadsheetId });
   // otherwise, create one
   else {
     spreadsheet.create()
       .then(data => {
-        spreadsheet = data.spreadsheetId;
+        spreadsheetId = data.spreadsheetId;
         // add it to the store
-        store.dispatch({ type: 'SET_SPREADSHEET', spreadsheet });
-        chrome.storage.sync.set({'TagMarker': spreadsheet}, () => {
+        store.dispatch({ type: 'SET_SPREADSHEET', spreadsheetId });
+        chrome.storage.sync.set({'TagMarker': spreadsheetId}, () => {
           if (chrome.runtime.lastError) {
             console.log("Error Storing: " + chrome.runtime.lastError);
           }

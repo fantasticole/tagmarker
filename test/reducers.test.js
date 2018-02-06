@@ -54,18 +54,18 @@ describe('bookmarks reducer', () => {
   })
 })
 
-describe('spreadsheet reducer', () => {
+describe('spreadsheetId reducer', () => {
   it('should return the initial state', () => {
-    expect(reducers.spreadsheet(null, {})).toEqual(null)
+    expect(reducers.spreadsheetId(null, {})).toEqual(null)
   })
 
   it('should handle SET_SPREADSHEET', () => {
-    const spreadsheet = 'abc'
+    const spreadsheetId = 'abc'
 
     // should set the spreadsheet in the store
     expect(
-      reducers.spreadsheet(null, { type: 'SET_SPREADSHEET', spreadsheet })
-    ).toEqual(spreadsheet);
+      reducers.spreadsheetId(null, { type: 'SET_SPREADSHEET', spreadsheetId })
+    ).toEqual(spreadsheetId);
   })
 })
 
