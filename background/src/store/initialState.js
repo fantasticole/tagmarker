@@ -1,8 +1,5 @@
 export default {
   bookmarks: {},
-  spreadsheet: {
-    id: null,
-    url: null,
-  },
+  spreadsheet: null,
   tags: {},
 };
