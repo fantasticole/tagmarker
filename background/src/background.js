@@ -26,26 +26,39 @@ chrome.bookmarks.getTree(arr => {
 chrome.storage.sync.get('TagMarker', response => {
   let spreadsheetId = response.TagMarker;
 
-  // if we have a spreadsheet id, set it in the store
-  // TODO: confirm that the spreadsheet exists
-  if (spreadsheetId) store.dispatch({ type: 'SET_SPREADSHEET', spreadsheetId });
-  // otherwise, create one
-  else {
-    spreadsheet.create()
-      .then(data => {
-        spreadsheetId = data.spreadsheetId;
-        // add it to the store
-        store.dispatch({ type: 'SET_SPREADSHEET', spreadsheetId });
-        chrome.storage.sync.set({'TagMarker': spreadsheetId}, () => {
-          if (chrome.runtime.lastError) {
-            console.log("Error Storing: " + chrome.runtime.lastError);
-          }
-        });
+  // if we have a spreadsheet id
+  if (spreadsheetId) {
+    // make sure the spreadsheet exists
+    spreadsheet.exists(spreadsheetId)
+      .then(exists => {
+        // if it does, set the spreadsheet id in the store
+        if (exists) store.dispatch({ type: 'SET_SPREADSHEET', spreadsheetId });
+        // otherwise, create one
+        else createSpreadsheet()
       }, error => {
         console.error(error);
       });
   }
+  // otherwise, create one
+  else createSpreadsheet();
 })
+
+function createSpreadsheet () {
+  spreadsheet.create()
+    .then(data => {
+      let { spreadsheetId } = data;
+      // add it to the store
+      store.dispatch({ type: 'SET_SPREADSHEET', spreadsheetId });
+      chrome.storage.sync.set({'TagMarker': spreadsheetId}, () => {
+        if (chrome.runtime.lastError) {
+          console.log("Error Storing: " + chrome.runtime.lastError);
+        }
+      });
+    }, error => {
+      console.error(error);
+    });
+}
+
 
 // SET UP LISTENERS
 // open and close drawer on icon click
