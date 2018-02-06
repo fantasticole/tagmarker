@@ -106,7 +106,7 @@ const newSpreadsheet = {
  }
 }
 
-export function create (sendResponse) {
+export function create () {
   return new Promise((resolve, reject) => {
     chrome.identity.getAuthToken({ interactive: true }, (token) => {
       if (token) {
@@ -119,6 +119,28 @@ export function create (sendResponse) {
         xhr.open('POST', url, newSpreadsheet);
         xhr.setRequestHeader('Authorization', 'Bearer ' + token);
         xhr.send(JSON.stringify(newSpreadsheet));
+      }
+      else {
+        let message = chrome.runtime.lastError ? chrome.runtime.lastError.message : "";
+        reject({ status: "Not signed into Chrome, network error or no permission.\n" + message });
+      }
+    });
+  })
+}
+
+export function exists (id) {
+  return new Promise((resolve, reject) => {
+    chrome.identity.getAuthToken({ interactive: true }, (token) => {
+      if (token) {
+        let url = `https://sheets.googleapis.com/v4/spreadsheets/${id}?key=${apiKey}`;
+        let xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = event => {
+          if (xhr.status == 200) resolve(true);
+          else if (xhr.status == 404) resolve(false);
+        }
+        xhr.open('GET', url);
+        xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+        xhr.send();
       }
       else {
         let message = chrome.runtime.lastError ? chrome.runtime.lastError.message : "";
