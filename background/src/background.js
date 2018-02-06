@@ -5,13 +5,29 @@ import { createOrUpdateBookmark, createOrUpdateTags, initialize } from './store/
 import { createBookmark, createFolder } from './store/aliases';
 
 import addBookmark from './utils/addBookmark';
-import getBookmarksAndFolders from './utils/getBookmarksAndFolders';
 import checkDrawerStatus from './utils/checkDrawerStatus';
 import createSpreadsheet from './utils/createSpreadsheet';
+import getBookmarksAndFolders from './utils/getBookmarksAndFolders';
+import getChildren from './utils/getChildren';
 import toggleDrawer from './utils/toggleDrawer';
 
 wrapStore(store, {
   portName: 'tagmarker',
+});
+
+// SET UP THE STORE
+// get all bookmarks from chrome
+chrome.bookmarks.getTree(arr => {
+  let data = getBookmarksAndFolders(arr, { bookmarks: {}, tags: {}, });
+  // set data as variable on the window for debugging purposes
+  window.bookmarkData = data;
+  chrome.storage.local.set({'TagMarker': data}, () => {
+    if (chrome.runtime.lastError) {
+      console.log("Error Storing: " + chrome.runtime.lastError);
+    }
+  });
+  // initialize data in the store
+  store.dispatch(initialize(data));
 });
 
 createSpreadsheet()
@@ -22,6 +38,8 @@ createSpreadsheet()
     console.error(error);
   });
 
+
+// SET UP LISTENERS
 // open and close drawer on icon click
 chrome.browserAction.onClicked.addListener(tab => {
   // send the action to the container
@@ -41,6 +59,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   else if (request.ref === 'add_bookmark') addBookmark();
 });
 
+// listen for key commands
 chrome.commands.onCommand.addListener(command => {
   if (command === "add-bookmark") {
     // see if the drawer is open
@@ -56,6 +75,7 @@ chrome.commands.onCommand.addListener(command => {
   }
 });
 
+// listen for created bookmarks
 chrome.bookmarks.onCreated.addListener((id, bookmarkOrFolder) => {
   // wait in case it's being added to the store from the extension
   setTimeout(() => {
@@ -74,7 +94,7 @@ chrome.bookmarks.onCreated.addListener((id, bookmarkOrFolder) => {
   }, 250)
 });
 
-// fired when bookmark name or url changes
+// listen for changed bookmarks (name or url)
 chrome.bookmarks.onChanged.addListener((id, data) => {
   let storeState = store.getState();
 
@@ -94,6 +114,7 @@ chrome.bookmarks.onChanged.addListener((id, data) => {
   }
 });
 
+// listen for removed bookmarks
 chrome.bookmarks.onRemoved.addListener((id, data) => {
   // node includes all children, if any
   let { node, parentId } = data;
@@ -114,29 +135,4 @@ chrome.bookmarks.onRemoved.addListener((id, data) => {
       store.dispatch({ type: 'REMOVE_TAG', id });
     })
   }
-});
-
-function getChildren(node, all) {
-  if (node.children) {
-    all.tags = [...all.tags, node.id];
-    node.children.forEach(n => {
-      return getChildren(n, all);
-    })
-  }
-  else all.bookmarks = [...all.bookmarks, node.id];
-  return all;
-}
-
-// get all bookmarks from chrome
-chrome.bookmarks.getTree(arr => {
-  let data = getBookmarksAndFolders(arr, { bookmarks: {}, tags: {}, });
-  // set data as variable on the window for debugging purposes
-  window.bookmarkData = data;
-  chrome.storage.local.set({'TagMarker': data}, () => {
-    if (chrome.runtime.lastError) {
-      console.log("Error Storing: " + chrome.runtime.lastError);
-    }
-  });
-  // initialize data in the store
-  store.dispatch(initialize(data));
 });
