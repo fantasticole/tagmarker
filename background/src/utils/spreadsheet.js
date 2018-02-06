@@ -108,10 +108,10 @@ const newSpreadsheet = {
 
 export function create (sendResponse) {
   return new Promise((resolve, reject) => {
-    chrome.identity.getAuthToken({ interactive: true }, function (token) {
+    chrome.identity.getAuthToken({ interactive: true }, (token) => {
       if (token) {
         let url = `https://sheets.googleapis.com/v4/spreadsheets?fields=spreadsheetId%2CspreadsheetUrl&key=${apiKey}`;
-        var xhr = new XMLHttpRequest();
+        let xhr = new XMLHttpRequest();
         xhr.responseType = 'json';
         xhr.onreadystatechange = event => {
           if (xhr.readyState == 4 && xhr.status == 200) resolve(xhr.response);
@@ -119,11 +119,10 @@ export function create (sendResponse) {
         xhr.open('POST', url, newSpreadsheet);
         xhr.setRequestHeader('Authorization', 'Bearer ' + token);
         xhr.send(JSON.stringify(newSpreadsheet));
-      } else {
-          var message = "";
-          if (chrome.runtime.lastError)
-              message = chrome.runtime.lastError.message;
-          reject({ status: "Not signed into Chrome, network error or no permission.\n" + message });
+      }
+      else {
+        let message = chrome.runtime.lastError ? chrome.runtime.lastError.message : "";
+        reject({ status: "Not signed into Chrome, network error or no permission.\n" + message });
       }
     });
   })
