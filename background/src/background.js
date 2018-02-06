@@ -17,6 +17,7 @@ wrapStore(store, {
 createSpreadsheet()
   .then(data => {
     console.log(data);
+    store.dispatch({ type: 'SET_SPREADSHEET', spreadsheet: data.spreadsheetId });
   }, error => {
     console.error(error);
   });
@@ -138,9 +139,4 @@ chrome.bookmarks.getTree(arr => {
   });
   // initialize data in the store
   store.dispatch(initialize(data));
-});
-
-// get the auth token and set it in the store
-chrome.identity.getAuthToken({interactive: true}, token => {
-  store.dispatch({ type: 'SET_TOKEN', token });
 });
