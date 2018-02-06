@@ -6,7 +6,7 @@ import { createBookmark, createFolder } from './store/aliases';
 
 import addBookmark from './utils/addBookmark';
 import checkDrawerStatus from './utils/checkDrawerStatus';
-import createSpreadsheet from './utils/createSpreadsheet';
+import * as spreadsheet from './utils/spreadsheet';
 import getBookmarksAndFolders from './utils/getBookmarksAndFolders';
 import getChildren from './utils/getChildren';
 import toggleDrawer from './utils/toggleDrawer';
@@ -25,14 +25,13 @@ chrome.bookmarks.getTree(arr => {
 
 chrome.storage.sync.get('TagMarker', response => {
   let spreadsheet = response.TagMarker;
-  console.log({spreadsheet})
 
   // if we have a spreadsheet id, set it in the store
   // TODO: confirm that the spreadsheet exists
   if (spreadsheet) store.dispatch({ type: 'SET_SPREADSHEET', spreadsheet });
   // otherwise, create one
   else {
-    createSpreadsheet()
+    spreadsheet.create()
       .then(data => {
         spreadsheet = data.spreadsheetId;
         // add it to the store
