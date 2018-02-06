@@ -21,6 +21,15 @@ export function bookmarks (state = {}, action) {
   }
 };
 
+export function spreadsheet (state = {}, action) {
+  switch (action.type) {
+    case 'SET_SPREADSHEET':
+      return action.spreadsheet;
+    default:
+      return state;
+  }
+};
+
 export function tags (state = {}, action) {
   switch (action.type) {
     case 'SET_TAGS':
@@ -45,17 +54,8 @@ export function tags (state = {}, action) {
   }
 };
 
-export function token (state = null, action) {
-  switch (action.type) {
-    case 'SET_TOKEN':
-      return action.token;
-    default:
-      return state;
-  }
-};
-
 export default combineReducers({
   bookmarks,
+  spreadsheet,
   tags,
-  token,
 });
