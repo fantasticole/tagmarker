@@ -1,7 +1,4 @@
-// import { api_key } from '../../../api_key';
-
-// unrestricted key
-const apiKey = 'lol';
+import { api_key } from '../../../api_key';
 
 const newSpreadsheet = {
  "sheets": [
@@ -110,10 +107,11 @@ export function create () {
   return new Promise((resolve, reject) => {
     chrome.identity.getAuthToken({ interactive: true }, (token) => {
       if (token) {
-        let url = `https://sheets.googleapis.com/v4/spreadsheets?fields=spreadsheetId%2CspreadsheetUrl&key=${apiKey}`;
+        let url = `https://sheets.googleapis.com/v4/spreadsheets?fields=spreadsheetId%2CspreadsheetUrl&key=${api_key}`;
         let xhr = new XMLHttpRequest();
         xhr.responseType = 'json';
         xhr.onreadystatechange = event => {
+          // when we have the response, pass it to the resolve function
           if (xhr.readyState == 4 && xhr.status == 200) resolve(xhr.response);
         }
         xhr.open('POST', url, newSpreadsheet);
@@ -128,11 +126,13 @@ export function create () {
   })
 }
 
+// TODO: check if file is in the trash
+// can still be updated there though
 export function exists (id) {
   return new Promise((resolve, reject) => {
     chrome.identity.getAuthToken({ interactive: true }, (token) => {
       if (token) {
-        let url = `https://sheets.googleapis.com/v4/spreadsheets/${id}?key=${apiKey}`;
+        let url = `https://sheets.googleapis.com/v4/spreadsheets/${id}?key=${api_key}`;
         let xhr = new XMLHttpRequest();
         xhr.onreadystatechange = event => {
           if (xhr.status == 200) resolve(true);
