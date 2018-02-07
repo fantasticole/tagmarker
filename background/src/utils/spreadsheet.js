@@ -63,11 +63,6 @@ const newSpreadsheet = {
        "values": [
         {
          "userEnteredValue": {
-          "stringValue": "tags"
-         }
-        },
-        {
-         "userEnteredValue": {
           "stringValue": "dateAdded"
          }
         },
@@ -83,12 +78,17 @@ const newSpreadsheet = {
         },
         {
          "userEnteredValue": {
-          "stringValue": "url"
+          "stringValue": "tags"
          }
         },
         {
          "userEnteredValue": {
           "stringValue": "title"
+         }
+        },
+        {
+         "userEnteredValue": {
+          "stringValue": "url"
          }
         }
        ]
@@ -99,8 +99,15 @@ const newSpreadsheet = {
   }
  ],
  "properties": {
-  "title": "mew tagmarker data"
+  "title": "TagMarker Data"
  }
+}
+
+export function addRows (sheet, data, id) {
+  let formattedRows = formatRows(sheet, data);
+
+  console.log({sheet})
+  console.log(formattedRows)
 }
 
 export function create () {
@@ -114,7 +121,7 @@ export function create () {
           // when we have the response, pass it to the resolve function
           if (xhr.readyState == 4 && xhr.status == 200) resolve(xhr.response);
         }
-        xhr.open('POST', url, newSpreadsheet);
+        xhr.open('POST', url);
         xhr.setRequestHeader('Authorization', 'Bearer ' + token);
         xhr.send(JSON.stringify(newSpreadsheet));
       }
@@ -148,4 +155,36 @@ export function exists (id) {
       }
     });
   })
+}
+
+function formatRows (type, arrayOfObjects) {
+  let values = arrayOfObjects.map(obj => {
+    let arr = [];
+
+    // push objects in specific order
+    if (type === 'tags') {
+      arr.push(
+        obj.bookmarks,
+        obj.dateAdded,
+        obj.dateGroupModified,
+        obj.id,
+        obj.parentId,
+        obj.parents,
+        obj.title
+      )
+    }
+    else if (type === 'bookmarks') {
+      arr.push(
+        obj.dateAdded,
+        obj.id,
+        obj.parentId,
+        obj.tags,
+        obj.title,
+        obj.url
+      )
+    }
+    return arr;
+  });
+
+  return { values };
 }
