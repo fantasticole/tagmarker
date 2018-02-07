@@ -15,10 +15,13 @@ wrapStore(store, {
   portName: 'tagmarker',
 });
 
+let storeData;
+
 // SET UP THE STORE
 // get all bookmarks from chrome
 chrome.bookmarks.getTree(arr => {
   let data = getBookmarksAndFolders(arr, { bookmarks: {}, tags: {}, });
+  storeData = data;
   // initialize data in the store
   store.dispatch(initialize(data));
 });
@@ -54,8 +57,15 @@ function createSpreadsheet () {
           console.log("Error Storing: " + chrome.runtime.lastError);
         }
       });
+
+      return spreadsheetId;
     }, error => {
       console.error(error);
+    })
+    .then((id) => {
+      // add tag and bookmark data to the spreadsheet
+      spreadsheet.addRows('bookmarks', Object.values(storeData.bookmarks), id);
+      spreadsheet.addRows('tags', Object.values(storeData.tags), id);
     });
 }
 
