@@ -106,8 +106,23 @@ const newSpreadsheet = {
 export function addRows (sheet, data, id) {
   let formattedRows = formatRows(sheet, data);
 
-  console.log({sheet})
-  console.log(formattedRows)
+  chrome.identity.getAuthToken({ interactive: false }, (token) => {
+    if (token) {
+      let url = `https://sheets.googleapis.com/v4/spreadsheets/${id}/values/${sheet}!A1:append?valueInputOption=USER_ENTERED&key=${api_key}`;
+      let xhr = new XMLHttpRequest();
+      xhr.responseType = 'json';
+      xhr.onreadystatechange = event => {
+        if (xhr.readyState == 4 && xhr.status !== 200) console.error(xhr.response)
+      }
+      xhr.open('POST', url);
+      xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+      xhr.send(JSON.stringify(formattedRows));
+    }
+    else {
+      let message = chrome.runtime.lastError ? chrome.runtime.lastError.message : "";
+      console.error({ status: "Not signed into Chrome, network error or no permission.\n" + message });
+    }
+  });
 }
 
 export function create () {
@@ -164,12 +179,12 @@ function formatRows (type, arrayOfObjects) {
     // push objects in specific order
     if (type === 'tags') {
       arr.push(
-        obj.bookmarks,
+        obj.bookmarks.toString(),
         obj.dateAdded,
         obj.dateGroupModified,
         obj.id,
         obj.parentId,
-        obj.parents,
+        obj.parents.toString(),
         obj.title
       )
     }
@@ -178,7 +193,7 @@ function formatRows (type, arrayOfObjects) {
         obj.dateAdded,
         obj.id,
         obj.parentId,
-        obj.tags,
+        obj.tags.toString(),
         obj.title,
         obj.url
       )
