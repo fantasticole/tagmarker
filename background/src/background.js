@@ -1,7 +1,7 @@
 import store from './store';
 import { wrapStore } from 'react-chrome-redux';
 
-import { createOrUpdateBookmark, createOrUpdateTags, initialize } from './store/actions';
+import { createOrUpdateBookmarks, createOrUpdateTags, initialize } from './store/actions';
 import { createBookmark, createFolder } from './store/aliases';
 
 import addBookmark from './utils/addBookmark';
@@ -134,7 +134,7 @@ chrome.bookmarks.onChanged.addListener((id, data) => {
     let bookmark = Object.assign({}, storeState.bookmarks[id], data);
 
     // update the bookmark in the store
-    store.dispatch(createOrUpdateBookmark(bookmark));
+    store.dispatch(createOrUpdateBookmarks(bookmark));
   }
   // otherwise, it's a folder
   else {

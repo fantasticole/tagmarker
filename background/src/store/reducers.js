@@ -5,11 +5,15 @@ export function bookmarks (state = {}, action) {
   switch (action.type) {
     case 'SET_BOOKMARKS':
       return action.data;
-    case 'CREATE_OR_UPDATE_BOOKMARK':
-      // get updated object holding all of the bookmarks
-      let updated = Object.assign({}, state, { [action.bookmark.id]: action.bookmark });
+    case 'CREATE_OR_UPDATE_BOOKMARKS':
+      // get object holding all of the bookmarks
+      let updated = Object.assign({}, state);
 
-      // return the whole object
+      // create or update each bookmark that we're being passed
+      action.bookmarks.forEach(bookmark => {
+        updated[bookmark.id] = bookmark;
+      })
+      // return all of the bookmarks
       return updated;
     case 'DELETE_BOOKMARK':
       let updatedState = Object.assign({}, state);

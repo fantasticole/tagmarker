@@ -1,5 +1,5 @@
 import {
-  createOrUpdateBookmark,
+  createOrUpdateBookmarks,
   createOrUpdateTags,
 } from './actions';
 
@@ -14,7 +14,7 @@ export function createBookmark (originalAction) {
 
     bookmark.tags = idsToAdd;
     dispatch(createOrUpdateTags(tagsToUpdate));
-    return dispatch(createOrUpdateBookmark(bookmark));
+    return dispatch(createOrUpdateBookmarks(bookmark));
   }
 }
 
@@ -126,9 +126,7 @@ export function removeTag (originalAction) {
         });
 
     // remove the tag id from each bookmark associated with it
-    bookmarksToUpdate.forEach(bookmarkObj => {
-      dispatch(createOrUpdateBookmark(bookmarkObj));
-    })
+    dispatch(createOrUpdateBookmarks(bookmarksToUpdate));
     // delete tag from store
     return dispatch({ type: 'DELETE_TAG', id });
   }
@@ -159,7 +157,7 @@ export function updateBookmark (originalAction) {
 
     bookmark.tags = tagIds;
     dispatch(createOrUpdateTags(tagsToUpdate));
-    return dispatch(createOrUpdateBookmark(bookmark));
+    return dispatch(createOrUpdateBookmarks(bookmark));
   }
 }
 

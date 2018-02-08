@@ -6,12 +6,14 @@ export function initialize (data) {
   };
 }
 
-export function createOrUpdateBookmark (bookmark) {
-  return { type: 'CREATE_OR_UPDATE_BOOKMARK', bookmark };
+export function createOrUpdateBookmarks (bookmarks) {
+  if (!Array.isArray(bookmarks)) bookmarks = [ bookmarks ];
+  return { type: 'CREATE_OR_UPDATE_BOOKMARKS', bookmarks };
 }
 
 export function createOrUpdateTags (tags) {
-  return { type: 'CREATE_OR_UPDATE_TAGS', tags: [...tags] };
+  if (!Array.isArray(tags)) tags = [ tags ];
+  return { type: 'CREATE_OR_UPDATE_TAGS', tags };
 }
 
 export function setBookmarks (data) {
