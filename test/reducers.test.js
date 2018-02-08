@@ -27,21 +27,23 @@ describe('bookmarks reducer', () => {
     ).toEqual(newBookmarks);
   })
 
-  it('should handle CREATE_OR_UPDATE_BOOKMARK', () => {
+  it('should handle CREATE_OR_UPDATE_BOOKMARKS', () => {
     const bookmark = newBookmarks[3];
     const updatedBookmarks = Object.assign({}, allBookmarks, { [bookmark.id]: bookmark });
 
     // adds a bookmark
     expect(
-      reducers.bookmarks(allBookmarks, { type: 'CREATE_OR_UPDATE_BOOKMARK', bookmark })
+      reducers.bookmarks(allBookmarks, { type: 'CREATE_OR_UPDATE_BOOKMARKS', bookmarks: [bookmark] })
     ).toEqual(updatedBookmarks);
 
-    // updates a bookmark
+    // updates one bookmark while adding another
     bookmark.title = 'new title';
-    updatedBookmarks[3].title = 'new title';
+    const bookmarks = [ bookmark, newBookmarks[4] ];
+    const newestBookmarks = Object.assign({}, updatedBookmarks, { 4 : newBookmarks[4]});
+    newestBookmarks[3].title = 'new title';
     expect(
-      reducers.bookmarks(allBookmarks, { type: 'CREATE_OR_UPDATE_BOOKMARK', bookmark })
-    ).toEqual(updatedBookmarks);
+      reducers.bookmarks(allBookmarks, { type: 'CREATE_OR_UPDATE_BOOKMARKS', bookmarks })
+    ).toEqual(newestBookmarks);
   })
 
   it('should handle DELETE_BOOKMARK', () => {

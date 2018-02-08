@@ -33,17 +33,25 @@ describe('actions', () => {
     });
   })
 
-  describe('createOrUpdateBookmark', () => {
+  describe('createOrUpdateBookmarks', () => {
     const store = mockStore(testState);
     const storeActions = store.getActions();
     const bookmark = { id: 5, title: 'new bookmark' };
+    const bookmarks = [{ id: 6, title: 'newer bookmark' }, { id: 7, title: 'newest bookmark' }];
 
-    store.dispatch(actions.createOrUpdateBookmark(bookmark))
+    store.dispatch(actions.createOrUpdateBookmarks(bookmark))
 
     it('should create an action to create or update a bookmark object', () => {
-      const createOrUpdateAction = { type: 'CREATE_OR_UPDATE_BOOKMARK', bookmark };
+      const createOrUpdateAction = { type: 'CREATE_OR_UPDATE_BOOKMARKS', bookmarks: [bookmark] };
       expect(storeActions[0]).toEqual(createOrUpdateAction)
     });
+
+    store.dispatch(actions.createOrUpdateBookmarks(bookmarks))
+
+    it('should create an action to create or update all bookmark objects that are passed in', () => {
+      const createOrUpdateMultiAction = { type: 'CREATE_OR_UPDATE_BOOKMARKS', bookmarks };
+      expect(storeActions[1]).toEqual(createOrUpdateMultiAction)
+    })
   })
 
   describe('createOrUpdateTags', () => {

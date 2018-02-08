@@ -27,7 +27,7 @@ describe('aliases', () => {
 
     it('should create an action to create or update a bookmark', () => {
       const newBookmark = Object.assign({}, bookmark, { tags: tagsToAdd } )
-      const createOrUpdateBookmarkAction = { type: 'CREATE_OR_UPDATE_BOOKMARK', bookmark: newBookmark };
+      const createOrUpdateBookmarkAction = { type: 'CREATE_OR_UPDATE_BOOKMARKS', bookmarks: [newBookmark] };
       expect(storeActions[1]).toEqual(createOrUpdateBookmarkAction)
     });
   })
@@ -127,15 +127,13 @@ describe('aliases', () => {
     store.dispatch(aliases.removeTag({ id: 3 }));
 
     it('should create an action to update each associated bookmark to not have the tag id', () => {
-      const updateBookmarkAction = { type: 'CREATE_OR_UPDATE_BOOKMARK', bookmark: { id: 1, title: 'bookmark', tags: [] } };
-      const updateBookmarkAction2 = { type: 'CREATE_OR_UPDATE_BOOKMARK', bookmark: { id: 2, title: 'other bookmark', tags: [ 4 ] } };
+      const updateBookmarkAction = { type: 'CREATE_OR_UPDATE_BOOKMARKS', bookmarks: [{ id: 1, title: 'bookmark', tags: [] }, { id: 2, title: 'other bookmark', tags: [ 4 ] }] };
       expect(storeActions[0]).toEqual(updateBookmarkAction);
-      expect(storeActions[1]).toEqual(updateBookmarkAction2);
     });
 
     it('should create an action to delete the tag from the store', () => {
       const deleteTagAction = { type: 'DELETE_TAG', id: 3 };
-      expect(storeActions[2]).toEqual(deleteTagAction);
+      expect(storeActions[1]).toEqual(deleteTagAction);
     });
   })
 
@@ -153,7 +151,7 @@ describe('aliases', () => {
     });
 
     it('should create an action to update a bookmark', () => {
-      const createOrUpdateBookmarkAction = { type: 'CREATE_OR_UPDATE_BOOKMARK', bookmark };
+      const createOrUpdateBookmarkAction = { type: 'CREATE_OR_UPDATE_BOOKMARKS', bookmarks: [bookmark] };
       expect(storeActions[1]).toEqual(createOrUpdateBookmarkAction)
     });
   })
