@@ -209,3 +209,23 @@ function formatRows (sheet, arrayOfObjects) {
 
   return { values };
 }
+
+export function getRow (sheet, index, id) {
+  chrome.identity.getAuthToken({ interactive: false }, (token) => {
+    if (token) {
+      let url = `https://sheets.googleapis.com/v4/spreadsheets/${id}/values/${sheet}!A${index+2}%3AH${index+2}?valueRenderOption=UNFORMATTED_VALUE&key=${api_key}`;
+      let xhr = new XMLHttpRequest();
+      xhr.responseType = 'json';
+      xhr.onreadystatechange = event => {
+        if (xhr.readyState == 4 && xhr.status == 200) console.log(xhr.response)
+      }
+      xhr.open('GET', url);
+      xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+      xhr.send();
+    }
+    else {
+      let message = chrome.runtime.lastError ? chrome.runtime.lastError.message : "";
+      console.error({ status: "Not signed into Chrome, network error or no permission.\n" + message });
+    }
+  });
+}
