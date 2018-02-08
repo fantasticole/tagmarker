@@ -14,9 +14,8 @@ Enzyme.configure({ adapter: new Adapter() });
 
 function bookmarkListSetup (filteredBookmarks) {
   const props = {
-    ascending: storeState.sort.bookmarks.ascending,
+    bookmarks: storeState.bookmarks,
     filteredBookmarks,
-    sortBy: storeState.sort.bookmarks.sortBy,
   }
 
   const enzymeWrapper = mount(
