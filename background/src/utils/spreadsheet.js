@@ -4,6 +4,9 @@ const newSpreadsheet = {
  "sheets": [
   {
    "properties": {
+    "gridProperties": {
+     "frozenRowCount": 1
+    },
     "title": "tags"
    },
    "data": [
@@ -50,10 +53,13 @@ const newSpreadsheet = {
       }
      ]
     }
-   ]
+   ],
   },
   {
    "properties": {
+    "gridProperties": {
+     "frozenRowCount": 1
+    },
     "title": "bookmarks"
    },
    "data": [
@@ -95,7 +101,7 @@ const newSpreadsheet = {
       }
      ]
     }
-   ]
+   ],
   }
  ],
  "properties": {
@@ -108,7 +114,7 @@ export function addRows (sheet, data, id) {
 
   chrome.identity.getAuthToken({ interactive: false }, (token) => {
     if (token) {
-      let url = `https://sheets.googleapis.com/v4/spreadsheets/${id}/values/${sheet}!A1:append?valueInputOption=USER_ENTERED&key=${api_key}`;
+      let url = `https://sheets.googleapis.com/v4/spreadsheets/${id}/values/${sheet}!A1:append?valueInputOption=RAW&key=${api_key}`;
       let xhr = new XMLHttpRequest();
       xhr.responseType = 'json';
       xhr.onreadystatechange = event => {
@@ -172,28 +178,28 @@ export function exists (id) {
   })
 }
 
-function formatRows (type, arrayOfObjects) {
+function formatRows (sheet, arrayOfObjects) {
   let values = arrayOfObjects.map(obj => {
     let arr = [];
 
     // push objects in specific order
-    if (type === 'tags') {
+    if (sheet === 'tags') {
       arr.push(
-        obj.bookmarks.toString(),
+        obj.bookmarks.join(','),
         obj.dateAdded,
         obj.dateGroupModified,
         obj.id,
         obj.parentId,
-        obj.parents.toString(),
+        obj.parents.join(','),
         obj.title
       )
     }
-    else if (type === 'bookmarks') {
+    else if (sheet === 'bookmarks') {
       arr.push(
         obj.dateAdded,
         obj.id,
         obj.parentId,
-        obj.tags.toString(),
+        obj.tags.join(','),
         obj.title,
         obj.url
       )
