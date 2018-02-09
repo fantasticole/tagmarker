@@ -139,7 +139,7 @@ chrome.bookmarks.onChanged.addListener((id, data) => {
     let tag = Object.assign({}, storeState.tags[id], data);
 
     // update the tag in the store
-    store.dispatch(createOrUpdateTags([tag]));
+    store.dispatch(createOrUpdateTags(tag));
   }
 });
 

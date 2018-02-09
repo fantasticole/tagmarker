@@ -36,7 +36,7 @@ export function createFolder (originalAction) {
         };
 
     // updates tags
-    return dispatch(createOrUpdateTags([newTag]));
+    return dispatch(createOrUpdateTags(newTag));
   }
 }
 
