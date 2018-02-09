@@ -1,4 +1,5 @@
 import { api_key } from '../../../api_key';
+import store from '../store';
 
 const newSpreadsheet = {
  "sheets": [
@@ -165,6 +166,42 @@ export function create () {
   })
 }
 
+export function deleteRow (sheet, index) {
+  let { bookmarksSheet, id, tagsSheet } = store.getState().spreadsheet;
+
+  const request = {
+    requests: [
+      {
+        deleteDimension: {
+          range: {
+            sheetId: (sheet === 'tags' ? tagsSheet : bookmarksSheet),
+            dimension: 'ROWS',
+            startIndex: index,
+            endIndex: index + 1
+          }
+        }
+      }
+    ]
+  };
+
+  chrome.identity.getAuthToken({ interactive: false }, (token) => {
+    if (token) {
+      let url = `https://sheets.googleapis.com/v4/spreadsheets/${id}:batchUpdate?fields=replies%2CspreadsheetId%2CupdatedSpreadsheet&key=${api_key}`;
+      let xhr = new XMLHttpRequest();
+      xhr.onreadystatechange = event => {
+        if (xhr.readyState == 4 && xhr.status !== 200) console.error(xhr.response)
+      }
+      xhr.open('POST', url);
+      xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+      xhr.send(JSON.stringify(request));
+    }
+    else {
+      let message = chrome.runtime.lastError ? chrome.runtime.lastError.message : "";
+      console.error({ status: "Not signed into Chrome, network error or no permission.\n" + message });
+    }
+  });
+}
+
 // TODO: check if file is in the trash
 // can still be updated there though
 export function exists (id) {
@@ -221,7 +258,9 @@ function formatRows (sheet, arrayOfObjects) {
   return { values };
 }
 
-export function getRow (sheet, index, id) {
+export function getRow (sheet, index) {
+  let { id } = store.getState().spreadsheet;
+
   chrome.identity.getAuthToken({ interactive: false }, (token) => {
     if (token) {
       let url = `https://sheets.googleapis.com/v4/spreadsheets/${id}/values/${sheet}!A${index+2}%3AH${index+2}?valueRenderOption=UNFORMATTED_VALUE&key=${api_key}`;
