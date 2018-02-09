@@ -135,12 +135,23 @@ export function create () {
   return new Promise((resolve, reject) => {
     chrome.identity.getAuthToken({ interactive: true }, (token) => {
       if (token) {
-        let url = `https://sheets.googleapis.com/v4/spreadsheets?fields=spreadsheetId%2CspreadsheetUrl&key=${api_key}`;
+        let url = `https://sheets.googleapis.com/v4/spreadsheets?fields=sheets%2CspreadsheetId%2CspreadsheetUrl&key=${api_key}`;
         let xhr = new XMLHttpRequest();
         xhr.responseType = 'json';
         xhr.onreadystatechange = event => {
           // when we have the response, pass it to the resolve function
-          if (xhr.readyState == 4 && xhr.status == 200) resolve(xhr.response);
+          if (xhr.readyState == 4 && xhr.status == 200) {
+            let tagsSheet = xhr.response.sheets.find(sheet => sheet.properties.title === 'tags'),
+                bookmarksSheet = xhr.response.sheets.find(sheet => sheet.properties.title === 'bookmarks'),
+                // gather spreadsheet data
+                spreadsheet = {
+                  id: xhr.response.spreadsheetId,
+                  bookmarksSheet: bookmarksSheet.properties.sheetId,
+                  tagsSheet: tagsSheet.properties.sheetId,
+                }
+
+            resolve(spreadsheet);
+          }
         }
         xhr.open('POST', url);
         xhr.setRequestHeader('Authorization', 'Bearer ' + token);

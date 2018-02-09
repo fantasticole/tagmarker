@@ -15,27 +15,24 @@ wrapStore(store, {
   portName: 'tagmarker',
 });
 
-let storeData;
-
 // SET UP THE STORE
 // get all bookmarks from chrome
 chrome.bookmarks.getTree(arr => {
   let data = getBookmarksAndFolders(arr, { bookmarks: {}, tags: {}, });
-  storeData = data;
   // initialize data in the store
   store.dispatch(initialize(data));
 });
 
 chrome.storage.sync.get('TagMarker', response => {
-  let spreadsheetId = response.TagMarker;
+  let data = response.TagMarker;
 
   // if we have a spreadsheet id
-  if (spreadsheetId) {
+  if (data) {
     // make sure the spreadsheet exists
-    spreadsheet.exists(spreadsheetId)
+    spreadsheet.exists(data.id)
       .then(exists => {
         // if it does, set the spreadsheet id in the store
-        if (exists) store.dispatch({ type: 'SET_SPREADSHEET', spreadsheetId });
+        if (exists) store.dispatch({ type: 'SET_SPREADSHEET', data });
         // otherwise, create one
         else createSpreadsheet()
       }, error => {
@@ -49,20 +46,21 @@ chrome.storage.sync.get('TagMarker', response => {
 function createSpreadsheet () {
   spreadsheet.create()
     .then(data => {
-      let { spreadsheetId } = data;
       // add it to the store
-      store.dispatch({ type: 'SET_SPREADSHEET', spreadsheetId });
-      chrome.storage.sync.set({'TagMarker': spreadsheetId}, () => {
+      store.dispatch({ type: 'SET_SPREADSHEET', data });
+      chrome.storage.sync.set({'TagMarker': data}, () => {
         if (chrome.runtime.lastError) {
           console.log("Error Storing: " + chrome.runtime.lastError);
         }
       });
 
-      return spreadsheetId;
+      return data.id;
     }, error => {
       console.error(error);
     })
     .then((id) => {
+      let storeData = store.getState();
+
       // add tag and bookmark data to the spreadsheet
       spreadsheet.addRows('bookmarks', Object.values(storeData.bookmarks), id);
       spreadsheet.addRows('tags', Object.values(storeData.tags), id);

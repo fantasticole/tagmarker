@@ -25,10 +25,10 @@ export function bookmarks (state = {}, action) {
   }
 };
 
-export function spreadsheetId (state = null, action) {
+export function spreadsheet (state = {}, action) {
   switch (action.type) {
     case 'SET_SPREADSHEET':
-      return action.spreadsheetId;
+      return action.data;
     default:
       return state;
   }
@@ -60,6 +60,6 @@ export function tags (state = {}, action) {
 
 export default combineReducers({
   bookmarks,
-  spreadsheetId,
+  spreadsheet,
   tags,
 });
