@@ -167,14 +167,15 @@ export function create () {
 }
 
 export function deleteRow (sheet, index) {
-  let { bookmarksSheet, id, tagsSheet } = store.getState().spreadsheet;
+  let { spreadsheet } = store.getState();
+  let url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheet.id}:batchUpdate?fields=replies%2CspreadsheetId%2CupdatedSpreadsheet&key=${api_key}`;
 
   const request = {
     requests: [
       {
         deleteDimension: {
           range: {
-            sheetId: (sheet === 'tags' ? tagsSheet : bookmarksSheet),
+            sheetId: spreadsheet[`${sheet}Sheet`],
             dimension: 'ROWS',
             startIndex: index,
             endIndex: index + 1
@@ -184,22 +185,16 @@ export function deleteRow (sheet, index) {
     ]
   };
 
-  chrome.identity.getAuthToken({ interactive: false }, (token) => {
-    if (token) {
-      let url = `https://sheets.googleapis.com/v4/spreadsheets/${id}:batchUpdate?fields=replies%2CspreadsheetId%2CupdatedSpreadsheet&key=${api_key}`;
-      let xhr = new XMLHttpRequest();
-      xhr.onreadystatechange = event => {
-        if (xhr.readyState == 4 && xhr.status !== 200) console.error(xhr.response)
-      }
-      xhr.open('POST', url);
-      xhr.setRequestHeader('Authorization', 'Bearer ' + token);
-      xhr.send(JSON.stringify(request));
+  newRequest(false, url, 'POST', (xhrOrError) => {
+    if (xhrOrError.xhr) {
+      let { xhr } = xhrOrError;
+
+      // when the request is done
+      if (xhr.readyState == 4 && xhr.status !== 200) console.error(xhr.response)
     }
-    else {
-      let message = chrome.runtime.lastError ? chrome.runtime.lastError.message : "";
-      console.error({ status: "Not signed into Chrome, network error or no permission.\n" + message });
-    }
-  });
+    else if (xhrOrError.error) console.error(xhrOrError.error);
+    else console.log({ xhrOrError });
+  }, null, request)
 }
 
 // TODO: check if file is in the trash
@@ -282,7 +277,7 @@ export function getRowIndex (sheet, endRange, bookmarkOrTagId) {
       }
     }
     else if (xhrOrError.error) console.error(xhrOrError.error);
-    else { console.log({ xhrOrError }); }
+    else console.log({ xhrOrError });
   }, 'json')
 }
 
