@@ -258,24 +258,47 @@ function formatRows (sheet, arrayOfObjects) {
   return { values };
 }
 
-export function getRow (sheet, index) {
+export function getRowIndex (sheet, endRange, bookmarkOrTagId) {
   let { id } = store.getState().spreadsheet;
+  let idColumn = sheet === 'bookmarks' ? 'B' : 'D';
+  let url = `https://sheets.googleapis.com/v4/spreadsheets/${id}/values/${sheet}!${idColumn}1%3A${idColumn}${endRange+1}?valueRenderOption=UNFORMATTED_VALUE&majorDimension=COLUMNS&key=${api_key}`;
 
-  chrome.identity.getAuthToken({ interactive: false }, (token) => {
-    if (token) {
-      let url = `https://sheets.googleapis.com/v4/spreadsheets/${id}/values/${sheet}!A${index+2}%3AH${index+2}?valueRenderOption=UNFORMATTED_VALUE&key=${api_key}`;
-      let xhr = new XMLHttpRequest();
-      xhr.responseType = 'json';
-      xhr.onreadystatechange = event => {
-        if (xhr.readyState == 4 && xhr.status == 200) console.log(xhr.response)
+  newRequest(false, url, 'GET', (xhrOrError) => {
+    if (xhrOrError.xhr) {
+      let { xhr } = xhrOrError;
+
+      // when the request is done
+      if (xhr.readyState == 4) {
+        // if it's successful
+        if (xhr.status == 200) {
+          // get the index of the row we're looking for
+          let rowIndex = xhr.response.values[0].findIndex(id => id === bookmarkOrTagId);
+          // add one to account for title column
+          rowIndex++;
+          console.log({rowIndex})
+        }
+        // otherwise, log the error to the console
+        else { console.error(xhr.response.error) }
       }
-      xhr.open('GET', url);
+    }
+    else if (xhrOrError.error) console.error(xhrOrError.error);
+    else { console.log({ xhrOrError }); }
+  }, 'json')
+}
+
+function newRequest (interactive, url, type, callback, responseType, data) {
+  chrome.identity.getAuthToken({ interactive }, (token) => {
+    if (token) {
+      let xhr = new XMLHttpRequest();
+      if (responseType) xhr.responseType = 'json';
+      xhr.onreadystatechange = event => { callback({ xhr }); }
+      xhr.open(type, url);
       xhr.setRequestHeader('Authorization', 'Bearer ' + token);
-      xhr.send();
+      data ? xhr.send(JSON.stringify(data)) : xhr.send();
     }
     else {
       let message = chrome.runtime.lastError ? chrome.runtime.lastError.message : "";
-      console.error({ status: "Not signed into Chrome, network error or no permission.\n" + message });
+      callback({ error: "Not signed into Chrome, network error or no permission.\n" + message });
     }
   });
 }
