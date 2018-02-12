@@ -201,23 +201,18 @@ export function deleteRow (sheet, index) {
 // can still be updated there though
 export function exists (id) {
   return new Promise((resolve, reject) => {
-    chrome.identity.getAuthToken({ interactive: true }, (token) => {
-      if (token) {
-        let url = `https://sheets.googleapis.com/v4/spreadsheets/${id}?key=${api_key}`;
-        let xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = event => {
-          if (xhr.status == 200) resolve(true);
-          else if (xhr.status == 404) resolve(false);
-        }
-        xhr.open('GET', url);
-        xhr.setRequestHeader('Authorization', 'Bearer ' + token);
-        xhr.send();
+    let url = `https://sheets.googleapis.com/v4/spreadsheets/${id}?key=${api_key}`;
+
+    newRequest(true, url, 'GET', (xhrOrError) => {
+      if (xhrOrError.xhr) {
+        let { xhr } = xhrOrError;
+
+        if (xhr.status == 200) resolve(true);
+        else if (xhr.status == 404) resolve(false);
       }
-      else {
-        let message = chrome.runtime.lastError ? chrome.runtime.lastError.message : "";
-        reject({ status: "Not signed into Chrome, network error or no permission.\n" + message });
-      }
-    });
+      else if (xhrOrError.error) reject(xhrOrError.error);
+      else reject({ xhrOrError });
+    })
   })
 }
 
