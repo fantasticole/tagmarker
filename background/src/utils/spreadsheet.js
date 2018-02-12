@@ -255,6 +255,7 @@ function formatRows (sheet, arrayOfObjects) {
 
 export function getRowIndex (sheet, endRange, bookmarkOrTagId) {
   let { id } = store.getState().spreadsheet;
+  // get the column that holds the bookmark or tag ids
   let idColumn = sheet === 'bookmarks' ? 'B' : 'D';
   let url = `https://sheets.googleapis.com/v4/spreadsheets/${id}/values/${sheet}!${idColumn}1%3A${idColumn}${endRange+1}?valueRenderOption=UNFORMATTED_VALUE&majorDimension=COLUMNS&key=${api_key}`;
 
@@ -268,8 +269,6 @@ export function getRowIndex (sheet, endRange, bookmarkOrTagId) {
         if (xhr.status == 200) {
           // get the index of the row we're looking for
           let rowIndex = xhr.response.values[0].findIndex(id => id === bookmarkOrTagId);
-          // add one to account for title column
-          rowIndex++;
           console.log({rowIndex})
         }
         // otherwise, log the error to the console
