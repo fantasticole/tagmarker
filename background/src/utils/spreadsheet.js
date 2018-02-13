@@ -215,12 +215,8 @@ export function exists (id) {
 
           // use tag and bookmark counts to get data within that range
           getData(sheetData, id)
-            // format that data
-            .then(tagsAndBookmarks => {
-              console.log({tagsAndBookmarks});
-            });
-
-          resolve(true);
+            // format and return that data
+            .then(tagsAndBookmarks => resolve(formatObjects(tagsAndBookmarks)));
         }
         else if (xhr.status == 404) resolve();
       }
@@ -228,6 +224,39 @@ export function exists (id) {
       else reject({ xhrOrError });
     }, 'json')
   })
+}
+
+function formatObjects ({ tags, bookmarks }) {
+  let formatted = { tags: {}, bookmarks: {} };
+
+  // format the tags
+  tags.forEach(tag => {
+    formatted.tags[tag[3]] = {
+      // if bookmarks isn't an empty string, split the ids at the commas
+      bookmarks: tag[0] ? tag[0].split(',') : [],
+      dateAdded: Number(tag[1]),
+      dateGroupModified: Number(tag[2]),
+      id: tag[3],
+      parentId: tag[4],
+      // if parents isn't an empty string, split the ids at the commas
+      parents: tag[5] ? tag[5].split(',') : [],
+      title: tag[6],
+    }
+  })
+  // format the bookmarks
+  bookmarks.forEach(bookmark => {
+    formatted.bookmarks[bookmark[1]] = {
+      dateAdded: Number(bookmark[0]),
+      id: bookmark[1],
+      parentId: bookmark[2],
+      // if tags isn't an empty string, split the ids at the commas
+      tags: bookmark[3] ? bookmark[3].split(',') : [],
+      title: bookmark[4],
+      url: bookmark[5],
+    }
+  })
+
+  return formatted;
 }
 
 function formatRows (sheet, arrayOfObjects) {
@@ -263,7 +292,7 @@ function formatRows (sheet, arrayOfObjects) {
 }
 
 function getData (data, id) {
-  let url = `https://sheets.googleapis.com/v4/spreadsheets/${id}/values:batchGet?ranges=tags!A1%3AG${data.tags}&ranges=bookmarks!A1%3AF${data.bookmarks}&key=${api_key}`;
+  let url = `https://sheets.googleapis.com/v4/spreadsheets/${id}/values:batchGet?ranges=tags!A2%3AG${data.tags}&ranges=bookmarks!A2%3AF${data.bookmarks}&key=${api_key}`;
 
   return new Promise((resolve, reject) => {
     newRequest(false, url, 'GET', (xhrOrError) => {
