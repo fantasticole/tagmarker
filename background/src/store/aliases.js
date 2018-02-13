@@ -161,7 +161,10 @@ export function updateBookmark (originalAction) {
 
   return (dispatch, getState) => {
     let { bookmarks, tags } = getState(),
-        oldTags = bookmarks[bookmark.id].tags,
+        oldBookmark = bookmarks[bookmark.id],
+        titleChanged = oldBookmark.title !== bookmark.title,
+        urlChanged = oldBookmark.url !== bookmark.url,
+        oldTags = oldBookmark.tags,
         // figure out which tags are being added
         tagsToAdd = bookmark.tags.filter(t => (!oldTags.includes(t))),
         // and which are being deleted
@@ -178,6 +181,14 @@ export function updateBookmark (originalAction) {
             return allTags.find(tag => tag.title === idOrTitle).id;
           }
         });
+
+    // if the title or url changed
+    if ( titleChanged || urlChanged ) {
+      let { title, url } = bookmark;
+
+      // update them with chrome
+      chrome.bookmarks.update(bookmark.id, { title, url });
+    }
 
     bookmark.tags = tagIds;
     // update the spreadsheet
