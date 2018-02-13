@@ -158,32 +158,39 @@ export function create () {
   })
 }
 
-export function deleteRow (sheet, index) {
+export function deleteRow (sheet, endRange, id) {
   let { spreadsheet } = store.getState();
   let url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheet.id}:batchUpdate?fields=replies%2CspreadsheetId%2CupdatedSpreadsheet&key=${api_key}`;
 
-  const request = {
-    requests: [
-      {
-        deleteDimension: {
-          range: {
-            sheetId: spreadsheet[`${sheet}Sheet`],
-            dimension: 'ROWS',
-            startIndex: index,
-            endIndex: index + 1
-          }
-        }
-      }
-    ]
-  };
 
-  newRequest(false, url, 'POST', (xhrOrError) => {
-    if (xhrOrError.xhr) {
-      // if the request is unsuccessful, throw an error
-      if (xhrOrError.xhr.status !== 200) console.error(xhr.response)
-    }
-    else console.error(xhrOrError);
-  }, null, request)
+  getRowIndexes(sheet, endRange, [id])
+    .then(indexes => {
+      let { index } = indexes.find(index => index.id === id);
+      let request = {
+        requests: [
+          {
+            deleteDimension: {
+              range: {
+                sheetId: spreadsheet[`${sheet}Sheet`],
+                dimension: 'ROWS',
+                // zero-indexed means we need to subtract one
+                startIndex: index - 1,
+                endIndex: index
+              }
+            }
+          }
+        ]
+      };
+
+      newRequest(false, url, 'POST', (xhrOrError) => {
+        if (xhrOrError.xhr) {
+          // if the request is unsuccessful, throw an error
+          if (xhrOrError.xhr.status !== 200) console.error(xhr.response)
+        }
+        else console.error(xhrOrError);
+      }, null, request)
+    })
+    .catch(err => console.error(err));
 }
 
 // TODO: check if file is in the trash
