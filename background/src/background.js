@@ -134,7 +134,7 @@ chrome.bookmarks.onChanged.addListener((id, data) => {
         bookmarkCount = Object.keys(bookmarks).length,
         bookmark = Object.assign({}, bookmarks[id], data);
 
-    spreadsheet.update(bookmark, 'bookmarks', bookmarkCount, id)
+    spreadsheet.update(bookmark, 'bookmarks', bookmarkCount)
     // update the bookmark in the store
     store.dispatch(createOrUpdateBookmarks(bookmark));
   }
@@ -144,7 +144,7 @@ chrome.bookmarks.onChanged.addListener((id, data) => {
         tagCount = Object.keys(tags).length,
         tag = Object.assign({}, tags[id], data);
 
-    spreadsheet.update(tag, 'tags', tagCount, id)
+    spreadsheet.update(tag, 'tags', tagCount)
     // update the tag in the store
     store.dispatch(createOrUpdateTags(tag));
   }

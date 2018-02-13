@@ -303,11 +303,12 @@ function getData (data, id) {
   })
 }
 
-export function getRowIndex (sheet, endRange, bookmarkOrTagId) {
-  let { id } = store.getState().spreadsheet;
+export function getRowIndexes (sheet, endRange, arrayOfIds) {
+  let { spreadsheet } = store.getState();
   // get the column that holds the bookmark or tag ids
   let idColumn = sheet === 'bookmarks' ? 'B' : 'D';
-  let url = `https://sheets.googleapis.com/v4/spreadsheets/${id}/values/${sheet}!${idColumn}1%3A${idColumn}${endRange+1}?valueRenderOption=UNFORMATTED_VALUE&majorDimension=COLUMNS&key=${api_key}`;
+  // add one to endRange to account for title row
+  let url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheet.id}/values/${sheet}!${idColumn}1%3A${idColumn}${endRange+1}?valueRenderOption=UNFORMATTED_VALUE&majorDimension=COLUMNS&key=${api_key}`;
 
   return new Promise((resolve, reject) => {
     newRequest(false, url, 'GET', (xhrOrError) => {
@@ -316,8 +317,12 @@ export function getRowIndex (sheet, endRange, bookmarkOrTagId) {
 
         // if it's successful
         if (xhr.status == 200) {
-          // get the index of the row we're looking for
-          resolve(xhr.response.values[0].findIndex(id => id === bookmarkOrTagId));
+          // return the index for the corresponding the row id
+          resolve(arrayOfIds.map(id => ({
+            id,
+            // add one to account for zero-indexing in the array
+            index: xhr.response.values[0].findIndex(rowId => rowId === id) + 1,
+          })));
         }
         // otherwise, log the error to the console
         else { reject(xhr.response.error) }
@@ -347,23 +352,32 @@ function newRequest (interactive, url, type, callback, responseType, data) {
   });
 }
 
-export function update (data, sheet, endRange, bookmarkOrTagId) {
+export function update (itemsToUpdate, sheet, endRange) {
   let { id } = store.getState().spreadsheet;
-  // format row for PUT request
-  let formattedRow = formatRows(sheet, [ data ])
+  // if we only have one item to update, make it an arry
+  if (!Array.isArray(itemsToUpdate)) itemsToUpdate = [ itemsToUpdate ];
 
-  getRowIndex(sheet, endRange, bookmarkOrTagId)
-    .then(index => {
-      // index is zero-indexed, so we need to add one
-      let url = `https://sheets.googleapis.com/v4/spreadsheets/${id}/values/${sheet}!A${index+1}?valueInputOption=RAW&key=${api_key}`;
+  getRowIndexes(sheet, endRange, itemsToUpdate.map(row => row.id))
+    .then(indexes => {
+      let url = `https://sheets.googleapis.com/v4/spreadsheets/${id}/values:batchUpdate?key=${api_key}`;
+      // format data for POST request
+      let updates = {
+       "data": itemsToUpdate.map(item => {
+          let values = formatRows(sheet, [ item ]);
+          let { index } = indexes.find(index => index.id === item.id);
 
-      newRequest(false, url, 'PUT', (xhrOrError) => {
+          return Object.assign({}, values, { range: `${sheet}!A${index}` });
+        }),
+       "valueInputOption": "RAW"
+      }
+
+      newRequest(false, url, 'POST', (xhrOrError) => {
         if (xhrOrError.xhr) {
           // if the request is unsuccessful, throw an error
           if (xhrOrError.xhr.status !== 200) console.error(xhr.response)
         }
         else console.error(xhrOrError);
-      }, null, formattedRow)
+      }, null, updates)
     })
     .catch(err => console.error(err));
 }
