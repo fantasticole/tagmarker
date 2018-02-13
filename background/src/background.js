@@ -152,23 +152,29 @@ chrome.bookmarks.onChanged.addListener((id, data) => {
 
 // listen for removed bookmarks
 chrome.bookmarks.onRemoved.addListener((id, data) => {
-  // node includes all children, if any
-  let { node, parentId } = data;
+  // wait in case it's being deleted from the extension
+  setTimeout(() => {
+    // node includes all children, if any
+    let { node, parentId } = data;
+    let storeState = store.getState();
 
-  // if there's a url, it's a bookmark
-  if (node.url) store.dispatch({ type: 'REMOVE_BOOKMARK', id });
-  // otherwise, it's a tag
-  else {
-    // get all folders and tags to be removed
-    let toRemove = getChildren(node, { bookmarks: [], tags: [] }),
-        { bookmarks, tags } = toRemove;
-
-    bookmarks.forEach(id => {
+    // if there's a url, it's a bookmark (if it exists, delete it)
+    if (node.url && storeState.bookmarks[id]) {
       store.dispatch({ type: 'REMOVE_BOOKMARK', id });
-    })
+    }
+    // otherwise, it's a tag (if it exists, delete it)
+    else if (storeState.tags[id]) {
+      // get all folders and tags to be removed
+      let toRemove = getChildren(node, { bookmarks: [], tags: [] }),
+          { bookmarks, tags } = toRemove;
 
-    tags.forEach(id => {
-      store.dispatch({ type: 'REMOVE_TAG', id });
-    })
-  }
+      bookmarks.forEach(id => {
+        store.dispatch({ type: 'REMOVE_BOOKMARK', id });
+      })
+
+      tags.forEach(id => {
+        store.dispatch({ type: 'REMOVE_TAG', id });
+      })
+    }
+  }, 250)
 });
