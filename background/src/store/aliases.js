@@ -13,8 +13,8 @@ export function addBookmark (originalAction) {
     bookmark.tags = idsToAdd;
     // update the spreadsheet
     spreadsheet.addRows('bookmarks', bookmark);
-    spreadsheet.addRows('tags', tagsToCreate);
-    spreadsheet.update(tagsToUpdate, 'tags', Object.keys(tags).length);
+    if (tagsToCreate.length) spreadsheet.addRows('tags', tagsToCreate);
+    if (tagsToUpdate.length) spreadsheet.update(tagsToUpdate, 'tags', Object.keys(tags).length);
     // update the store
     dispatch(createOrUpdateTags(allTags));
     return dispatch(createOrUpdateBookmarks(bookmark));
