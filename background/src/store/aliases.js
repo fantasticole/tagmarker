@@ -118,6 +118,9 @@ export function removeBookmark (originalAction) {
         tagsToDelete = bookmark.tags,
         { allTags } = getTagsToUpdate([], tagsToDelete, tags, id);
 
+    // update the spreadsheet
+    spreadsheet.deleteRow('bookmarks', Object.keys(bookmarks).length, id);
+    spreadsheet.update(allTags, 'tags', Object.keys(tags).length);
     // update the store
     dispatch(createOrUpdateTags(allTags));
     // delete bookmark from store
@@ -143,6 +146,9 @@ export function removeTag (originalAction) {
           return Object.assign({}, bookmark, updatedTags);
         });
 
+    // update the spreadsheet
+    spreadsheet.deleteRow('tags', Object.keys(tags).length, id);
+    spreadsheet.update(bookmarksToUpdate, 'bookmarks', Object.keys(bookmarks).length);
     // remove the tag id from each bookmark associated with it
     dispatch(createOrUpdateBookmarks(bookmarksToUpdate));
     // delete tag from store
