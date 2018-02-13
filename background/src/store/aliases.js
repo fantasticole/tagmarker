@@ -6,16 +6,17 @@ export function addBookmark (originalAction) {
 
   return (dispatch, getState) => {
     let { tags } = getState(),
-        tagsToUpdate = getTagsToUpdate(tagsToAdd, [], tags, bookmark.id),
+        { allTags, tagsToCreate, tagsToUpdate } = getTagsToUpdate(tagsToAdd, [], tags, bookmark.id),
         // get ids to set on bookmark
-        idsToAdd = tagsToUpdate.map(tag => tag.id);
+        idsToAdd = allTags.map(tag => tag.id);
 
     bookmark.tags = idsToAdd;
     // update the spreadsheet
     spreadsheet.addRows('bookmarks', bookmark);
+    spreadsheet.addRows('tags', tagsToCreate);
     spreadsheet.update(tagsToUpdate, 'tags', Object.keys(tags).length);
     // update the store
-    dispatch(createOrUpdateTags(tagsToUpdate));
+    dispatch(createOrUpdateTags(allTags));
     return dispatch(createOrUpdateBookmarks(bookmark));
   }
 }
@@ -64,7 +65,7 @@ export function createTag (title, tags, bookmarkId) {
 }
 
 export function getTagsToUpdate (tagsToAdd, tagsToDelete, allTags, bookmarkId) {
-  let tagsToUpdate = [];
+  let tags = { tagsToUpdate: [], tagsToCreate: [] };
 
   // add bookmark to each tag
   tagsToAdd.forEach(id => {
@@ -73,11 +74,15 @@ export function getTagsToUpdate (tagsToAdd, tagsToDelete, allTags, bookmarkId) {
     // if the tag exists, add the bookmark id to its bookmarks
     if (updatedTag.hasOwnProperty('title')) {
       updatedTag.bookmarks = [...updatedTag.bookmarks, bookmarkId];
+      // add tag to list of tags to update
+      tags.tagsToUpdate.push(updatedTag);
     }
     // otherwise, create the tag and add the id on creation
-    else updatedTag = createTag(id, allTags, bookmarkId);
-    // add tag to list of tags to update
-    tagsToUpdate.push(updatedTag);
+    else {
+      updatedTag = createTag(id, allTags, bookmarkId);
+      // add tag to list of tags to create
+      tags.tagsToCreate.push(updatedTag);
+    }
   });
 
   tagsToDelete.forEach(id => {
@@ -89,10 +94,12 @@ export function getTagsToUpdate (tagsToAdd, tagsToDelete, allTags, bookmarkId) {
     // set the new bookmarks
     updatedTag.bookmarks = newBookmarks;
     // add tag to list of tags to update
-    tagsToUpdate.push(updatedTag);
+    tags.tagsToUpdate.push(updatedTag);
   });
 
-  return tagsToUpdate;
+  // get all tags
+  tags.allTags = [...tags.tagsToCreate, ...tags.tagsToUpdate];
+  return tags;
 }
 
 export function removeBookmark (originalAction) {
@@ -102,10 +109,10 @@ export function removeBookmark (originalAction) {
     let { bookmarks, tags } = getState(),
         bookmark = bookmarks[id],
         tagsToDelete = bookmark.tags,
-        tagsToUpdate = getTagsToUpdate([], tagsToDelete, tags, id);
+        { allTags } = getTagsToUpdate([], tagsToDelete, tags, id);
 
     // update the store
-    dispatch(createOrUpdateTags(tagsToUpdate));
+    dispatch(createOrUpdateTags(allTags));
     // delete bookmark from store
     return dispatch({ type: 'DELETE_BOOKMARK', id });
   }
@@ -147,7 +154,7 @@ export function updateBookmark (originalAction) {
         // and which are being deleted
         tagsToDelete = oldTags.filter(t => (!bookmark.tags.includes(t))),
         // get the tag objects for each to update
-        tagsToUpdate = getTagsToUpdate(tagsToAdd, tagsToDelete, tags, bookmark.id),
+        { allTags } = getTagsToUpdate(tagsToAdd, tagsToDelete, tags, bookmark.id),
         // get the newly created ids
         tagIds = bookmark.tags.map(idOrTitle => {
           // if the tag exists, return the id
@@ -155,12 +162,12 @@ export function updateBookmark (originalAction) {
           // otherwise it's a title
           else {
             // so find the newly created tag and return its id
-            return tagsToUpdate.find(tag => tag.title === idOrTitle).id;
+            return allTags.find(tag => tag.title === idOrTitle).id;
           }
         });
 
     bookmark.tags = tagIds;
-    dispatch(createOrUpdateTags(tagsToUpdate));
+    dispatch(createOrUpdateTags(allTags));
     return dispatch(createOrUpdateBookmarks(bookmark));
   }
 }
