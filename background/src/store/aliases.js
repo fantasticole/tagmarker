@@ -37,7 +37,9 @@ export function addTag (originalAction) {
           bookmarks: [],
         };
 
-    // updates tags
+    // update the spreadsheet
+    spreadsheet.addRows('tags', newTag);
+    // update the store
     return dispatch(createOrUpdateTags(newTag));
   }
 }
