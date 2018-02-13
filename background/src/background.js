@@ -130,15 +130,21 @@ chrome.bookmarks.onChanged.addListener((id, data) => {
 
   // if there's a url, it's a bookmark
   if (data.url) {
-    let bookmark = Object.assign({}, storeState.bookmarks[id], data);
+    let { bookmarks } = storeState,
+        bookmarkCount = Object.keys(bookmarks).length,
+        bookmark = Object.assign({}, bookmarks[id], data);
 
+    spreadsheet.update(bookmark, 'bookmarks', bookmarkCount, id)
     // update the bookmark in the store
     store.dispatch(createOrUpdateBookmarks(bookmark));
   }
   // otherwise, it's a folder
   else {
-    let tag = Object.assign({}, storeState.tags[id], data);
+    let { tags } = storeState,
+        tagCount = Object.keys(tags).length,
+        tag = Object.assign({}, tags[id], data);
 
+    spreadsheet.update(tag, 'tags', tagCount, id)
     // update the tag in the store
     store.dispatch(createOrUpdateTags(tag));
   }
