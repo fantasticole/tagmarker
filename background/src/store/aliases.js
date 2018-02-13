@@ -27,16 +27,23 @@ export function addTag (originalAction) {
   return (dispatch, getState) => {
     let { tags } = getState(),
         { dateAdded, dateGroupModified, id, parentId, title } = folder,
+        parentTag = tags[parentId],
         parents = [...tags[parentId].parents, parentId],
         newTag = {
           dateAdded,
           dateGroupModified,
           id,
           parentId,
-          parents,
           title,
           bookmarks: [],
         };
+
+    // if this folder is a child of the bookmarks bar or other bookmarks
+    if (parentTag && parentTag.title === ("Bookmarks Bar" || "Other Bookmarks")) {
+      // remove that parent folder's id from its 'parents' array
+      parents.splice(parents.indexOf(parentId), 1);
+    }
+    newTag.parents = parents;
 
     // update the spreadsheet
     spreadsheet.addRows('tags', newTag);
