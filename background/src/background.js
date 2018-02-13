@@ -2,9 +2,9 @@ import store from './store';
 import { wrapStore } from 'react-chrome-redux';
 
 import { createOrUpdateBookmarks, createOrUpdateTags, initialize } from './store/actions';
-import { createBookmark, createFolder } from './store/aliases';
+import { addBookmark, addTag } from './store/aliases';
 
-import addBookmark from './utils/addBookmark';
+import sendBookmarkData from './utils/sendBookmarkData';
 import checkDrawerStatus from './utils/checkDrawerStatus';
 import * as spreadsheet from './utils/spreadsheet';
 import getBookmarksAndFolders from './utils/getBookmarksAndFolders';
@@ -86,7 +86,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     });
   }
   // if the message is about adding a bookmark
-  else if (request.ref === 'add_bookmark') addBookmark();
+  else if (request.ref === 'add_bookmark') sendBookmarkData();
 });
 
 // listen for key commands
@@ -100,7 +100,7 @@ chrome.commands.onCommand.addListener(command => {
         // if it's closed, open it
         if (!drawerIsOpen) toggleDrawer(tabId);
         // add bookmark
-        addBookmark();
+        sendBookmarkData();
       });
   }
 });
@@ -116,11 +116,11 @@ chrome.bookmarks.onCreated.addListener((id, bookmarkOrFolder) => {
       // if the bookmark does not already exist (not created in extension)
       if (!storeState.bookmarks[id]) {
         // add it to the store
-        store.dispatch(createBookmark({ bookmark: bookmarkOrFolder, tagsToAdd: [ bookmarkOrFolder.parentId, ...storeState.tags[bookmarkOrFolder.parentId].parents ] }));
+        store.dispatch(addBookmark({ bookmark: bookmarkOrFolder, tagsToAdd: [ bookmarkOrFolder.parentId, ...storeState.tags[bookmarkOrFolder.parentId].parents ] }));
       }
     }
     // otherwise, it's a folder
-    else store.dispatch(createFolder({ folder: bookmarkOrFolder }));
+    else store.dispatch(addTag({ folder: bookmarkOrFolder }));
   }, 250)
 });
 

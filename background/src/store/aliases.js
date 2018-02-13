@@ -3,7 +3,7 @@ import {
   createOrUpdateTags,
 } from './actions';
 
-export function createBookmark (originalAction) {
+export function addBookmark (originalAction) {
   let { bookmark, tagsToAdd } = originalAction;
 
   return (dispatch, getState) => {
@@ -18,7 +18,7 @@ export function createBookmark (originalAction) {
   }
 }
 
-export function createFolder (originalAction) {
+export function addTag (originalAction) {
   let { folder } = originalAction;
 
   return (dispatch, getState) => {
@@ -162,8 +162,8 @@ export function updateBookmark (originalAction) {
 }
 
 export default {
-  'CREATE_BOOKMARK': createBookmark,
-  'CREATE_FOLDER': createFolder,
+  'ADD_BOOKMARK': addBookmark,
+  'ADD_TAG': addTag,
   'REMOVE_BOOKMARK': removeBookmark,
   'REMOVE_TAG': removeTag,
   'UPDATE_BOOKMARK': updateBookmark,

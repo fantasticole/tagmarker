@@ -1,4 +1,4 @@
-export default function addBookmark (bookmark) {
+export default function sendBookmarkData (bookmark) {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     let data = tabs[0];
 

@@ -7,14 +7,14 @@ const middlewares = [ thunk ];
 const mockStore = configureMockStore(middlewares);
 
 describe('aliases', () => {
-  describe('createBookmark', () => {
+  describe('addBookmark', () => {
     const store = mockStore(testState);
     const storeActions = store.getActions();
     const storeState = store.getState();
     const bookmark = { id: 5, title: 'bookmark' };
     const tagsToAdd = [ 3, 4 ];
 
-    store.dispatch(aliases.createBookmark({ bookmark, tagsToAdd }))
+    store.dispatch(aliases.addBookmark({ bookmark, tagsToAdd }))
 
     it('should create an action to create or update tags', () => {
       const tags = [
@@ -32,7 +32,7 @@ describe('aliases', () => {
     });
   })
 
-  describe('createFolder', () => {
+  describe('addTag', () => {
     const store = mockStore(testState);
     const storeActions = store.getActions();
     const storeState = store.getState();
@@ -44,7 +44,7 @@ describe('aliases', () => {
       title: 'title',
     };
 
-    store.dispatch(aliases.createFolder({ folder }))
+    store.dispatch(aliases.addTag({ folder }))
 
     it('should create an action to create a tag from a folder object', () => {
       const parentsList = storeState.tags[folder.parentId].parents;
