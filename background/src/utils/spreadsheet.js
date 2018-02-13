@@ -309,21 +309,22 @@ export function getRowIndex (sheet, endRange, bookmarkOrTagId) {
   let idColumn = sheet === 'bookmarks' ? 'B' : 'D';
   let url = `https://sheets.googleapis.com/v4/spreadsheets/${id}/values/${sheet}!${idColumn}1%3A${idColumn}${endRange+1}?valueRenderOption=UNFORMATTED_VALUE&majorDimension=COLUMNS&key=${api_key}`;
 
-  newRequest(false, url, 'GET', (xhrOrError) => {
-    if (xhrOrError.xhr) {
-      let { xhr } = xhrOrError;
+  return new Promise((resolve, reject) => {
+    newRequest(false, url, 'GET', (xhrOrError) => {
+      if (xhrOrError.xhr) {
+        let { xhr } = xhrOrError;
 
-      // if it's successful
-      if (xhr.status == 200) {
-        // get the index of the row we're looking for
-        let rowIndex = xhr.response.values[0].findIndex(id => id === bookmarkOrTagId);
-        console.log({rowIndex})
+        // if it's successful
+        if (xhr.status == 200) {
+          // get the index of the row we're looking for
+          resolve(xhr.response.values[0].findIndex(id => id === bookmarkOrTagId));
+        }
+        // otherwise, log the error to the console
+        else { reject(xhr.response.error) }
       }
-      // otherwise, log the error to the console
-      else { console.error(xhr.response.error) }
-    }
-    else console.error(xhrOrError);
-  }, 'json')
+      else reject(xhrOrError);
+    }, 'json')
+  });
 }
 
 function newRequest (interactive, url, type, callback, responseType, data) {
@@ -344,4 +345,25 @@ function newRequest (interactive, url, type, callback, responseType, data) {
       callback({ error: "Not signed into Chrome, network error or no permission.\n" + message });
     }
   });
+}
+
+export function update (data, sheet, endRange, bookmarkOrTagId) {
+  let { id } = store.getState().spreadsheet;
+  // format row for PUT request
+  let formattedRow = formatRows(sheet, [ data ])
+
+  getRowIndex(sheet, endRange, bookmarkOrTagId)
+    .then(index => {
+      // index is zero-indexed, so we need to add one
+      let url = `https://sheets.googleapis.com/v4/spreadsheets/${id}/values/${sheet}!A${index+1}?valueInputOption=RAW&key=${api_key}`;
+
+      newRequest(false, url, 'PUT', (xhrOrError) => {
+        if (xhrOrError.xhr) {
+          // if the request is unsuccessful, throw an error
+          if (xhrOrError.xhr.status !== 200) console.error(xhr.response)
+        }
+        else console.error(xhrOrError);
+      }, null, formattedRow)
+    })
+    .catch(err => console.error(err));
 }
