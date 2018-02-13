@@ -10,47 +10,50 @@
   * ~~Remove from array of tags on bookmark in store~~
   * ~~Remove bookmark id from tag's bookmarks array in store~~
   * Check to see if the folder should be deleted as well
-  * Update db
+  * ~~Update db~~
 * Delete bookmark functionality
   * ~~Remove from bookmarks object in store~~
   * Check to see if the chrome bookmark should be deleted as well
-* Add tag functionality
+* ~~Add tag functionality~~
   * ~~Create/import dropdown/autocomplete with existing tags~~
   * ~~Add to array of tags on bookmark in store~~
   * ~~Add bookmark id to tag's bookmarks array in store~~
-  * Update db
-* Edit bookmark name functionality
+  * ~~Update db~~
+* Edit bookmark functionality
   * ~~Update bookmark name in extension~~
-  * Update bookmark name in Chrome
+  * ~~Update bookmark name in Chrome~~
+  * Add notes
 * Add bookmark functionality
   * ~~Ask where new bookmark should be created~~
   * ~~Add bookmark to Chrome~~
   * ~~Get and save bookmark details on 'add' command~~
+  * ~~Update db~~
   * Check page for keywords as suggested tags
-* Listen for manually created bookmarks and folders
+* ~~Listen for manually created bookmarks and folders~~
   * ~~Create bookmark in extension for new bookmark~~
   * ~~Create tag in extension for new folder~~
-  * Ask for tags for new bookmarks
+  * ~~Ask for tags for new bookmarks~~
 * Listen for moved bookmarks and folders
   * update bookmark's tags
   * update tag's parents
 * Add "All tags" option
+  * ???
 * Batch tagging
   * Add or remove tags for multiple bookmarks at once
-* Figure out where to store all of this so it persists
-  * indexedDB?
-  * local storage?
-  * google drive?!
+* ~~Figure out where to store all of this so it persists~~
+  * ~~google drive!~~
 * Connect bookmarks
   * link them manually/by date
 * FEATURE REQUEST: Page previews?
   * on hover show screen rendering
 * Add context details to tags in select box
   * ~~bookmark count~~
+  * update bookmark count
   * Put parent folder name in parens after?
 * Add backup capability
-  * Download json file from settings page?
-  * Store all in google drive
+  * ~~Store all in google drive~~
+  * Add ability to create/duplicate spreadsheet
+  * Add ability to point extension to chosen spreadsheet
 * Toggle tag selection mode
   * ~~narrowing~~
   * concatting
@@ -67,6 +70,7 @@
   * ~~When one tag is selected, the only other tags that should show should be the ones that overlap.~~
 * ~~Add tag functionality~~
   * ~~Create new tag with custom id~~
+* Add ability to create a folder in the folder select
 
 
 ## Tag Storage
@@ -88,7 +92,7 @@ The storage should look like this:
 ```
 data.tags = {
   1: {
-    bookmarks: [ "123", "554", ... ],
+    bookmarks: [],
     dateAdded: 1329359260125
     dateGroupModified: 1481077695941
     id: "1",
@@ -116,13 +120,14 @@ data.bookmarks = {
     dateAdded: 1329359259993,
     id: "123",
     parentId: "14",
-    tags: ["3", "2", "1"],
+    tags: ["14", "3", "2"],
     title: "December 1st Assignment",
     url: "www.example.com"
   },
   "554": {
     id: "554",
-    tags: ["2", "1"]
+    parentId: "2",
+    tags: ["2"]
     title: "November 1st Assignment",
     ...
   },
