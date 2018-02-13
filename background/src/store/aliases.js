@@ -153,8 +153,8 @@ export function updateBookmark (originalAction) {
         tagsToAdd = bookmark.tags.filter(t => (!oldTags.includes(t))),
         // and which are being deleted
         tagsToDelete = oldTags.filter(t => (!bookmark.tags.includes(t))),
-        // get the tag objects for each to update
-        { allTags } = getTagsToUpdate(tagsToAdd, tagsToDelete, tags, bookmark.id),
+        // get the tag objects for each to update or create
+        { allTags, tagsToCreate, tagsToUpdate } = getTagsToUpdate(tagsToAdd, tagsToDelete, tags, bookmark.id),
         // get the newly created ids
         tagIds = bookmark.tags.map(idOrTitle => {
           // if the tag exists, return the id
@@ -167,6 +167,11 @@ export function updateBookmark (originalAction) {
         });
 
     bookmark.tags = tagIds;
+    // update the spreadsheet
+    spreadsheet.update(bookmark, 'bookmarks', Object.keys(bookmarks).length);
+    if (tagsToUpdate.length) spreadsheet.update(tagsToUpdate, 'tags', Object.keys(tags).length);
+    if (tagsToCreate.length) spreadsheet.addRows('tags', tagsToCreate);
+    // update the store
     dispatch(createOrUpdateTags(allTags));
     return dispatch(createOrUpdateBookmarks(bookmark));
   }
