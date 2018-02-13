@@ -1,7 +1,5 @@
-import {
-  createOrUpdateBookmarks,
-  createOrUpdateTags,
-} from './actions';
+import { createOrUpdateBookmarks, createOrUpdateTags } from './actions';
+import * as spreadsheet from '../utils/spreadsheet';
 
 export function addBookmark (originalAction) {
   let { bookmark, tagsToAdd } = originalAction;
@@ -13,6 +11,10 @@ export function addBookmark (originalAction) {
         idsToAdd = tagsToUpdate.map(tag => tag.id);
 
     bookmark.tags = idsToAdd;
+    // update the spreadsheet
+    spreadsheet.addRows('bookmarks', bookmark);
+    spreadsheet.update(tagsToUpdate, 'tags', Object.keys(tags).length);
+    // update the store
     dispatch(createOrUpdateTags(tagsToUpdate));
     return dispatch(createOrUpdateBookmarks(bookmark));
   }
