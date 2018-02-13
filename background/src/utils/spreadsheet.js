@@ -115,6 +115,10 @@ const newSpreadsheet = {
 }
 
 export function addRows (sheet, data, id) {
+  // if we only have one item to add, make it an arry
+  if (!Array.isArray(data)) data = [ data ];
+  // if we don't have an id, get it from the store
+  if (!id) id = store.getState().spreadsheet.id;
   let formattedRows = formatRows(sheet, data);
   let url = `https://sheets.googleapis.com/v4/spreadsheets/${id}/values/${sheet}!A1:append?valueInputOption=RAW&key=${api_key}`;
 
