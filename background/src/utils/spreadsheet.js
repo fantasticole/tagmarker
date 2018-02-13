@@ -116,25 +116,15 @@ const newSpreadsheet = {
 
 export function addRows (sheet, data, id) {
   let formattedRows = formatRows(sheet, data);
+  let url = `https://sheets.googleapis.com/v4/spreadsheets/${id}/values/${sheet}!A1:append?valueInputOption=RAW&key=${api_key}`;
 
-  chrome.identity.getAuthToken({ interactive: false }, (token) => {
-    if (token) {
-      let url = `https://sheets.googleapis.com/v4/spreadsheets/${id}/values/${sheet}!A1:append?valueInputOption=RAW&key=${api_key}`;
-      let xhr = new XMLHttpRequest();
-      xhr.responseType = 'json';
-      xhr.onreadystatechange = event => {
-        // if the request is unsuccessful, throw an error
-        if (xhr.status !== 200) console.error(xhr.response)
-      }
-      xhr.open('POST', url);
-      xhr.setRequestHeader('Authorization', 'Bearer ' + token);
-      xhr.send(JSON.stringify(formattedRows));
+  newRequest(false, url, 'POST', (xhrOrError) => {
+    if (xhrOrError.xhr) {
+      // if the request is unsuccessful, throw an error
+      if (xhrOrError.xhr.status !== 200) console.error(xhr.response)
     }
-    else {
-      let message = chrome.runtime.lastError ? chrome.runtime.lastError.message : "";
-      console.error({ status: "Not signed into Chrome, network error or no permission.\n" + message });
-    }
-  });
+    else console.error(xhrOrError);
+  }, 'json', formattedRows)
 }
 
 export function create () {
