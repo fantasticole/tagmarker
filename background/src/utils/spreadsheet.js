@@ -6,7 +6,9 @@ const newSpreadsheet = {
   {
    "properties": {
     "gridProperties": {
-     "frozenRowCount": 1
+     "columnCount": 7,
+     "frozenRowCount": 1,
+     "rowCount": 2
     },
     "title": "tags"
    },
@@ -59,7 +61,9 @@ const newSpreadsheet = {
   {
    "properties": {
     "gridProperties": {
-     "frozenRowCount": 1
+     "columnCount": 6,
+     "frozenRowCount": 1,
+     "rowCount": 2
     },
     "title": "bookmarks"
    },
@@ -201,12 +205,28 @@ export function exists (id) {
       if (xhrOrError.xhr) {
         let { xhr } = xhrOrError;
 
-        if (xhr.status == 200) resolve(true);
-        else if (xhr.status == 404) resolve(false);
+        if (xhr.readyState == 4 && xhr.status == 200) {
+          let sheetData = {};
+
+          // get row count to get ranges for tags and bookmarks
+          xhr.response.sheets.forEach(sheet => {
+            sheetData[sheet.properties.title] = sheet.properties.gridProperties.rowCount;
+          });
+
+          // use tag and bookmark counts to get data within that range
+          getData(sheetData, id)
+            // format that data
+            .then(tagsAndBookmarks => {
+              console.log({tagsAndBookmarks});
+            });
+
+          resolve(true);
+        }
+        else if (xhr.status == 404) resolve();
       }
       else if (xhrOrError.error) reject(xhrOrError.error);
       else reject({ xhrOrError });
-    })
+    }, 'json')
   })
 }
 
@@ -240,6 +260,32 @@ function formatRows (sheet, arrayOfObjects) {
   });
 
   return { values };
+}
+
+function getData (data, id) {
+  let url = `https://sheets.googleapis.com/v4/spreadsheets/${id}/values:batchGet?ranges=tags!A1%3AG${data.tags}&ranges=bookmarks!A1%3AF${data.bookmarks}&key=${api_key}`;
+
+  return new Promise((resolve, reject) => {
+    newRequest(false, url, 'GET', (xhrOrError) => {
+      if (xhrOrError.xhr) {
+        let { xhr } = xhrOrError;
+
+        // when the request is done & successful
+        if (xhr.readyState == 4 && xhr.status == 200) {
+          let { valueRanges } = xhr.response;
+
+          resolve({
+            // find range with name starting with t to get tags
+            tags: valueRanges.find(sheet => sheet.range[0] === 't').values,
+            // find range with name starting with b to get bookmarks
+            bookmarks: valueRanges.find(sheet => sheet.range[0] === 'b').values,
+          })
+        }
+      }
+      else if (xhrOrError.error) reject(xhrOrError.error);
+      else reject({ xhrOrError });
+    }, 'json')
+  })
 }
 
 export function getRowIndex (sheet, endRange, bookmarkOrTagId) {
