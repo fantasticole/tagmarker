@@ -16,13 +16,6 @@ wrapStore(store, {
 });
 
 // SET UP THE STORE
-// get all bookmarks from chrome
-chrome.bookmarks.getTree(arr => {
-  let data = getBookmarksAndFolders(arr, { bookmarks: {}, tags: {}, });
-  // initialize data in the store
-  store.dispatch(initialize(data));
-});
-
 chrome.storage.sync.get('TagMarker', response => {
   let data = response.TagMarker;
 
@@ -30,11 +23,15 @@ chrome.storage.sync.get('TagMarker', response => {
   if (data) {
     // make sure the spreadsheet exists
     spreadsheet.exists(data.id)
-      .then(exists => {
+      .then(tagsAndBookmarks => {
         // if it does, set the spreadsheet id in the store
-        if (exists) store.dispatch({ type: 'SET_SPREADSHEET', data });
+        if (tagsAndBookmarks) {
+          store.dispatch({ type: 'SET_SPREADSHEET', data });
+          // initialize tags and bookmarks in the store
+          store.dispatch(initialize(tagsAndBookmarks));
+        }
         // otherwise, create one
-        else createSpreadsheet()
+        else createSpreadsheet();
       }, error => {
         console.error(error);
       });
@@ -58,15 +55,19 @@ function createSpreadsheet () {
     }, error => {
       console.error(error);
     })
-    .then((id) => {
-      let storeData = store.getState();
+    .then(id => {
+      // get all bookmarks from chrome
+      chrome.bookmarks.getTree(arr => {
+        let data = getBookmarksAndFolders(arr, { bookmarks: {}, tags: {}, });
 
-      // add tag and bookmark data to the spreadsheet
-      spreadsheet.addRows('bookmarks', Object.values(storeData.bookmarks), id);
-      spreadsheet.addRows('tags', Object.values(storeData.tags), id);
+        // initialize data in the store
+        store.dispatch(initialize(data));
+        // add tag and bookmark data to the spreadsheet
+        spreadsheet.addRows('bookmarks', Object.values(data.bookmarks), id);
+        spreadsheet.addRows('tags', Object.values(data.tags), id);
+      });
     });
 }
-
 
 // SET UP LISTENERS
 // open and close drawer on icon click
