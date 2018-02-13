@@ -123,7 +123,8 @@ export function addRows (sheet, data, id) {
       let xhr = new XMLHttpRequest();
       xhr.responseType = 'json';
       xhr.onreadystatechange = event => {
-        if (xhr.readyState == 4 && xhr.status !== 200) console.error(xhr.response)
+        // if the request is unsuccessful, throw an error
+        if (xhr.status !== 200) console.error(xhr.response)
       }
       xhr.open('POST', url);
       xhr.setRequestHeader('Authorization', 'Bearer ' + token);
@@ -144,8 +145,8 @@ export function create () {
       if (xhrOrError.xhr) {
         let { xhr } = xhrOrError;
 
-        // when we have the response, pass it to the resolve function
-        if (xhr.readyState == 4 && xhr.status == 200) {
+        // when we have success, pass the data to the resolve function
+        if (xhr.status == 200) {
           let tagsSheet = xhr.response.sheets.find(sheet => sheet.properties.title === 'tags'),
               bookmarksSheet = xhr.response.sheets.find(sheet => sheet.properties.title === 'bookmarks'),
               // gather spreadsheet data
@@ -158,8 +159,7 @@ export function create () {
           resolve(spreadsheet);
         }
       }
-      else if (xhrOrError.error) reject(xhrOrError.error);
-      else reject({ xhrOrError });
+      else reject(xhrOrError);
     }, 'json', newSpreadsheet)
   })
 }
@@ -185,13 +185,10 @@ export function deleteRow (sheet, index) {
 
   newRequest(false, url, 'POST', (xhrOrError) => {
     if (xhrOrError.xhr) {
-      let { xhr } = xhrOrError;
-
-      // when the request is done
-      if (xhr.readyState == 4 && xhr.status !== 200) console.error(xhr.response)
+      // if the request is unsuccessful, throw an error
+      if (xhrOrError.xhr.status !== 200) console.error(xhr.response)
     }
-    else if (xhrOrError.error) console.error(xhrOrError.error);
-    else console.log({ xhrOrError });
+    else console.error(xhrOrError);
   }, null, request)
 }
 
@@ -205,7 +202,8 @@ export function exists (id) {
       if (xhrOrError.xhr) {
         let { xhr } = xhrOrError;
 
-        if (xhr.readyState == 4 && xhr.status == 200) {
+        // if we have success
+        if (xhr.status == 200) {
           let sheetData = {};
 
           // get row count to get ranges for tags and bookmarks
@@ -220,8 +218,7 @@ export function exists (id) {
         }
         else if (xhr.status == 404) resolve();
       }
-      else if (xhrOrError.error) reject(xhrOrError.error);
-      else reject({ xhrOrError });
+      else reject(xhrOrError);
     }, 'json')
   })
 }
@@ -299,8 +296,8 @@ function getData (data, id) {
       if (xhrOrError.xhr) {
         let { xhr } = xhrOrError;
 
-        // when the request is done & successful
-        if (xhr.readyState == 4 && xhr.status == 200) {
+        // when the request is successful
+        if (xhr.status == 200) {
           let { valueRanges } = xhr.response;
 
           resolve({
@@ -311,8 +308,7 @@ function getData (data, id) {
           })
         }
       }
-      else if (xhrOrError.error) reject(xhrOrError.error);
-      else reject({ xhrOrError });
+      else reject(xhrOrError);
     }, 'json')
   })
 }
@@ -327,20 +323,16 @@ export function getRowIndex (sheet, endRange, bookmarkOrTagId) {
     if (xhrOrError.xhr) {
       let { xhr } = xhrOrError;
 
-      // when the request is done
-      if (xhr.readyState == 4) {
-        // if it's successful
-        if (xhr.status == 200) {
-          // get the index of the row we're looking for
-          let rowIndex = xhr.response.values[0].findIndex(id => id === bookmarkOrTagId);
-          console.log({rowIndex})
-        }
-        // otherwise, log the error to the console
-        else { console.error(xhr.response.error) }
+      // if it's successful
+      if (xhr.status == 200) {
+        // get the index of the row we're looking for
+        let rowIndex = xhr.response.values[0].findIndex(id => id === bookmarkOrTagId);
+        console.log({rowIndex})
       }
+      // otherwise, log the error to the console
+      else { console.error(xhr.response.error) }
     }
-    else if (xhrOrError.error) console.error(xhrOrError.error);
-    else console.log({ xhrOrError });
+    else console.error(xhrOrError);
   }, 'json')
 }
 
@@ -349,7 +341,10 @@ function newRequest (interactive, url, type, callback, responseType, data) {
     if (token) {
       let xhr = new XMLHttpRequest();
       if (responseType) xhr.responseType = 'json';
-      xhr.onreadystatechange = event => { callback({ xhr }); }
+      xhr.onreadystatechange = event => {
+        // when the request is done, call the callback on the request
+        if (xhr.readyState == 4) callback({ xhr });
+      }
       xhr.open(type, url);
       xhr.setRequestHeader('Authorization', 'Bearer ' + token);
       data ? xhr.send(JSON.stringify(data)) : xhr.send();
