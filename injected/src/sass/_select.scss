@@ -95,3 +95,53 @@
 .Select-clear-zone:hover {
   color: $deep;
 }
+
+
+// Filtered Tag List
+.filtered-tags__list {
+  .Select.is-searchable.is-open {
+    .Select-control {
+      background-color: $base;
+      border-bottom: 1px dotted $lighter-light;
+    }
+  }
+  .Select-control {
+    margin-top: 0;
+    position: fixed;
+    width: 242px;
+    z-index: 20;
+    margin-top: -35px;
+    &:after {
+      content: "\f002";
+      font-family: FontAwesome;
+      color: $deep;
+      font-size: 14px;
+      position: absolute;
+      right: 10px;
+      top: 7px;
+    }
+    &:hover {
+      box-shadow: none;
+    }
+  }
+  .Select-menu-outer {
+    position: relative;
+    background: transparent;
+  }
+  .Select-menu {
+    margin-top: 35px;
+    overflow: visible;
+  }
+  .Select-option {
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    max-width: 100%;
+    &.is-focused {
+      background-color: transparent;
+    }
+  }
+  .Select-arrow-zone {
+    display: none;
+  }
+}
