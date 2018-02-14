@@ -39,9 +39,7 @@ export default class TagList extends Component {
       <div className='tag-list__container'>
         <TagActions
           ascending={ascending}
-          filteredTags={filteredTags}
           onSort={(sort) => this.handleSort(sort)}
-          selectTag={(id) => onSelect(id)}
           sortBy={sortBy}
           />
         <ul className='tagmarker-list tag-list'>
