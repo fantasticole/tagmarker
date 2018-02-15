@@ -6,6 +6,7 @@
 
 .list__actions {
   height: 35px;
+  transition: height 0.3s ease-in-out;
   text-align: right;
   display: flex;
   flex-direction: row;
@@ -57,6 +58,10 @@
 .tag-list__container {
   .list__actions {
     display: block;
+    overflow: hidden;
+    &.hidden {
+      height: 0;
+    }
   }
 }
 

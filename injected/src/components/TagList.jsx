@@ -41,6 +41,7 @@ export default class TagList extends Component {
           ascending={ascending}
           onSort={(sort) => this.handleSort(sort)}
           sortBy={sortBy}
+          tagCount={filteredTags.length}
           />
         <ul className='tagmarker-list tag-list'>
           <SelectedTags removeTag={(id) => onDeselect(id)} tags={selectedTags} />
