@@ -62,18 +62,11 @@ export default class FilteredTags extends Component {
   }
 
   renderOption (option) {
-    let tag = this.props.tags.find(t => t.id === option.value);
-
-    return (
-      <MarqueeWrapper>
-        <Tag tag={tag} />
-      </MarqueeWrapper>
-    );
+    return (<Tag tag={option} />);
   }
 
   render () {
     let sortedTags = this.props.tags.sort(this.sort());
-    let options = sortedTags.map(tag => ({ label: tag.title, value: tag.id }));
 
     return (
       <div className='filtered-tags__list'>
@@ -81,13 +74,15 @@ export default class FilteredTags extends Component {
           sortedTags.length ?
           <OpenSelect
             className='filtered-selector'
+            labelKey='title'
             name='filtered-select'
             onChange={(selected) => this.props.selectTag(selected.value)}
-            options={options}
+            options={sortedTags}
             optionRenderer={(option) => this.renderOption(option)}
             placeholder='search tags'
             ref='filtered'
             value=''
+            valueKey='id'
             /> :
           <p className='empty-list__message'>no related tags to display</p>
         }
