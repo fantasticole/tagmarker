@@ -23,10 +23,11 @@ export default class Drawer extends Component {
       // if we're being sent bookmark data, open modal to add bookmark
       if (req.ref === 'bookmark_data') {
         let { title, url } = req.data,
-            { createBookmark, tags } = this.props;
+            { addTag, createBookmark, tags } = this.props;
 
         Modal.render(
           <CreateBookmarkModal
+            addTag={(folder) => addTag(folder)}
             createBookmark={(bookmark, tagsToAdd) => createBookmark(bookmark, tagsToAdd)}
             tags={tags}
             title={title}
