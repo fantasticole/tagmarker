@@ -95,7 +95,7 @@ export default class BookmarkListItem extends Component {
       );
     }
     return (
-      <button className='button bookmark-action__button action-button' onClick={() => this.handleClickEdit()}>Edit <i className='fa fa-pencil'/></button>
+      <button className='button bookmark-action__button action-button bookmark-edit__button' onClick={() => this.handleClickEdit()}>Edit <i className='fa fa-pencil'/></button>
     );
   }
 
