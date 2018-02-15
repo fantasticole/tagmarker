@@ -28,7 +28,7 @@ export default class EditTag extends Component {
         // if so, see if the tag is also a folder
         if (!isNaN(this.props.tag.id)) {
           // if it is, ask if they want to delete the folder
-          Alert('delete folder from chrome as well?', 'delete folder', 'delete from chrome').then(isConfirmed => {
+          Alert('delete folder from chrome as well?', 'delete folder', 'delete from chrome', 'keep folder').then(isConfirmed => {
             // send their response
             this.props.removeTag(this.props.tag.id, isConfirmed)
           })

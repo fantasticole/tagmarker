@@ -8,9 +8,10 @@ import AlertModule from './AlertModule';
  * 
  * @param {string} [text] - optional alert text
  * @param {string} [title] - optional alert title
- * @param  {[string]} buttonText - confirm button text
+ * @param  {[string]} noText - cancel button text
+ * @param  {[string]} yesText - confirm button text
  */
-export default function Alert (text, title, buttonText='OK') {
+export default function Alert (text, title, yesText='OK', noText='Cancel') {
   const alertBox = document.getElementsByClassName('alert-container')[0];
   const confirmAndClose = (resolve, trueOrFalse) => {
     // unmount
@@ -23,8 +24,8 @@ export default function Alert (text, title, buttonText='OK') {
     AlertModule.render(
       <AlertModule.Alert title={title} text={text}>
         <div className='alert__actions'>
-          <button className='button action-button alert-action__button' onClick={() => confirmAndClose(resolve, true)}>{buttonText}</button>
-          <button className='button action-button alert-action__button' onClick={() => confirmAndClose(resolve, false)}>Cancel</button>
+          <button className='button action-button alert-action__button' onClick={() => confirmAndClose(resolve, true)}>{yesText}</button>
+          <button className='button action-button alert-action__button' onClick={() => confirmAndClose(resolve, false)}>{noText}</button>
         </div>
       </AlertModule.Alert>
     );
