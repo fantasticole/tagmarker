@@ -106,11 +106,12 @@ export default class ListView extends Component {
 
   render () {
     let { filteredBookmarks, filteredTags, selectedTags } = this.state,
-        { bookmarks } = this.props;
+        { bookmarks, tags } = this.props;
 
     return (
       <div className='drawer__content lists'>
         <TagList
+          allTags={Object.values(tags)}
           filteredTags={filteredTags}
           selectedTags={selectedTags}
           onDeselect={(id) => this.handleDeselect(id)}

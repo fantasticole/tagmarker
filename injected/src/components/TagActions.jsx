@@ -8,6 +8,8 @@ import Select from 'react-select';
  * TagActions
  *
  * @param {bool} ascending - direction of sort
+ * @param {bool} editing - whether we're in tag editing mode
+ * @param {function} onEdit - function to run when edit is clicked
  * @param {function} onSort - function to run when sort is clicked
  * @param {string} sortBy - key to sort by
  * @param {number} tagCount - number of filtered tags
@@ -18,7 +20,7 @@ export default class TagActions extends Component {
   }
 
   render () {
-    let { ascending, sortBy, tagCount } = this.props,
+    let { ascending, editing, sortBy, tagCount } = this.props,
         dir = ascending ? 'up' : 'down',
         actionClasses = classNames('list__actions', {
           'hidden': tagCount < 2,
@@ -31,6 +33,9 @@ export default class TagActions extends Component {
         }),
         dateClasses = classNames('list__button', 'button', 'sort-tags__button-by_date', {
           'active': sortBy === 'date',
+        }),
+        editClasses = classNames('list__button', 'button', {
+          'active': editing,
         });
         
     return (
@@ -47,6 +52,9 @@ export default class TagActions extends Component {
             <i className='fa fa-calendar-o'/>
           </button>
         </div>
+        <button className={editClasses} onClick={() => this.props.onEdit()} title='edit tags'>
+          <i className='fa fa-pencil'/>
+        </button>
       </div>
     );
   }

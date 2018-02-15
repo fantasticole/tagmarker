@@ -63,6 +63,9 @@
       height: 0;
     }
   }
+  .list__sort {
+    display: inline-block;
+  }
 }
 
 .tagmarker-list {
@@ -83,6 +86,7 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  padding-bottom: 0;
 }
 
 .filtered-tags__list {

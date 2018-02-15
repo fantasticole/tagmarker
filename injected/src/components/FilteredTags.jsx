@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
-import MarqueeWrapper from './MarqueeWrapper';
+import EditTag from './EditTag';
 import OpenSelect from './OpenSelect';
 import Tag from './Tag';
 
@@ -9,6 +9,7 @@ import Tag from './Tag';
  * FilteredTags
  *
  * @param {bool} ascending - direction of sort
+ * @param {bool} editing - edit state
  * @param {function} selectTag - function to select a tag
  * @param {string} sortBy - key to sort by
  * @param {array} tags - tags to render
@@ -62,6 +63,7 @@ export default class FilteredTags extends Component {
   }
 
   renderOption (option) {
+    if (this.props.editing) return (<EditTag tag={option} />);
     return (<Tag tag={option} />);
   }
 
