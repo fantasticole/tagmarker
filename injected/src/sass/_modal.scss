@@ -11,6 +11,7 @@
   left: 0;
   right: 0;
   background-color: $base-translucent;
+  z-index: 100;
 }
 
 .modal__viewport {
@@ -22,7 +23,6 @@
   box-shadow: 0 0 5px $light-deep;
   margin: auto;
   margin-top: 50px;
-  z-index: 100;
   position: relative;
 }
 
