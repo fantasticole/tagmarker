@@ -41,11 +41,13 @@ export default class EditTag extends Component {
         <button className='button edit-tag__button' onClick={() => this.handleUpdateTag()}>
           <i className='clear-tag fa fa-pencil'/>
         </button>
-        <MarqueeWrapper>
-          <p className='tag'>
-            {tag.title} <span className='tagCount'>{tag.bookmarks.length}</span>
-          </p>
-        </MarqueeWrapper>
+        <span className='tag-name__wrapper'>
+          <MarqueeWrapper>
+            <p className='tag'>
+              {tag.title} <span className='tagCount'>{tag.bookmarks.length}</span>
+            </p>
+          </MarqueeWrapper>
+        </span>
       </li>
     );
   }
