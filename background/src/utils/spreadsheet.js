@@ -124,8 +124,10 @@ export function addRows (sheet, data, id) {
 
   newRequest(false, url, 'POST', (xhrOrError) => {
     if (xhrOrError.xhr) {
+      let { xhr } = xhrOrError;
+
       // if the request is unsuccessful, throw an error
-      if (xhrOrError.xhr.status !== 200) console.error(xhr.response)
+      if (xhr.status !== 200) console.error(xhr.response)
     }
     else console.error(xhrOrError);
   }, 'json', formattedRows)
@@ -185,7 +187,7 @@ export function deleteRow (sheet, endRange, id) {
       newRequest(false, url, 'POST', (xhrOrError) => {
         if (xhrOrError.xhr) {
           // if the request is unsuccessful, throw an error
-          if (xhrOrError.xhr.status !== 200) console.error(xhr.response)
+          if (xhrOrError.xhr.status !== 200) console.error(xhrOrError.xhr.response)
         }
         else console.error(xhrOrError);
       }, null, request)
@@ -385,7 +387,7 @@ export function update (itemsToUpdate, sheet, endRange) {
       newRequest(false, url, 'POST', (xhrOrError) => {
         if (xhrOrError.xhr) {
           // if the request is unsuccessful, throw an error
-          if (xhrOrError.xhr.status !== 200) console.error(xhr.response)
+          if (xhrOrError.xhr.status !== 200) console.error(xhrOrError.xhr.response)
         }
         else console.error(xhrOrError);
       }, null, updates)
