@@ -66,6 +66,15 @@
   .list__sort {
     display: inline-block;
   }
+  &.tag-list--is_editing {
+    .tag-list {
+      max-height: 94%;
+      height: 94%;
+    }
+    & + .bookmark-list__container {
+      display: none;
+    }
+  }
 }
 
 .tagmarker-list {

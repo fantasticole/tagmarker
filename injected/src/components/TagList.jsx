@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import classNames from 'classnames';
 
 import TagActions from './TagActions';
 import FilteredTags from './FilteredTags';
@@ -41,10 +42,13 @@ export default class TagList extends Component {
 
   render () {
     let { ascending, editing, sortBy } = this.state,
-        { allTags, filteredTags, onDeselect, selectedTags, onSelect } = this.props;
+        { allTags, filteredTags, onDeselect, selectedTags, onSelect } = this.props,
+        tagListClasses = classNames('tag-list__container', {
+          'tag-list--is_editing': editing,
+        });
 
     return (
-      <div className='tag-list__container'>
+      <div className={tagListClasses}>
         <TagActions
           ascending={ascending}
           editing={editing}

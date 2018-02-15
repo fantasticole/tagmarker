@@ -98,6 +98,15 @@
 
 
 // Filtered Tag List
+.tag-list--is_editing {
+  .Select-menu-outer {
+    max-height: 100%;
+    height: 100%;
+    .Select-option {
+      display: block;
+    }
+  }
+}
 .filtered-tags__list {
   .Select.is-searchable.is-open {
     .Select-control {
