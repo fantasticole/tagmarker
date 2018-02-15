@@ -30,8 +30,11 @@ export default class EditTag extends Component {
   }
 
   handleClickSave () {
+    let { title } = this.state,
+        updatedTag = Object.assign({}, this.props.tag, { title });
+
+    this.props.updateTag(updatedTag);
     this.setState({ isEditing: false });
-    // this.props.updateTag(this.props.tag)
   }
 
   handleClickEdit () {
@@ -72,10 +75,7 @@ export default class EditTag extends Component {
       );
     }
     return (
-      <li className='tag-item tag-item--is_editable'>
-        <button className='button edit-tag__button' onClick={() => this.handleClickEdit()}>
-          <i className='clear-tag fa fa-pencil'/>
-        </button>
+      <li className='tag-item tag-item--is_editable' onClick={() => this.handleClickEdit()}>
         <span className='tag-name__wrapper'>
           <MarqueeWrapper>
             <p className='tag'>
