@@ -16,7 +16,7 @@ export default class FolderSelection extends Component {
 
     this.state = {
       options: [],
-      selected: this.props.parentId,
+      selected: { value: this.props.parentId },
     };
   }
 
