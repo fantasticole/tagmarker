@@ -127,7 +127,10 @@ export default class EditableTags extends Component {
           else return { title: id, id }
         }),
         // if we have suggestions, render those that aren't selected
-        suggestedTags = suggested ? suggested.filter(id => !selected.includes(id)).map(id => tags[id]) : [];
+        suggestedTags = suggested ? suggested.filter(id => !selected.includes(id))
+          // a suggestion may be a folder that's getting created from
+          // the CreateBookmarkModal, in which case, a tag should be faked
+          .map(id => tags[id] ? tags[id] : { title: id, id }) : [];
 
     return (
       <div className='bookmark__tags'>

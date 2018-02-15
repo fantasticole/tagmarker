@@ -12,7 +12,8 @@ import ifTrue from '../utils/ifTrue';
 /**
  * CreateBookmarkModal
  *
- * @param {function} createBookmark - function save bookmark
+ * @param {function} addTag - function to add a tag
+ * @param {function} createBookmark - function to save a bookmark
  * @param {object} tags - all tags from store
  * @param {string} title - current page title
  * @param {string} url - current page url
@@ -55,6 +56,15 @@ export default class CreateBookmarkModal extends Component {
         this.props.addTag(folder);
         // then, create the bookmark in that folder
         chrome.bookmarks.create({ parentId: folder.id, title, url }, bookmark => {
+          // check to see if any of the tagsToAdd include our new folder name
+          tagsToAdd = tagsToAdd.map(idOrName => {
+            // if the id isn't a number, check it against new folder name
+            if (isNaN(idOrName)) {
+              // if the name is the same as the folder's title, return its id
+              return idOrName === folder.title ? folder.id : idOrName;
+            }
+            return idOrName;
+          })
           this.props.createBookmark(bookmark, tagsToAdd);
           this.handleDeactivate();
         });
@@ -91,9 +101,13 @@ export default class CreateBookmarkModal extends Component {
 
   setParent (parentId) {
     let { tags } = this.props,
+        { creatingFolder, newFolderName } = this.state,
         parent = tags[parentId],
         // if we have an id, get suggestions, otherwise return none
         suggested = parentId ? [ ...parent.parents, parent.id ] : [];
+
+    // if we're creating a folder, include newFolderName in suggestions
+    if (creatingFolder) suggested.push(newFolderName)
 
     // set the new parent in the state
     this.setState({ parentId, suggested });

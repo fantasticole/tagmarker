@@ -9,7 +9,8 @@ import Modal from './Modal';
 /**
  * Drawer
  *
- * @param {function} createBookmark - function save bookmark
+ * @param {function} addTag - function to add a tag
+ * @param {function} createBookmark - function to save a bookmark
  * @param {object} tags - all tags from store
  */
 export default class Drawer extends Component {
