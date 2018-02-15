@@ -201,10 +201,31 @@ export function updateBookmark (originalAction) {
   }
 }
 
+export function updateTagName (originalAction) {
+  let { tag } = originalAction;
+
+  return (dispatch, getState) => {
+    let { tags } = getState();
+
+    // if the tag corresponds to a folder in chrome
+    if ( tag.id[0] !== 't' ) {
+      let { title } = tag;
+
+      // update the title with chrome
+      chrome.bookmarks.update(tag.id, { title });
+    }
+    // update the spreadsheet
+    spreadsheet.update(tag, 'tags', Object.keys(tags).length);
+    // update the store
+    dispatch(createOrUpdateTags(tag));
+  }
+}
+
 export default {
   'ADD_BOOKMARK': addBookmark,
   'ADD_TAG': addTag,
   'REMOVE_BOOKMARK': removeBookmark,
   'REMOVE_TAG': removeTag,
   'UPDATE_BOOKMARK': updateBookmark,
+  'UPDATE_TAG_NAME': updateTagName,
 };
