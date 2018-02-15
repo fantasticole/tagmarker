@@ -7,6 +7,8 @@ import Bookmark from './Bookmark';
 import FolderSelection from './FolderSelection';
 import Modal from './Modal';
 
+import ifTrue from '../utils/ifTrue';
+
 /**
  * CreateBookmarkModal
  *
@@ -20,6 +22,8 @@ export default class CreateBookmarkModal extends Component {
     super(props);
 
     this.state = {
+      creatingFolder: false,
+      newFolderName: null,
       parentId: null,
       preventClose: false,
       suggested: [],
@@ -43,12 +47,25 @@ export default class CreateBookmarkModal extends Component {
   }
 
   handleClickSubmit () {
-    let { parentId, tagsToAdd, title, url } = this.state;
+    let { creatingFolder, newFolderName, parentId, tagsToAdd, title, url } = this.state;
 
-    chrome.bookmarks.create({ parentId, title, url }, bookmark => {
-      this.props.createBookmark(bookmark, tagsToAdd);
-      this.handleDeactivate();
-    });
+    if (creatingFolder) {
+      chrome.bookmarks.create({ parentId, title: newFolderName }, folder => {
+        // add the folder to the store as a tag
+        this.props.addTag(folder);
+        // then, create the bookmark in that folder
+        chrome.bookmarks.create({ parentId: folder.id, title, url }, bookmark => {
+          this.props.createBookmark(bookmark, tagsToAdd);
+          this.handleDeactivate();
+        });
+      });
+    }
+    else {
+      chrome.bookmarks.create({ parentId, title, url }, bookmark => {
+        this.props.createBookmark(bookmark, tagsToAdd);
+        this.handleDeactivate();
+      });
+    }
   }
 
   handleDeactivate () {
@@ -56,8 +73,20 @@ export default class CreateBookmarkModal extends Component {
   }
 
   handleSelectFolder(id) {
+    // if the id is not a number
+    if (isNaN(id)) {
+      // store the name and render parent folder selection
+      this.setState({
+        creatingFolder: true,
+        newFolderName: id,
+      });
+    }
+    // otherwise, hide it and set the selected parent id
+    else {
+      this.setState({ creatingFolder: false });
+      this.setParent(id);
+    }
     this.triggerCancelBuffer();
-    this.setParent(id);
   }
 
   setParent (parentId) {
@@ -80,10 +109,10 @@ export default class CreateBookmarkModal extends Component {
   }
 
   render () {
-    let { parentId, suggested, tagsToAdd, title, url, warn } = this.state,
+    let { creatingFolder, parentId, suggested, tagsToAdd, title, url, warn } = this.state,
         { tags } = this.props,
         cancelText = warn ? 'Yes, bye' : 'Cancel',
-        canSubmit = parentId && tagsToAdd.length,
+        canSubmit = url && parentId && tagsToAdd.length,
         warningClasses = classNames('modal__warning', {
           visible: warn,
         });
@@ -92,9 +121,18 @@ export default class CreateBookmarkModal extends Component {
       <Modal.Modal className='bookmark-modal' ref='modal'>
         <h1 className='modal__header bookmark__header'>Add bookmark in:</h1>
         <FolderSelection
-          onSelect={(selected) => this.handleSelectFolder(selected.value)}
+          creatable
+          onSelect={(selected) => this.handleSelectFolder(selected)}
           parentId={parentId}
           />
+        {ifTrue(creatingFolder).render(() => (
+          <span>
+            <p  className='modal__text'>where should this folder live?</p>
+            <FolderSelection
+              onSelect={(selected) => this.setParent(selected)}
+              />
+          </span>
+        ))}
         <Bookmark
           isEditing={true}
           onChange={(field, event) => this.handleChange(field, event)}
