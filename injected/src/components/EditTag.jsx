@@ -30,7 +30,7 @@ export default class EditTag extends Component {
   }
 
   handleClickSave () {
-    console.log('save!')
+    this.setState({ isEditing: false });
     // this.props.updateTag(this.props.tag)
   }
 

@@ -52,6 +52,76 @@
   }
 }
 
+// editable/editing tag list styles
+.tag-item--is_editable {
+  display: block;
+  text-align: left;
+  white-space: nowrap;
+  .edit-tag__button {
+    font-size: 16px;
+    width: 20px;
+    vertical-align: bottom;
+    padding: 5px 0;
+    &:hover {
+      color: $light;
+    }
+  }
+  .tag:hover {
+    cursor: default;
+    background-color: $deep;
+    background-image: linear-gradient(to top, $deep 0%, $deep-highlight 100%);
+    .tagCount {
+      color: $deep;
+    }
+  }
+  .tag-name__wrapper {
+    display: inline-block;
+    width: calc(100% - 20px);
+    overflow: hidden;
+  }
+}
+
+.tag-item--is_editing {
+  width: 100%;
+  .tag {
+    display: block;
+    background: $base;
+    color: $deep;
+    border: 1px solid $deep;
+    &:hover {
+      background: $base;
+    }
+  }
+  .edit-tag__actions {
+    display: flex;
+    flex-direction: row;
+    margin-top: 5px;
+  }
+  .action-button {
+    margin-right: 5px;
+    flex: 1;
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}
+
+.tag-name__input {
+  background-color: transparent;
+  color: $deep;
+  border: none;
+  font-size: 14px;
+  padding: 0 4px;
+  width: 90%;
+  margin: auto;
+  &:active,
+  &:focus {
+    outline: 0;
+    -webkit-box-shadow: none;
+            box-shadow: none;
+  }
+}
+
 // bookmark tag styles
 .bookmark__tag {
   padding: 2px 5px 1px;
