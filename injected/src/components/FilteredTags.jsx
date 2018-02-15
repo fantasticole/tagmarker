@@ -23,8 +23,12 @@ export default class FilteredTags extends Component {
     this.refs.filtered.focus();
   }
 
-  handleSelectTag (id) {
-    if (!this.props.editing) this.props.selectTag(id);
+  handleSelectTag (selected) {
+    // if we're not in editing mode and we have something selected
+    if (!this.props.editing && selected) {
+      // send the id to selectTag
+      this.props.selectTag(selected.id);
+    }
   }
 
   sort () {
@@ -82,12 +86,12 @@ export default class FilteredTags extends Component {
             className='filtered-selector'
             labelKey='title'
             name='filtered-select'
-            onChange={(selected) => this.handleSelectTag(selected.value)}
+            onBlurResetsInput={false}
+            onChange={(selected) => this.handleSelectTag(selected)}
             options={sortedTags}
             optionRenderer={(option) => this.renderOption(option)}
             placeholder='search tags'
             ref='filtered'
-            value=''
             valueKey='id'
             /> :
           <p className='empty-list__message'>no related tags to display</p>
