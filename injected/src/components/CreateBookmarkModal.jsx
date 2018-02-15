@@ -54,20 +54,23 @@ export default class CreateBookmarkModal extends Component {
       chrome.bookmarks.create({ parentId, title: newFolderName }, folder => {
         // add the folder to the store as a tag
         this.props.addTag(folder);
-        // then, create the bookmark in that folder
-        chrome.bookmarks.create({ parentId: folder.id, title, url }, bookmark => {
-          // check to see if any of the tagsToAdd include our new folder name
-          tagsToAdd = tagsToAdd.map(idOrName => {
-            // if the id isn't a number, check it against new folder name
-            if (isNaN(idOrName)) {
-              // if the name is the same as the folder's title, return its id
-              return idOrName === folder.title ? folder.id : idOrName;
-            }
-            return idOrName;
-          })
-          this.props.createBookmark(bookmark, tagsToAdd);
-          this.handleDeactivate();
-        });
+        // wait because addTag is updating the spreadsheet
+        setTimeout(() => {
+          // then, create the bookmark in that folder
+          chrome.bookmarks.create({ parentId: folder.id, title, url }, bookmark => {
+            // check to see if any of the tagsToAdd include our new folder name
+            tagsToAdd = tagsToAdd.map(idOrName => {
+              // if the id isn't a number, check it against new folder name
+              if (isNaN(idOrName)) {
+                // if the name is the same as the folder's title, return its id
+                return idOrName === folder.title ? folder.id : idOrName;
+              }
+              return idOrName;
+            })
+            this.props.createBookmark(bookmark, tagsToAdd);
+            this.handleDeactivate();
+          });
+        }, 500)
       });
     }
     else {
