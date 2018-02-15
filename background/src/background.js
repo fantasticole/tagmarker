@@ -109,10 +109,10 @@ chrome.commands.onCommand.addListener(command => {
 chrome.bookmarks.onCreated.addListener((id, bookmarkOrFolder) => {
   // wait in case it's being added to the store from the extension
   setTimeout(() => {
+    let storeState = store.getState();
+
     // if we have a url, it's a bookmark
     if (bookmarkOrFolder.url) {
-      let storeState = store.getState();
-
       // if the bookmark does not already exist (not created in extension)
       if (!storeState.bookmarks[id]) {
         // add it to the store
@@ -120,7 +120,13 @@ chrome.bookmarks.onCreated.addListener((id, bookmarkOrFolder) => {
       }
     }
     // otherwise, it's a folder
-    else store.dispatch(addTag({ folder: bookmarkOrFolder }));
+    else {
+      // if the tag does not already exist (not created in extension)
+      if (!storeState.tags[id]) {
+        // add it to the store
+        store.dispatch(addTag({ folder: bookmarkOrFolder }));
+      }
+    }
   }, 250)
 });
 
