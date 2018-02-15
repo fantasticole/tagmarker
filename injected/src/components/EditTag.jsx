@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
+import Alert from './Alert';
 import MarqueeWrapper from './MarqueeWrapper';
 
 /**
@@ -21,8 +22,21 @@ export default class EditTag extends Component {
   }
 
   handleClickDelete () {
-    console.log('delete!')
-    // this.props.removeTag(this.props.tag.id)
+    // make sure the user wants to delete
+    Alert('are you sure you want to delete this tag?', 'confirm delete', 'yes, delete').then(isConfirmed => {
+      if (isConfirmed) {
+        // if so, see if the tag is also a folder
+        if (!isNaN(this.props.tag.id)) {
+          // if it is, ask if they want to delete the folder
+          Alert('delete folder from chrome as well?', 'delete folder', 'delete from chrome').then(isConfirmed => {
+            // send their response
+            this.props.removeTag(this.props.tag.id, isConfirmed)
+          })
+        }
+        // if not, delete the tag
+        else this.props.removeTag(this.props.tag.id, false)
+      }
+    });
   }
 
   handleClickCancel () {
