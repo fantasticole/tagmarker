@@ -207,8 +207,8 @@ export function updateTagName (originalAction) {
   return (dispatch, getState) => {
     let { tags } = getState();
 
-    // if the tag corresponds to a folder in chrome
-    if ( tag.id[0] !== 't' ) {
+    // if the tag id is a number, it corresponds to a folder in chrome
+    if (!isNaN(tag.id[0])) {
       let { title } = tag;
 
       // update the title with chrome
