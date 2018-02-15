@@ -88,6 +88,7 @@ export default class FilteredTags extends Component {
             name='filtered-select'
             onBlurResetsInput={false}
             onChange={(selected) => this.handleSelectTag(selected)}
+            onSelectResetsInput={!this.props.editing}
             options={sortedTags}
             optionRenderer={(option) => this.renderOption(option)}
             placeholder='search tags'
