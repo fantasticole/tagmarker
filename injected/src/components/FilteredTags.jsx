@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
-import EditTag from './EditTag';
+import EditTag from '../containers/EditTag';
 import OpenSelect from './OpenSelect';
 import Tag from './Tag';
 
@@ -21,6 +21,10 @@ export default class FilteredTags extends Component {
 
   componentDidMount () {
     this.refs.filtered.focus();
+  }
+
+  handleSelectTag (id) {
+    if (!this.props.editing) this.props.selectTag(id);
   }
 
   sort () {
@@ -78,7 +82,7 @@ export default class FilteredTags extends Component {
             className='filtered-selector'
             labelKey='title'
             name='filtered-select'
-            onChange={(selected) => this.props.selectTag(selected.value)}
+            onChange={(selected) => this.handleSelectTag(selected.value)}
             options={sortedTags}
             optionRenderer={(option) => this.renderOption(option)}
             placeholder='search tags'
