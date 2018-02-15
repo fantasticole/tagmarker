@@ -6,6 +6,7 @@ import Select from 'react-select';
 /**
  * FolderSelection
  *
+ * @param {bool} creatable - if a folder can be created from the select or not
  * @param {function} onSelect - function to select folder
  * @param {number} parentId - parent folder title
  */
@@ -50,9 +51,13 @@ export default class FolderSelection extends Component {
   }
 
   selectFolder (selected) {
+    let { options } = this.state;
+
+    // remove created option from options array
+    options = options.filter(option => !option.className);
     if (!selected) selected = { value: '' };
-    this.setState({ selected });
-    this.props.onSelect(selected);
+    this.setState({ options, selected });
+    this.props.onSelect(selected.value);
   }
 
   renderOption (option) {
@@ -66,15 +71,18 @@ export default class FolderSelection extends Component {
   }
 
   render () {
+    let SelectType = this.props.creatable ? Select.Creatable : Select;
+
     return (
-      <Select
+      <SelectType
         className='folder-selector'
         multi={false}
         name='folder-select'
         onChange={(selected) => this.selectFolder(selected)}
         options={this.state.options}
         optionRenderer={(option) => this.renderOption(option)}
-        placeholder=''
+        placeholder='search folders'
+        promptTextCreator={(label) => (`Create folder "${label}"`)}
         value={this.state.selected}
         />
     );
