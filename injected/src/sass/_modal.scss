@@ -22,6 +22,8 @@
   box-shadow: 0 0 5px $light-deep;
   margin: auto;
   margin-top: 50px;
+  z-index: 100;
+  position: relative;
 }
 
 .modal__close {
