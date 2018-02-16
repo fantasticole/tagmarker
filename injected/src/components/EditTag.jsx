@@ -25,14 +25,14 @@ export default class EditTag extends Component {
     // make sure the user wants to delete
     Alert('are you sure you want to delete this tag?', 'confirm delete', 'yes, delete').then(isConfirmed => {
       if (isConfirmed) {
-        // send their response to the store
-        this.props.removeTag(this.props.tag.id)
         // see if the tag is also a folder
         if (!isNaN(this.props.tag.id)) {
           // if it is, ask if they want to delete the folder
-          Alert('delete folder from chrome as well?', 'delete folder', 'delete from chrome', 'keep folder').then(isConfirmed => {
+          Alert('delete folder and its contents from chrome as well?', 'delete folder', 'delete from chrome', 'keep folder').then(isConfirmed => {
             // if they want to delete from chrome, let chrome know
-            if (isConfirmed) chrome.bookmarks.remove(this.props.tag.id);
+            if (isConfirmed) chrome.bookmarks.removeTree(this.props.tag.id);
+            // send their response to the store
+            this.props.removeTag(this.props.tag.id)
           })
         }
         // if not, delete the tag
