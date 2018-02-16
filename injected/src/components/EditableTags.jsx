@@ -39,7 +39,7 @@ export default class EditableTags extends Component {
     // if we have a tag object for it,
     if (tag) {
       // add it back to the options
-      options.push({ label: tag.title, value: id });
+      options.push(tag);
       // sort the options to appear alphabetically
       options = this.sortOptions(options);
     }
@@ -50,7 +50,7 @@ export default class EditableTags extends Component {
 
   selectTag (id) {
     let { options, selected } = this.state,
-        index = options.findIndex(o => (o.value === id));
+        index = options.findIndex(o => (o.id === id));
 
     selected.push(id);
     // if it's in the options array, remove it
@@ -62,26 +62,19 @@ export default class EditableTags extends Component {
   setOptions () {
     let { selected } = this.state,
         { tags } = this.props,
-        options = [],
-        sortedOptions;
+        tagOptions = Object.values(tags).filter(tag => !selected.includes(tag.id)),
+        options = this.sortOptions(tagOptions);
 
-    Object.values(tags).forEach(tag => {
-      if (!selected.includes(tag.id)) {
-        options.push({ label: tag.title, value: tag.id });
-      }
-    })
-    // sort the options to appear alphabetically
-    sortedOptions = this.sortOptions(options);
-    this.setState({ options: sortedOptions });
+    this.setState({ options });
   }
 
   sortOptions (options) {
     return options.sort((a, b) => {
-      let aLabel = a.label.toLowerCase(),
-          bLabel = b.label.toLowerCase();
+      let aTitle = a.title.toLowerCase(),
+          bTitle = b.title.toLowerCase();
 
-      if (aLabel < bLabel) return -1;
-      if (aLabel > bLabel) return 1;
+      if (aTitle < bTitle) return -1;
+      if (aTitle > bTitle) return 1;
       return 0;
     });
   }
@@ -140,12 +133,14 @@ export default class EditableTags extends Component {
         <div className='bookmark__tags-search'>
           <Select.Creatable
             className='tag-selector'
+            labelKey='title'
             multi={false}
             name='tag-select'
-            onChange={(selected) => this.selectTag(selected.value)}
+            onChange={(selected) => this.selectTag(selected.id)}
             options={this.state.options}
             placeholder='select tags'
             promptTextCreator={(label) => (`Create tag "${label}"`)}
+            valueKey='id'
             />
         </div>
       </div>
