@@ -84,6 +84,7 @@ export default class FilteredTags extends Component {
           sortedTags.length ?
           <OpenSelect
             className='filtered-selector'
+            clearValueOnBlur={false}
             labelKey='title'
             name='filtered-select'
             onBlurResetsInput={false}

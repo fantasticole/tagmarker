@@ -864,7 +864,7 @@ class OpenSelect extends React.Component {
     });
 
     let value = this.state.inputValue;
-    if (value && !this.props.onSelectResetsInput && !this.state.isFocused){
+    if (value && !this.props.onSelectResetsInput && !this.state.isFocused && this.props.clearValueOnBlur){
       // it hides input value when it is not focused and was not reset on select
       value= '';
     }
