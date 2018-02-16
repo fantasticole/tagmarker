@@ -16,7 +16,7 @@ export default class FolderSelection extends Component {
 
     this.state = {
       options: [],
-      selected: { value: this.props.parentId },
+      selected: null,
     };
   }
 
@@ -55,8 +55,8 @@ export default class FolderSelection extends Component {
 
     // remove created option from options array
     options = options.filter(option => !option.className);
-    if (!selected) selected = { value: '' };
     this.setState({ options, selected });
+    if (!selected) selected = { value: '' };
     this.props.onSelect(selected.value);
   }
 
@@ -81,7 +81,7 @@ export default class FolderSelection extends Component {
         onChange={(selected) => this.selectFolder(selected)}
         options={this.state.options}
         optionRenderer={(option) => this.renderOption(option)}
-        placeholder='search folders'
+        placeholder='select folder'
         promptTextCreator={(label) => (`Create folder "${label}"`)}
         value={this.state.selected}
         />

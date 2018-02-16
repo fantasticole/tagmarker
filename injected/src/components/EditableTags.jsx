@@ -144,9 +144,8 @@ export default class EditableTags extends Component {
             name='tag-select'
             onChange={(selected) => this.selectTag(selected.value)}
             options={this.state.options}
-            placeholder=''
+            placeholder='select tags'
             promptTextCreator={(label) => (`Create tag "${label}"`)}
-            value=''
             />
         </div>
       </div>
