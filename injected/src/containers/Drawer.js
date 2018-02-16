@@ -22,7 +22,7 @@ const mapStateToProps = (state) => {
  */
 const mapDispatchToProps = (dispatch) => {
   return {
-    addTag: (folder) => {dispatch({ type: 'ADD_TAG', folder })},
+    createTagAndBookmark: (folder, bookmark, tagsToAdd) => {dispatch({ type: 'ADD_TAG_AND_BOOKMARK', folder, bookmark, tagsToAdd })},
     createBookmark: (bookmark, tagsToAdd) => {dispatch({ type: 'ADD_BOOKMARK', bookmark, tagsToAdd })},
   };
 }

@@ -12,7 +12,7 @@ import ifTrue from '../utils/ifTrue';
 /**
  * CreateBookmarkModal
  *
- * @param {function} addTag - function to add a tag
+ * @param {function} createTagAndBookmark - function to add a tag and a bookmark
  * @param {function} createBookmark - function to save a bookmark
  * @param {object} tags - all tags from store
  * @param {string} title - current page title
@@ -52,25 +52,21 @@ export default class CreateBookmarkModal extends Component {
 
     if (creatingFolder) {
       chrome.bookmarks.create({ parentId, title: newFolderName }, folder => {
-        // add the folder to the store as a tag
-        this.props.addTag(folder);
-        // wait because addTag is updating the spreadsheet
-        setTimeout(() => {
-          // then, create the bookmark in that folder
-          chrome.bookmarks.create({ parentId: folder.id, title, url }, bookmark => {
-            // check to see if any of the tagsToAdd include our new folder name
-            tagsToAdd = tagsToAdd.map(idOrName => {
-              // if the id isn't a number, check it against new folder name
-              if (isNaN(idOrName)) {
-                // if the name is the same as the folder's title, return its id
-                return idOrName === folder.title ? folder.id : idOrName;
-              }
-              return idOrName;
-            })
-            this.props.createBookmark(bookmark, tagsToAdd);
-            this.handleDeactivate();
-          });
-        }, 500)
+        // then, create the bookmark in that folder
+        chrome.bookmarks.create({ parentId: folder.id, title, url }, bookmark => {
+          // check to see if any of the tagsToAdd include our new folder name
+          tagsToAdd = tagsToAdd.map(idOrName => {
+            // if the id isn't a number, check it against new folder name
+            if (isNaN(idOrName)) {
+              // if the name is the same as the folder's title, return its id
+              return idOrName === folder.title ? folder.id : idOrName;
+            }
+            return idOrName;
+          })
+          // add the folder and bookmark to the store
+          this.props.createTagAndBookmark(folder, bookmark, tagsToAdd);
+          this.handleDeactivate();
+        });
       });
     }
     else {
