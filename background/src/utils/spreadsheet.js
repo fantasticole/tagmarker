@@ -122,15 +122,21 @@ export function addRows (sheet, data, id) {
   let formattedRows = formatRows(sheet, data);
   let url = `https://sheets.googleapis.com/v4/spreadsheets/${id}/values/${sheet}!A1:append?valueInputOption=RAW&key=${api_key}`;
 
-  newRequest(false, url, 'POST', (xhrOrError) => {
-    if (xhrOrError.xhr) {
-      let { xhr } = xhrOrError;
+  return new Promise ((resolve, reject) => {
+    newRequest(false, url, 'POST', (xhrOrError) => {
+      if (xhrOrError.xhr) {
+        let { xhr } = xhrOrError;
 
-      // if the request is unsuccessful, throw an error
-      if (xhr.status !== 200) console.error(xhr.response)
-    }
-    else console.error(xhrOrError);
-  }, 'json', formattedRows)
+        // if the request is unsuccessful, throw an error
+        if (xhr.status !== 200) {
+          console.error(xhr.response)
+          reject(xhr.response.error);
+        }
+        else resolve();
+      }
+      else console.error(xhrOrError);
+    }, 'json', formattedRows)
+  });
 }
 
 export function create () {
