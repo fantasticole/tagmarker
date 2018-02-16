@@ -10,7 +10,7 @@ export function addBookmark (originalAction) {
         // get ids to set on bookmark
         idsToAdd = allTags.map(tag => tag.id);
 
-    bookmark.tags = idsToAdd;
+    bookmark.tags = Array.from(new Set(idsToAdd));
     // update the spreadsheet
     spreadsheet.addRows('bookmarks', bookmark);
     if (tagsToCreate.length) spreadsheet.addRows('tags', tagsToCreate);
@@ -104,7 +104,7 @@ export function getTagsToUpdate (tagsToAdd, tagsToDelete, allTags, bookmarkId) {
 
     // if the tag exists, add the bookmark id to its bookmarks
     if (updatedTag.hasOwnProperty('title')) {
-      updatedTag.bookmarks = [...updatedTag.bookmarks, bookmarkId];
+      updatedTag.bookmarks = Array.from(new Set([...updatedTag.bookmarks, bookmarkId]));
       // add tag to list of tags to update
       tags.tagsToUpdate.push(updatedTag);
     }
@@ -123,7 +123,7 @@ export function getTagsToUpdate (tagsToAdd, tagsToDelete, allTags, bookmarkId) {
         newBookmarks = updatedTag.bookmarks.filter(bId => bId !== bookmarkId);
 
     // set the new bookmarks
-    updatedTag.bookmarks = newBookmarks;
+    updatedTag.bookmarks = Array.from(new Set(newBookmarks));
     // add tag to list of tags to update
     tags.tagsToUpdate.push(updatedTag);
   });
@@ -163,7 +163,7 @@ export function removeTag (originalAction) {
           let bookmark = bookmarks[bId],
               // filter out the tag id that's being deleted
               updatedTags = {
-                tags: bookmark.tags.filter(tId => tId !== id),
+                tags: Array.from(new Set(bookmark.tags.filter(tId => tId !== id))),
               };
 
           // return a new bookmark object
@@ -214,7 +214,7 @@ export function updateBookmark (originalAction) {
       chrome.bookmarks.update(bookmark.id, { title, url });
     }
 
-    bookmark.tags = tagIds;
+    bookmark.tags = Array.from(new Set(tagIds));
     // update the spreadsheet
     spreadsheet.update(bookmark, 'bookmarks', Object.keys(bookmarks).length);
     if (tagsToUpdate.length) spreadsheet.update(tagsToUpdate, 'tags', Object.keys(tags).length);
