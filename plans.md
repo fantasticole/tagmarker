@@ -9,11 +9,12 @@
 * Delete tag functionality
   * ~~Remove from array of tags on bookmark in store~~
   * ~~Remove bookmark id from tag's bookmarks array in store~~
-  * Check to see if the folder should be deleted as well
+  * ~~Check to see if the folder should be deleted as well~~
+  * Check to see if/which the folder contents should be deleted as well
   * ~~Update db~~
-* Delete bookmark functionality
+* ~~Delete bookmark functionality~~
   * ~~Remove from bookmarks object in store~~
-  * Check to see if the chrome bookmark should be deleted as well
+  * ~~Check to see if the chrome bookmark should be deleted as well~~
 * ~~Add tag functionality~~
   * ~~Create/import dropdown/autocomplete with existing tags~~
   * ~~Add to array of tags on bookmark in store~~
@@ -70,7 +71,12 @@
   * ~~When one tag is selected, the only other tags that should show should be the ones that overlap.~~
 * ~~Add tag functionality~~
   * ~~Create new tag with custom id~~
-* Add ability to create a folder in the folder select
+* ~~Add ability to create a folder in the folder select~~
+  * ~~make sure spreadsheet has it before new bookmark tag updates are sent~~
+* Continuity
+  * Make sure each browser instance updates when you make a change in one
+* Inform user about spreadsheet
+  * add worksheet to beginning with warning about editing data
 
 
 ## Tag Storage
