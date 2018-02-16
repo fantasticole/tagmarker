@@ -138,10 +138,13 @@
   .Select-menu-outer {
     position: relative;
     background: transparent;
+    box-shadow: none;
+    max-height: none;
   }
   .Select-menu {
     margin-top: 35px;
     overflow: visible;
+    max-height: none;
   }
   .Select-option {
     display: inline-block;

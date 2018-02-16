@@ -55,13 +55,20 @@
   display: inline-block;
 }
 
+.tag-list__container:not(.tag-list--is_editing) {
+  .hidden {
+    .list__sort {
+      .button {
+        color: $mid-accent;
+        pointer-events: none;
+      }
+    }
+  }
+}
 .tag-list__container {
   .list__actions {
     display: block;
     overflow: hidden;
-    &.hidden {
-      height: 0;
-    }
   }
   .list__sort {
     display: inline-block;
