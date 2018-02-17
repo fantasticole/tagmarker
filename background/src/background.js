@@ -115,8 +115,22 @@ chrome.bookmarks.onCreated.addListener((id, bookmarkOrFolder) => {
     if (bookmarkOrFolder.url) {
       // if the bookmark does not already exist (not created in extension)
       if (!storeState.bookmarks[id]) {
+        let bookmark = bookmarkOrFolder,
+            tagsToAdd = [ bookmarkOrFolder.parentId, ...storeState.tags[bookmarkOrFolder.parentId].parents ];
+
         // add it to the store
-        store.dispatch(addBookmark({ bookmark: bookmarkOrFolder, tagsToAdd: [ bookmarkOrFolder.parentId, ...storeState.tags[bookmarkOrFolder.parentId].parents ] }));
+        store.dispatch(addBookmark({ bookmark, tagsToAdd }));
+
+        // see if the drawer is open
+        checkDrawerStatus()
+          .then((data) => {
+            let { drawerIsOpen, tabId } = data;
+
+            // if it's closed, open it
+            if (!drawerIsOpen) toggleDrawer(tabId);
+            // add bookmark
+            sendBookmarkData(bookmark);
+          });
       }
     }
     // otherwise, it's a folder
