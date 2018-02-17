@@ -79,6 +79,24 @@ export default class EditableTags extends Component {
     });
   }
 
+  renderOption (tag) {
+    if (!tag.className) {
+      let { tags } = this.props,
+          parent = tags[tag.parentId],
+          tagCount = tag.bookmarks.length,
+          tagNoun = tagCount === 1 ? ' bookmark' : ' bookmarks',
+          tagParent = parent ? `, in folder ${parent.title}` : '';
+
+      return (
+        <span>
+          <p className='tag-title'>{tag.title}</p>
+          <p className='tag-info'>{tagCount}{tagNoun}{tagParent}</p>
+        </span>
+      );
+    }
+    return <span><p className='tag-title'>{tag.title}</p></span>
+  }
+
   renderTags (tags, type) {
     // always render if there are tags
     if (tags.length) {
@@ -137,6 +155,7 @@ export default class EditableTags extends Component {
             multi={false}
             name='tag-select'
             onChange={(selected) => this.selectTag(selected.id)}
+            optionRenderer={(option) => this.renderOption(option)}
             options={this.state.options}
             placeholder='select tags'
             promptTextCreator={(label) => (`Create tag "${label}"`)}
