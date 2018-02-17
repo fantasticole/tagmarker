@@ -23,13 +23,17 @@ export default class Drawer extends Component {
     chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
       // if we're being sent bookmark data, open modal to add bookmark
       if (req.ref === 'bookmark_data') {
-        let { title, url } = req.data,
+        // I don't understand why req.data has tags for manually
+        // created bookmarks
+        let { parentId, title, url } = req.data,
             { createTagAndBookmark, createBookmark, tags } = this.props;
 
         Modal.render(
           <CreateBookmarkModal
             createTagAndBookmark={(folder, bookmark, tagsToAdd) => createTagAndBookmark(folder, bookmark, tagsToAdd)}
             createBookmark={(bookmark, tagsToAdd) => createBookmark(bookmark, tagsToAdd)}
+            parentId={parentId}
+            selected={req.data.tags}
             tags={tags}
             title={title}
             url={url}

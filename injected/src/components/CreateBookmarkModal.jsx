@@ -14,6 +14,8 @@ import ifTrue from '../utils/ifTrue';
  *
  * @param {function} createTagAndBookmark - function to add a tag and a bookmark
  * @param {function} createBookmark - function to save a bookmark
+ * @param {array} selected - selected tags for the bookmark
+ * @param {number} parentId - parent folder id
  * @param {object} tags - all tags from store
  * @param {string} title - current page title
  * @param {string} url - current page url
@@ -25,10 +27,10 @@ export default class CreateBookmarkModal extends Component {
     this.state = {
       creatingFolder: false,
       newFolderName: null,
-      parentId: null,
+      parentId: this.props.parentId,
       preventClose: false,
       suggested: [],
-      tagsToAdd: [],
+      tagsToAdd: this.props.selected ? this.props.selected : [],
       title: this.props.title,
       url: this.props.url,
       warn: false,
@@ -136,7 +138,7 @@ export default class CreateBookmarkModal extends Component {
         <FolderSelection
           creatable
           onSelect={(selected) => this.handleSelectFolder(selected)}
-          parentId={parentId}
+          parent={tags[parentId]}
           />
         {ifTrue(creatingFolder).render(() => (
           <span>

@@ -8,15 +8,17 @@ import Select from 'react-select';
  *
  * @param {bool} creatable - if a folder can be created from the select or not
  * @param {function} onSelect - function to select folder
- * @param {number} parentId - parent folder title
+ * @param {number} parent - parent folder data
  */
 export default class FolderSelection extends Component {
   constructor (props) {
     super(props);
 
+    let { parent } = this.props;
+
     this.state = {
       options: [],
-      selected: null,
+      selected: parent ? { label: parent.title, value: parent.id } : null,
     };
   }
 
