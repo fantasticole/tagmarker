@@ -48,15 +48,17 @@ export default class EditableTags extends Component {
     this.props.selectTags(selected)
   }
 
-  selectTag (id) {
-    let { options, selected } = this.state,
-        index = options.findIndex(o => (o.id === id));
+  selectTag (tag) {
+    if (tag) {
+      let { options, selected } = this.state,
+          index = options.findIndex(o => (o.id === tag.id));
 
-    selected.push(id);
-    // if it's in the options array, remove it
-    if (index > -1) options.splice(index, 1);
-    this.setState({ options, selected });
-    this.props.selectTags(selected)
+      selected.push(tag.id);
+      // if it's in the options array, remove it
+      if (index > -1) options.splice(index, 1);
+      this.setState({ options, selected });
+      this.props.selectTags(selected);
+    }
   }
 
   setOptions () {
@@ -154,7 +156,7 @@ export default class EditableTags extends Component {
             labelKey='title'
             multi={false}
             name='tag-select'
-            onChange={(selected) => this.selectTag(selected.id)}
+            onChange={(selected) => this.selectTag(selected)}
             optionRenderer={(option) => this.renderOption(option)}
             options={this.state.options}
             placeholder='select tags'
