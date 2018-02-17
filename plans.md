@@ -4,7 +4,7 @@
 * Tests
   * components
   * ~~actions~~
-  * ~~aliases~~
+  * aliases
   * ~~reducers~~
 * Delete tag functionality
   * ~~Remove from array of tags on bookmark in store~~
@@ -12,6 +12,19 @@
   * ~~Check to see if the folder should be deleted as well~~
   * Check to see if/which the folder contents should be deleted as well
   * ~~Update db~~
+* Listen for moved bookmarks and folders
+  * ask about changing tags
+  * update tag's parents
+* Add backup capability
+  * ~~Store all in google drive~~
+  * Add ability to create/duplicate spreadsheet
+  * Add ability to point extension to chosen spreadsheet
+* Continuity
+  * Make sure each browser instance updates when you make a change in one
+* Inform user about spreadsheet
+  * add worksheet to beginning with warning about editing data
+
+## Done
 * ~~Delete bookmark functionality~~
   * ~~Remove from bookmarks object in store~~
   * ~~Check to see if the chrome bookmark should be deleted as well~~
@@ -20,44 +33,6 @@
   * ~~Add to array of tags on bookmark in store~~
   * ~~Add bookmark id to tag's bookmarks array in store~~
   * ~~Update db~~
-* Edit bookmark functionality
-  * ~~Update bookmark name in extension~~
-  * ~~Update bookmark name in Chrome~~
-  * Add notes
-* Add bookmark functionality
-  * ~~Ask where new bookmark should be created~~
-  * ~~Add bookmark to Chrome~~
-  * ~~Get and save bookmark details on 'add' command~~
-  * ~~Update db~~
-  * Check page for keywords as suggested tags
-* ~~Listen for manually created bookmarks and folders~~
-  * ~~Create bookmark in extension for new bookmark~~
-  * ~~Create tag in extension for new folder~~
-  * ~~Ask for tags for new bookmarks~~
-* Listen for moved bookmarks and folders
-  * update bookmark's tags
-  * update tag's parents
-* Add "All tags" option
-  * ???
-* Batch tagging
-  * Add or remove tags for multiple bookmarks at once
-* ~~Figure out where to store all of this so it persists~~
-  * ~~google drive!~~
-* Connect bookmarks
-  * link them manually/by date
-* FEATURE REQUEST: Page previews?
-  * on hover show screen rendering
-* Add context details to tags in select box
-  * ~~bookmark count~~
-  * update bookmark count
-  * Put parent folder name in parens after?
-* Add backup capability
-  * ~~Store all in google drive~~
-  * Add ability to create/duplicate spreadsheet
-  * Add ability to point extension to chosen spreadsheet
-* Toggle tag selection mode
-  * ~~narrowing~~
-  * concatting
 * ~~Track drawer status by tab~~
   * ~~Make sure the drawer knows where to be open and where to be closed~~
   * ~~default to close on page load/refresh, only open when told~~
@@ -73,10 +48,43 @@
   * ~~Create new tag with custom id~~
 * ~~Add ability to create a folder in the folder select~~
   * ~~make sure spreadsheet has it before new bookmark tag updates are sent~~
-* Continuity
-  * Make sure each browser instance updates when you make a change in one
-* Inform user about spreadsheet
-  * add worksheet to beginning with warning about editing data
+* ~~Edit bookmark functionality~~
+  * ~~Update bookmark name in extension~~
+  * ~~Update bookmark name in Chrome~~
+* ~~Add bookmark functionality~~
+  * ~~Ask where new bookmark should be created~~
+  * ~~Add bookmark to Chrome~~
+  * ~~Get and save bookmark details on 'add' command~~
+  * ~~Update db~~
+* ~~Figure out where to store all of this so it persists~~
+  * ~~google drive!~~
+* ~~Add context details to tags in select box~~
+  * ~~bookmark count~~
+  * ~~update bookmark count~~
+  * ~~Include parent folder name~~
+* ~~Listen for manually created bookmarks and folders~~
+  * ~~Create bookmark in extension for new bookmark~~
+  * ~~Create tag in extension for new folder~~
+  * ~~Ask for tags for new bookmarks~~
+
+## To Do Next Time
+* Edit bookmark functionality
+  * Add notes
+* Add bookmark functionality
+  * Check page for keywords as suggested tags
+* Add "All tags" option
+  * ???
+* Batch tagging
+  * Add or remove tags for multiple bookmarks at once
+* Connect bookmarks
+  * link them manually/by date
+* FEATURE REQUEST: Page previews?
+  * on hover show screen rendering
+* Toggle tag selection mode
+  * ~~narrowing~~
+  * concatting
+
+
 
 
 ## Tag Storage
