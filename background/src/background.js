@@ -178,10 +178,8 @@ chrome.bookmarks.onMoved.addListener((id, moveInfo) => {
       suggestedTags = [...tags[parentId].parents, parentId];
 
   if (type === 'tag') {
-    let tag = Object.assign({}, tags[id]);
-
-    // update parents
-    tag.parents = suggestedTags;
+    // get tag with updated parents
+    let tag = Object.assign({}, tags[id], { parents: suggestedTags });
 
     // update the spreadsheet
     spreadsheet.update(tag, 'tags', Object.keys(tags).length);
@@ -192,12 +190,14 @@ chrome.bookmarks.onMoved.addListener((id, moveInfo) => {
     // see if the drawer is open
     checkDrawerStatus()
       .then((data) => {
-        let { drawerIsOpen, tabId } = data;
+        let { drawerIsOpen, tabId } = data,
+            // get bookmark with updated parentId
+            bookmark = Object.assign({}, bookmarks[id], { parentId });
 
         // if it's closed, open it
         if (!drawerIsOpen) toggleDrawer(tabId);
         // add bookmark
-        sendBookmarkData(bookmarks[id], suggestedTags);
+        sendBookmarkData(bookmark, suggestedTags);
       });
   }
 })
