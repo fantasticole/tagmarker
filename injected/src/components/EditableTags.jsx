@@ -115,7 +115,7 @@ export default class EditableTags extends Component {
         <div className={`bookmark__tags--are_${type}`}>
           {tags.map(tag => (
             <MarqueeWrapper key={tag.id}>
-              <button className={tagClasses} onClick={() => {type === 'selected' ? this.handleDeleteTag(tag.id) : this.selectTag(tag.id)}}>{tag.title} <i className={iconClasses}/></button>
+              <button className={tagClasses} onClick={() => {type === 'selected' ? this.handleDeleteTag(tag.id) : this.selectTag({ id: tag.id })}}>{tag.title} <i className={iconClasses}/></button>
             </MarqueeWrapper>
           ))}
         </div>
