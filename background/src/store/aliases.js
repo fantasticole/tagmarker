@@ -36,7 +36,7 @@ export function addTag (originalAction) {
 }
 
 export function addTagAndBookmark (originalAction) {
-  let { folder, bookmark, tagsToAdd } = originalAction;
+  let { folder, update, bookmark, tagsToAdd } = originalAction;
 
   return (dispatch, getState) => {
     let { tags } = getState(),
@@ -47,7 +47,8 @@ export function addTagAndBookmark (originalAction) {
     spreadsheet.addRows('tags', newTag)
       .then(() => {
         // update the store
-        dispatch(addBookmark({ bookmark, tagsToAdd }))
+        if (update) dispatch(updateBookmark({ bookmark }));
+        else dispatch(addBookmark({ bookmark, tagsToAdd }))
       })
       .catch((err) => console.error(err));
   }

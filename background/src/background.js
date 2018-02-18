@@ -170,6 +170,38 @@ chrome.bookmarks.onChanged.addListener((id, data) => {
   }
 });
 
+// listen for moved bookmarks
+chrome.bookmarks.onMoved.addListener((id, moveInfo) => {
+  let { parentId, oldParentId } = moveInfo,
+      { bookmarks, tags } = store.getState(),
+      type = bookmarks[id] ? 'bookmark' : 'tag',
+      suggestedTags = [...tags[parentId].parents, parentId];
+
+  if (type === 'tag') {
+    let tag = Object.assign({}, tags[id]);
+
+    // update parents
+    tag.parents = suggestedTags;
+
+    // update the spreadsheet
+    spreadsheet.update(tag, 'tags', Object.keys(tags).length);
+    // update the tag in the store
+    store.dispatch(createOrUpdateTags(tag));
+  }
+  else {
+    // see if the drawer is open
+    checkDrawerStatus()
+      .then((data) => {
+        let { drawerIsOpen, tabId } = data;
+
+        // if it's closed, open it
+        if (!drawerIsOpen) toggleDrawer(tabId);
+        // add bookmark
+        sendBookmarkData(bookmarks[id], suggestedTags);
+      });
+  }
+})
+
 // listen for removed bookmarks
 chrome.bookmarks.onRemoved.addListener((id, data) => {
   // wait in case it's being deleted from the extension
