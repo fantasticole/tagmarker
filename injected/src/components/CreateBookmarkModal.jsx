@@ -12,13 +12,14 @@ import ifTrue from '../utils/ifTrue';
 /**
  * CreateBookmarkModal
  *
- * @param {function} createTagAndBookmark - function to add a tag and a bookmark
- * @param {function} createBookmark - function to save a bookmark
+ * @param {function} manageTagAndBookmark - function to add tag and manage
+ * a bookmark
+ * @param {function} manageBookmark - function to manage a bookmark
+ * @param {object} bookmark - bookmark object we're managing
  * @param {array} selected - selected tags for the bookmark
- * @param {number} parentId - parent folder id
+ * @param {array} suggested - suggested tags for the bookmark
  * @param {object} tags - all tags from store
- * @param {string} title - current page title
- * @param {string} url - current page url
+ * @param {bool} update - whether we're updating or creating a bookmark
  */
 export default class CreateBookmarkModal extends Component {
   constructor (props) {
@@ -27,12 +28,12 @@ export default class CreateBookmarkModal extends Component {
     this.state = {
       creatingFolder: false,
       newFolderName: null,
-      parentId: this.props.parentId,
+      parentId: this.props.bookmark.parentId,
       preventClose: false,
-      suggested: [],
+      suggested: this.props.suggested ? this.props.suggested : [],
       tagsToAdd: this.props.selected ? this.props.selected : [],
-      title: this.props.title,
-      url: this.props.url,
+      title: this.props.bookmark.title,
+      url: this.props.bookmark.url,
       warn: false,
     };
   }
@@ -50,12 +51,12 @@ export default class CreateBookmarkModal extends Component {
   }
 
   handleClickSubmit () {
-    let { creatingFolder, newFolderName, parentId, tagsToAdd, title, url } = this.state;
+    let { bookmark, update } = this.props,
+        { creatingFolder, newFolderName, parentId, tagsToAdd, title, url } = this.state;
 
+    // see if we're creating a folder
     if (creatingFolder) {
       chrome.bookmarks.create({ parentId, title: newFolderName }, folder => {
-        // then, create the bookmark in that folder
-        chrome.bookmarks.create({ parentId: folder.id, title, url }, bookmark => {
           // check to see if any of the tagsToAdd include our new folder name
           tagsToAdd = tagsToAdd.map(idOrName => {
             // if the id isn't a number, check it against new folder name
@@ -65,17 +66,44 @@ export default class CreateBookmarkModal extends Component {
             }
             return idOrName;
           })
-          // add the folder and bookmark to the store
-          this.props.createTagAndBookmark(folder, bookmark, tagsToAdd);
+
+          // if we're updating
+          if (update) {
+            // create updated bookmark object to pass along
+            let newBookmark = Object.assign({}, bookmark, { parentId, title, url });
+
+            // pass that to the manageTagAndBookmark function
+            this.props.manageTagAndBookmark(folder, update, newBookmark);
+            this.handleDeactivate();
+          }
+          // otherwise, create a bookmark in that folder
+          else {
+            chrome.bookmarks.create({ parentId: folder.id, title, url }, bookmark => {
+              // add the folder and bookmark to the store
+              this.props.manageTagAndBookmark(folder, update, bookmark, tagsToAdd);
+              this.handleDeactivate();
+            });
+          }
+        })
+    }
+    // if we're not creating a folder
+    else {
+      // if we're updating the bookmark
+      if (update) {
+        // create updated bookmark object to pass along
+        let newBookmark = Object.assign({}, bookmark, { parentId, title, url });
+
+        this.props.manageBookmark(newBookmark);
+        this.handleDeactivate();
+      }
+      // otherwise
+      else {
+        // create the bookmark
+        chrome.bookmarks.create({ parentId, title, url }, bookmark => {
+          this.props.manageBookmark(bookmark, tagsToAdd);
           this.handleDeactivate();
         });
-      });
-    }
-    else {
-      chrome.bookmarks.create({ parentId, title, url }, bookmark => {
-        this.props.createBookmark(bookmark, tagsToAdd);
-        this.handleDeactivate();
-      });
+      }
     }
   }
 

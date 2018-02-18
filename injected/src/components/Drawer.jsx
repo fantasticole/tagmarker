@@ -11,6 +11,7 @@ import Modal from './Modal';
  *
  * @param {function} addTag - function to add a tag
  * @param {function} createBookmark - function to save a bookmark
+ * @param {function} updateBookmark - function to update a bookmark
  * @param {object} tags - all tags from store
  */
 export default class Drawer extends Component {
@@ -25,18 +26,19 @@ export default class Drawer extends Component {
       if (req.ref === 'bookmark_data') {
         // I don't understand why req.data has tags for manually
         // created bookmarks
-        let { parentId, title, url } = req.data,
-            { createTagAndBookmark, createBookmark, tags } = this.props;
+        let { data, suggestedTags, update } = req,
+            { manageTagAndBookmark, createBookmark, tags, updateBookmark } = this.props,
+            manageBookmark = update ? updateBookmark : createBookmark;
 
         Modal.render(
           <CreateBookmarkModal
-            createTagAndBookmark={(folder, bookmark, tagsToAdd) => createTagAndBookmark(folder, bookmark, tagsToAdd)}
-            createBookmark={(bookmark, tagsToAdd) => createBookmark(bookmark, tagsToAdd)}
-            parentId={parentId}
-            selected={req.data.tags}
+            manageTagAndBookmark={(...args) => manageTagAndBookmark(...args)}
+            manageBookmark={(...args) => manageBookmark(...args)}
+            bookmark={data}
+            selected={data.tags}
+            suggested={suggestedTags}
             tags={tags}
-            title={title}
-            url={url}
+            update={update}
             />
         );
       }
