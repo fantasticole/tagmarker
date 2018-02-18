@@ -20,7 +20,7 @@ export default class FilteredTags extends Component {
   }
 
   componentDidMount () {
-    this.refs.filtered.focus();
+    if (this.refs.filtered) this.refs.filtered.focus();
   }
 
   handleSelectTag (selected) {
