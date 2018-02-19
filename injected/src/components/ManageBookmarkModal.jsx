@@ -13,10 +13,11 @@ import ifTrue from '../utils/ifTrue';
 /**
  * ManageBookmarkModal
  *
+ * @param {object} bookmark - bookmark object we're managing
  * @param {function} manageTagAndBookmark - function to add tag and manage
  * a bookmark
  * @param {function} manageBookmark - function to manage a bookmark
- * @param {object} bookmark - bookmark object we're managing
+ * @param {function} onCloseModal - function to run when modal closes
  * @param {array} selected - selected tags for the bookmark
  * @param {array} suggested - suggested tags for the bookmark
  * @param {object} tags - all tags from store
@@ -46,7 +47,8 @@ export default class ManageBookmarkModal extends Component {
   handleClickCancel () {
     if (this.state.warn) {
       Alert('are you sure you want to cancel?', null, 'yes, cancel', 'keep editing').then(isConfirmed => {
-        if (isConfirmed) this.handleDeactivate();
+        if (isConfirmed) {
+          this.handleDeactivate();}
       });
     }
     else this.handleDeactivate();
@@ -120,6 +122,7 @@ export default class ManageBookmarkModal extends Component {
   }
 
   handleDeactivate () {
+    if (this.props.onCloseModal) this.props.onCloseModal();
     this.refs.modal.deactivate();
   }
 
@@ -168,7 +171,7 @@ export default class ManageBookmarkModal extends Component {
         action = update ? 'update' : 'add';
 
     return (
-      <Modal.Modal className={modalClasses} ref='modal'>
+      <Modal.Modal className={modalClasses} onClose={() => this.props.onCloseModal()} ref='modal'>
         <h1 className='modal__header bookmark__header'>{action} bookmark in:</h1>
         <FolderSelection
           creatable

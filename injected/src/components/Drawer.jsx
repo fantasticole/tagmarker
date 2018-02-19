@@ -26,15 +26,17 @@ export default class Drawer extends Component {
       if (req.ref === 'bookmark_data') {
         // I don't understand why req.data has tags for manually
         // created bookmarks
-        let { data, suggestedTags, update } = req,
+        let { data, drawerWasOpen, suggestedTags, update } = req,
             { manageTagAndBookmark, createBookmark, tags, updateBookmark } = this.props,
-            manageBookmark = update ? updateBookmark : createBookmark;
+            manageBookmark = update ? updateBookmark : createBookmark,
+            closeDrawer = drawerWasOpen === undefined ? drawerWasOpen : (!drawerWasOpen);
 
         Modal.render(
           <ManageBookmarkModal
             manageTagAndBookmark={(...args) => manageTagAndBookmark(...args)}
             manageBookmark={(...args) => manageBookmark(...args)}
             bookmark={data}
+            onCloseModal={() => this.handleModalClose(closeDrawer)}
             selected={data.tags}
             suggested={suggestedTags}
             tags={tags}
@@ -43,6 +45,11 @@ export default class Drawer extends Component {
         );
       }
     })
+  }
+
+  handleModalClose (closeDrawer) {
+    // if we should close the drawer, send message to do so
+    if (closeDrawer) chrome.runtime.sendMessage({ ref: 'toggle_drawer' });
   }
 
   render () {

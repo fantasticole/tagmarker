@@ -20,7 +20,7 @@ Module.Modal = class Modal extends Component {
     e.preventDefault();
     e.stopPropagation();
     if (this.props.onClose) this.props.onClose();
-    else this.deactivate();
+    this.deactivate();
   }
 
   deactivate () {

@@ -100,7 +100,7 @@ chrome.commands.onCommand.addListener(command => {
         // if it's closed, open it
         if (!drawerIsOpen) toggleDrawer(tabId);
         // add bookmark
-        sendBookmarkData();
+        sendBookmarkData(drawerIsOpen);
       });
   }
 });
@@ -129,7 +129,7 @@ chrome.bookmarks.onCreated.addListener((id, bookmarkOrFolder) => {
             // if it's closed, open it
             if (!drawerIsOpen) toggleDrawer(tabId);
             // add bookmark
-            sendBookmarkData(bookmark);
+            sendBookmarkData(drawerIsOpen, bookmark);
           });
       }
     }
@@ -197,7 +197,7 @@ chrome.bookmarks.onMoved.addListener((id, moveInfo) => {
         // if it's closed, open it
         if (!drawerIsOpen) toggleDrawer(tabId);
         // add bookmark
-        sendBookmarkData(bookmark, suggestedTags);
+        sendBookmarkData(drawerIsOpen, bookmark, suggestedTags);
       });
   }
 })
