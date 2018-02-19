@@ -78,9 +78,9 @@ export default class ManageBookmarkModal extends Component {
           }
           // otherwise, create a bookmark in that folder
           else {
-            chrome.bookmarks.create({ parentId: folder.id, title, url }, bookmark => {
+            chrome.bookmarks.create({ parentId: folder.id, title, url }, bm => {
               // add the folder and bookmark to the store
-              this.props.manageTagAndBookmark(folder, update, bookmark, tagsToAdd);
+              this.props.manageTagAndBookmark(folder, update, bm, tagsToAdd);
               this.handleDeactivate();
             });
           }
@@ -99,8 +99,8 @@ export default class ManageBookmarkModal extends Component {
       // otherwise
       else {
         // create the bookmark
-        chrome.bookmarks.create({ parentId, title, url }, bookmark => {
-          this.props.manageBookmark(bookmark, tagsToAdd);
+        chrome.bookmarks.create({ parentId, title, url }, bm => {
+          this.props.manageBookmark(bm, tagsToAdd);
           this.handleDeactivate();
         });
       }
