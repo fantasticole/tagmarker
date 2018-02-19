@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 
-import Select from 'react-select';
+import Alert from './Alert';
 import EditBookmark from './EditBookmark';
 import FolderSelection from './FolderSelection';
 import Modal from './Modal';
+import Select from 'react-select';
 
 import ifTrue from '../utils/ifTrue';
 
@@ -29,7 +30,6 @@ export default class ManageBookmarkModal extends Component {
       creatingFolder: false,
       newFolderName: null,
       parentId: this.props.bookmark.parentId,
-      preventClose: false,
       suggested: this.props.suggested ? this.props.suggested : [],
       tagsToAdd: this.props.selected ? this.props.selected : [],
       title: this.props.bookmark.title,
@@ -39,14 +39,15 @@ export default class ManageBookmarkModal extends Component {
   }
 
   handleChange (bookmarkKey, event) {
-    this.setState({ [bookmarkKey]: event.target.value });
-    this.triggerCancelBuffer();
+    this.setState({ [bookmarkKey]: event.target.value, warn: true });
   }
 
   handleClickCancel () {
-    let { preventClose } = this.state;
-    // check for changes
-    if (preventClose) this.setState({ preventClose: false, warn: true });
+    if (this.state.warn) {
+      Alert('are you sure you want to cancel?', null, 'yes, cancel', 'keep editing').then(isConfirmed => {
+        if (isConfirmed) this.handleDeactivate();
+      });
+    }
     else this.handleDeactivate();
   }
 
@@ -118,14 +119,14 @@ export default class ManageBookmarkModal extends Component {
       this.setState({
         creatingFolder: true,
         newFolderName: id,
+        warn: true,
       });
     }
     // otherwise, hide it and set the selected parent id
     else {
-      this.setState({ creatingFolder: false });
+      this.setState({ creatingFolder: false, warn: true });
       this.setParent(id);
     }
-    this.triggerCancelBuffer();
   }
 
   setParent (parentId) {
@@ -143,22 +144,13 @@ export default class ManageBookmarkModal extends Component {
   }
 
   setSelectedTags (tagsToAdd) {
-    this.setState({ tagsToAdd });
-    this.triggerCancelBuffer();
-  }
-
-  triggerCancelBuffer () {
-    this.setState({ preventClose: true, warn: false })
+    this.setState({ tagsToAdd, warn: true, });
   }
 
   render () {
-    let { creatingFolder, parentId, suggested, tagsToAdd, title, url, warn } = this.state,
+    let { creatingFolder, parentId, suggested, tagsToAdd, title, url } = this.state,
         { tags } = this.props,
-        cancelText = warn ? 'Yes, bye' : 'Cancel',
-        canSubmit = url && parentId && tagsToAdd.length,
-        warningClasses = classNames('modal__warning', {
-          visible: warn,
-        });
+        canSubmit = url && parentId && tagsToAdd.length;
 
     return (
       <Modal.Modal className='bookmark-modal' ref='modal'>
@@ -177,7 +169,6 @@ export default class ManageBookmarkModal extends Component {
           </span>
         ))}
         <EditBookmark
-          isEditing={true}
           onChange={(field, event) => this.handleChange(field, event)}
           selected={tagsToAdd}
           setSelectedTags={(selected) => this.setSelectedTags(selected)}
@@ -186,10 +177,9 @@ export default class ManageBookmarkModal extends Component {
           title={title}
           url={url}
           />
-        <p className={warningClasses}>Are you sure you want to cancel?</p>
         <span className='modal__actions bookmark-modal__actions'>
           <button className='button modal-action__button bookmark-action__button action-button' disabled={!canSubmit} onClick={() => this.handleClickSubmit()}>Submit <i className='fa fa-floppy-o'/></button>
-          <button className='button modal-action__button bookmark-action__button action-button' onClick={() => this.handleClickCancel()}>{cancelText} <i className='fa fa-ban'/></button>
+          <button className='button modal-action__button bookmark-action__button action-button' onClick={() => this.handleClickCancel()}>Exit <i className='fa fa-ban'/></button>
         </span>
       </Modal.Modal>
     );
