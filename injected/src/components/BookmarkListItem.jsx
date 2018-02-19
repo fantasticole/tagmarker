@@ -4,8 +4,7 @@ import classNames from 'classnames';
 
 import Alert from './Alert';
 import Bookmark from './Bookmark';
-
-import ifTrue from '../utils/ifTrue';
+import EditBookmark from './EditBookmark';
 
 /**
  * BookmarkListItem
@@ -86,19 +85,43 @@ export default class BookmarkListItem extends Component {
     this.setState({ selected });
   }
 
-  renderBookmarkActions () {
-    if (this.state.isEditing) {
+  renderBookmark () {
+    let { bookmark, tags } = this.props,
+        { active, isEditing, selected } = this.state;
+
+    if (active) {
+      if (isEditing) {
+        return (
+          <div className='bookmark__item'>
+            <EditBookmark
+              onChange={(field, event) => this.handleChange(field, event)}
+              selected={selected}
+              setSelectedTags={(tags) => this.setSelectedTags(tags)}
+              tags={tags}
+              title={bookmark.title}
+              url={bookmark.url}
+              />
+            <span className='bookmark__actions'>
+              <button className='button bookmark-action__button action-button' onClick={() => this.handleClickSave()}>Save <i className='fa fa-floppy-o'/></button>
+              <button className='button bookmark-action__button action-button' onClick={() => this.handleExitEdit()}>Cancel <i className='fa fa-ban'/></button>
+              <button className='button bookmark-action__button action-button' onClick={() => this.handleClickDelete()}>Delete <i className='fa fa-trash-o'/></button>
+            </span>
+          </div>
+        );
+      }
       return (
-        <span className='bookmark__actions'>
-          <button className='button bookmark-action__button action-button' onClick={() => this.handleClickSave()}>Save <i className='fa fa-floppy-o'/></button>
-          <button className='button bookmark-action__button action-button' onClick={() => this.handleExitEdit()}>Cancel <i className='fa fa-ban'/></button>
-          <button className='button bookmark-action__button action-button' onClick={() => this.handleClickDelete()}>Delete <i className='fa fa-trash-o'/></button>
-        </span>
+        <div className='bookmark__item'>
+          <Bookmark
+            dateAdded={bookmark.dateAdded}
+            selected={selected}
+            tags={tags}
+            title={bookmark.title}
+            url={bookmark.url}
+            />
+          <button className='button bookmark-action__button action-button bookmark-edit__button' onClick={() => this.handleClickEdit()}>Edit <i className='fa fa-pencil'/></button>
+        </div>
       );
     }
-    return (
-      <button className='button bookmark-action__button action-button bookmark-edit__button' onClick={() => this.handleClickEdit()}>Edit <i className='fa fa-pencil'/></button>
-    );
   }
 
   render () {
@@ -117,21 +140,7 @@ export default class BookmarkListItem extends Component {
           <button className='show-more'><i className='fa fa-caret-right'/></button>
           {bookmark.title || bookmark.url}
         </p>
-        {ifTrue(active).render(() => (
-          <div className='bookmark__item'>
-            <Bookmark
-              dateAdded={bookmark.dateAdded}
-              isEditing={isEditing}
-              onChange={(field, event) => this.handleChange(field, event)}
-              selected={selected}
-              setSelectedTags={(tags) => this.setSelectedTags(tags)}
-              tags={tags}
-              title={bookmark.title}
-              url={bookmark.url}
-              />
-            {this.renderBookmarkActions()}
-          </div>
-        ))}
+        {this.renderBookmark()}
       </li>
     );
   }
