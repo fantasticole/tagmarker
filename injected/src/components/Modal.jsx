@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import classNames from 'classnames';
 
 /**
  * Modal
  *
  * @param {jsx} children - elements to wrap in the marquee
+ * @param {string} classNames - class names to add to modal
  * @param {function} [onClose] - optional function to run on close
  */
 const Module = {};
@@ -26,11 +28,13 @@ Module.Modal = class Modal extends Component {
   }
 
   render () {
+    let modalClasses = classNames('modal__content', this.props.className);
+
     return (
-      <div className="modal__fill">
-        <div className="modal__viewport" ref="viewport">
-          <button className="button modal__close" onClick={(e) => this.handleClose(e)}>✕</button>
-          <div className="modal__content">
+      <div className='modal__fill'>
+        <div className='modal__viewport' ref='viewport'>
+          <button className='button modal__close' onClick={(e) => this.handleClose(e)}>✕</button>
+          <div className={modalClasses}>
             {this.props.children}
           </div>
         </div>
