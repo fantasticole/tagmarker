@@ -3,14 +3,14 @@ import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 
 import Select from 'react-select';
-import Bookmark from './Bookmark';
+import EditBookmark from './EditBookmark';
 import FolderSelection from './FolderSelection';
 import Modal from './Modal';
 
 import ifTrue from '../utils/ifTrue';
 
 /**
- * CreateBookmarkModal
+ * ManageBookmarkModal
  *
  * @param {function} manageTagAndBookmark - function to add tag and manage
  * a bookmark
@@ -21,7 +21,7 @@ import ifTrue from '../utils/ifTrue';
  * @param {object} tags - all tags from store
  * @param {bool} update - whether we're updating or creating a bookmark
  */
-export default class CreateBookmarkModal extends Component {
+export default class ManageBookmarkModal extends Component {
   constructor (props) {
     super(props);
 
@@ -176,7 +176,7 @@ export default class CreateBookmarkModal extends Component {
               />
           </span>
         ))}
-        <Bookmark
+        <EditBookmark
           isEditing={true}
           onChange={(field, event) => this.handleChange(field, event)}
           selected={tagsToAdd}

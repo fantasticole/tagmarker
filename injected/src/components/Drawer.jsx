@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
-import CreateBookmarkModal from './CreateBookmarkModal';
 import DrawerActions from './DrawerActions';
 import ListView from '../containers/ListView';
+import ManageBookmarkModal from './ManageBookmarkModal';
 import Modal from './Modal';
 
 /**
@@ -31,7 +31,7 @@ export default class Drawer extends Component {
             manageBookmark = update ? updateBookmark : createBookmark;
 
         Modal.render(
-          <CreateBookmarkModal
+          <ManageBookmarkModal
             manageTagAndBookmark={(...args) => manageTagAndBookmark(...args)}
             manageBookmark={(...args) => manageBookmark(...args)}
             bookmark={data}
