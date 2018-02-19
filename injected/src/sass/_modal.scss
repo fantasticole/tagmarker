@@ -68,20 +68,6 @@
   max-width: 48%;
 }
 
-.modal__warning {
-  background-color: #09203f;
-  color: white;
-  text-align: center;
-  padding-top: 0;
-  height: 0;
-  transition: height 0.3s ease;
-  margin: 10px 0;
-  &.visible {
-    padding-top: 3px;
-    height: 20px;
-  }
-}
-
 // bookmark modal
 .folder-selector {
   margin-bottom: 20px;
