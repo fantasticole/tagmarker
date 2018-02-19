@@ -160,15 +160,16 @@ export default class ManageBookmarkModal extends Component {
 
   render () {
     let { creatingFolder, parentId, suggested, tagsToAdd, title, url, validUrl } = this.state,
-        { tags } = this.props,
+        { tags, update } = this.props,
         canSubmit = url && parentId && tagsToAdd.length,
         modalClasses = classNames('bookmark-modal', {
           'has-errors': !validUrl,
-        });
+        }),
+        action = update ? 'update' : 'add';
 
     return (
       <Modal.Modal className={modalClasses} ref='modal'>
-        <h1 className='modal__header bookmark__header'>Add bookmark in:</h1>
+        <h1 className='modal__header bookmark__header'>{action} bookmark in:</h1>
         <FolderSelection
           creatable
           onSelect={(selected) => this.handleSelectFolder(selected)}
