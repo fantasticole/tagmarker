@@ -121,3 +121,58 @@ button:focus,
   padding: 0 3px;
   margin-bottom: -8px;
 }
+
+// Forms
+.form-field {
+  display: block;
+  position: relative;
+}
+
+// Errors
+.has-errors {
+  *:invalid {
+    border-bottom: 1px solid $error;
+    &:hover + .form-error {
+      opacity: 1;
+      display: block;
+      .error-text {
+        height: auto;
+      }
+    }
+  }
+}
+
+.error-text {
+  height: 0;
+  overflow: hidden;
+}
+
+.form-error {
+  position: absolute;
+  top: 100%;
+  width: 100%;
+  border: 1px solid $error;
+  background-color: $base;
+  border-radius: 2px;
+  z-index: 5;
+  text-align: center;
+  opacity: 0;
+  display: none;
+  transition: opacity 0.3s ease-in-out 0.1s;
+  &:before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    border: 5px solid transparent;
+    left: calc(50%);
+    border-bottom-color: $error;
+  }
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    border: 4px solid transparent;
+    left: calc(50% + 1px);
+    border-bottom-color: $base;
+  }
+}

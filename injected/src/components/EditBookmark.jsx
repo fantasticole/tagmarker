@@ -4,6 +4,8 @@ import ReactDOM from 'react-dom';
 import EditableTags from './EditableTags';
 import MarqueeWrapper from './MarqueeWrapper';
 
+import ifTrue from '../utils/ifTrue';
+
 /**
  * EditBookmark
  *
@@ -43,27 +45,37 @@ export default class EditBookmark extends Component {
 
   render () {
     let { suggested } = this.state,
-        { selected, tags, title, url } = this.props;
+        { selected, tags, title, url } = this.props,
+        validUrl = this.refs.url ? this.refs.url.checkValidity() : true;
 
     return (
       <div className='bookmark__details bookmark__details--is_editing'>
-        <input
-          className='bookmark__input modal__input'
-          defaultValue={title}
-          name='title'
-          onChange={(e) => this.props.onChange('title', e)}
-          placeholder='bookmark name'
-          type='text'
-          />
-        <input
-          className='bookmark__input modal__input'
-          defaultValue={url}
-          name='url'
-          onChange={(e) => this.props.onChange('url', e)}
-          placeholder='url'
-          required
-          type='url'
-          />
+        <div className='form-field'>
+          <input
+            className='bookmark__input modal__input'
+            defaultValue={title}
+            name='title'
+            onChange={(e) => this.props.onChange('title', e)}
+            placeholder='bookmark name'
+            type='text'
+            />
+        </div>
+        <div className='form-field'>
+          <input
+            className='bookmark__input modal__input'
+            defaultValue={url}
+            name='url'
+            onChange={(e) => this.props.onChange('url', e)}
+            placeholder='url'
+            ref='url'
+            type='url'
+            />
+          {ifTrue(!validUrl).render(() => (
+            <div className='form-error'>
+              <p className='error-text'>please enter a valid url, e.g. one beginning with 'http://'</p>
+            </div>
+          ))}
+        </div>
         <EditableTags
           selected={selected}
           selectTags={(tags) => this.props.setSelectedTags(tags)}

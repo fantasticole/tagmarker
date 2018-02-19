@@ -34,6 +34,7 @@ export default class ManageBookmarkModal extends Component {
       tagsToAdd: this.props.selected ? this.props.selected : [],
       title: this.props.bookmark.title,
       url: this.props.bookmark.url,
+      validUrl: true,
       warn: false,
     };
   }
@@ -53,7 +54,17 @@ export default class ManageBookmarkModal extends Component {
 
   handleClickSubmit () {
     let { bookmark, update } = this.props,
-        { creatingFolder, newFolderName, parentId, tagsToAdd, title, url } = this.state;
+        { creatingFolder, newFolderName, parentId, tagsToAdd, title, url } = this.state,
+        // check the validity of the url
+        validUrl = this.refs.bookmark.refs.url.checkValidity();
+
+    // if the url is invalid
+    if (!validUrl) {
+      // set that on the state
+      this.setState({ validUrl });
+      // stop submission process
+      return;
+    }
 
     // see if we're creating a folder
     if (creatingFolder) {
@@ -148,12 +159,15 @@ export default class ManageBookmarkModal extends Component {
   }
 
   render () {
-    let { creatingFolder, parentId, suggested, tagsToAdd, title, url } = this.state,
+    let { creatingFolder, parentId, suggested, tagsToAdd, title, url, validUrl } = this.state,
         { tags } = this.props,
-        canSubmit = url && parentId && tagsToAdd.length;
+        canSubmit = url && parentId && tagsToAdd.length,
+        modalClasses = classNames('bookmark-modal', {
+          'has-errors': !validUrl,
+        });
 
     return (
-      <Modal.Modal className='bookmark-modal' ref='modal'>
+      <Modal.Modal className={modalClasses} ref='modal'>
         <h1 className='modal__header bookmark__header'>Add bookmark in:</h1>
         <FolderSelection
           creatable
@@ -175,6 +189,7 @@ export default class ManageBookmarkModal extends Component {
           suggested={suggested}
           tags={tags}
           title={title}
+          ref='bookmark'
           url={url}
           />
         <span className='modal__actions bookmark-modal__actions'>
