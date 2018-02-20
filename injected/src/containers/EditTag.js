@@ -12,7 +12,7 @@ import { connect } from 'react-redux';
 const mapDispatchToProps = (dispatch) => {
   return {
     removeTag: (id) => {
-      dispatch({ type: 'REMOVE_TAG', id });
+      dispatch({ type: 'REMOVE_TAGS', id });
     },
     updateTag: (tag) => {
       dispatch({ type: 'UPDATE_TAG_NAME', tag });

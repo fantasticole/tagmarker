@@ -115,50 +115,65 @@ export function getTagsToUpdate (tagsToAdd, tagsToDelete, allTags, bookmarkId) {
   return tags;
 }
 
-export function removeBookmark (originalAction) {
-  let { id } = originalAction;
+export function removeBookmarks (originalAction) {
+  let { ids } = originalAction;
+
+  // if we only have one id to delete, make it an arry
+  if (!Array.isArray(ids)) ids = [ ids ];
 
   return (dispatch, getState) => {
     let { bookmarks, tags } = getState(),
-        bookmark = bookmarks[id],
-        tagsToDelete = bookmark.tags,
-        { allTags } = getTagsToUpdate([], tagsToDelete, tags, id);
+        // get the bookmark objects we're removing
+        toRemove = ids.map(id => bookmarks[id]),
+        // get unique list tags we need to remove the bookmarks from
+        tagIds = Array.from(new Set(toRemove.reduce((tags, b) => tags.concat(b.tags), []))),
+        tagsToUpdate = tagIds.map(tId => {
+          // get a copy of the tag
+          let tag = Object.assign({}, tags[tId]);
 
-    // update the spreadsheet
-    spreadsheet.deleteRow('bookmarks', Object.keys(bookmarks).length, id);
-    spreadsheet.update(allTags, 'tags', Object.keys(tags).length);
-    // update the store
-    dispatch(createOrUpdateTags(allTags));
-    // delete bookmark from store
-    return dispatch({ type: 'DELETE_BOOKMARK', id });
-  }
-}
-
-export function removeTag (originalAction) {
-  let { id } = originalAction;
-
-  return (dispatch, getState) => {
-    let { bookmarks, tags } = getState(),
-        tag = tags[id],
-        // get a list of bookmarks with updated tags
-        bookmarksToUpdate = tag.bookmarks.map(bId => {
-          let bookmark = bookmarks[bId],
-              // filter out the tag id that's being deleted
-              updatedTags = {
-                tags: Array.from(new Set(bookmark.tags.filter(tId => tId !== id))),
-              };
-
-          // return a new bookmark object
-          return Object.assign({}, bookmark, updatedTags);
+          // update the tag's bookmarks to omit the ones we're deleting
+          tag.bookmarks = tag.bookmarks.filter(bId => (!ids.includes(bId)));
+          return tag;
         });
 
     // update the spreadsheet
-    spreadsheet.deleteRow('tags', Object.keys(tags).length, id);
+    spreadsheet.deleteRows('bookmarks', Object.keys(bookmarks).length, ids);
+    spreadsheet.update(tagsToUpdate, 'tags', Object.keys(tags).length);
+    // update the store
+    dispatch(createOrUpdateTags(tagsToUpdate));
+    // delete each bookmark from store
+    ids.forEach(id => dispatch({ type: 'DELETE_BOOKMARK', id }));
+  }
+}
+
+export function removeTags (originalAction) {
+  let { ids } = originalAction;
+
+  // if we only have one id to delete, make it an arry
+  if (!Array.isArray(ids)) ids = [ ids ];
+
+  return (dispatch, getState) => {
+    let { bookmarks, tags } = getState(),
+        // get the tag objects we're removing
+        toRemove = ids.map(id => tags[id]),
+        // get unique list of bookmarks we need to remove the tags from
+        bookmarkIds = Array.from(new Set(toRemove.reduce((bookmarks, t) => bookmarks.concat(t.bookmarks), []))),
+        bookmarksToUpdate = bookmarkIds.map(bId => {
+          // get a copy of the bookmark
+          let bookmark = Object.assign({}, bookmarks[bId]);
+
+          // update the bookmark's tags to omit the ones we're deleting
+          bookmark.tags = bookmark.tags.filter(tId => (!ids.includes(tId)));
+          return bookmark;
+        });
+
+    // update the spreadsheet
+    spreadsheet.deleteRows('tags', Object.keys(tags).length, ids);
     spreadsheet.update(bookmarksToUpdate, 'bookmarks', Object.keys(bookmarks).length);
-    // remove the tag id from each bookmark associated with it
+    // update the store
     dispatch(createOrUpdateBookmarks(bookmarksToUpdate));
-    // delete tag from store
-    return dispatch({ type: 'DELETE_TAG', id });
+    // delete each tag from store
+    ids.forEach(id => dispatch({ type: 'DELETE_BOOKMARK', id }));
   }
 }
 
@@ -237,8 +252,8 @@ export function updateTagName (originalAction) {
 export default {
   'ADD_BOOKMARK': addBookmark,
   'ADD_TAG': addTag,
-  'REMOVE_BOOKMARK': removeBookmark,
-  'REMOVE_TAG': removeTag,
+  'REMOVE_BOOKMARKS': removeBookmarks,
+  'REMOVE_TAGS': removeTags,
   'UPDATE_BOOKMARK': updateBookmark,
   'UPDATE_TAG_NAME': updateTagName,
 };

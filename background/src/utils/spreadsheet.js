@@ -166,30 +166,28 @@ export function create () {
   })
 }
 
-export function deleteRow (sheet, endRange, id) {
+export function deleteRows (sheet, endRange, ids) {
+  // if we only have one id to delete, make it an arry
+  if (!Array.isArray(ids)) ids = [ ids ];
   let { spreadsheet } = store.getState();
   let url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheet.id}:batchUpdate?fields=replies%2CspreadsheetId%2CupdatedSpreadsheet&key=${api_key}`;
 
 
-  getRowIndexes(sheet, endRange, [id])
+  getRowIndexes(sheet, endRange, ids)
     .then(indexes => {
-      console.log({indexes})
-      let { index } = indexes.find(index => index.id === id);
-      let request = {
-        requests: [
-          {
-            deleteDimension: {
-              range: {
-                sheetId: spreadsheet[`${sheet}Sheet`],
-                dimension: 'ROWS',
-                // zero-indexed means we need to subtract one
-                startIndex: index - 1,
-                endIndex: index
-              }
+      let requests = indexes.map(item => (
+        {
+          deleteDimension: {
+            range: {
+              sheetId: spreadsheet[`${sheet}Sheet`],
+              dimension: 'ROWS',
+              // zero-indexed means we need to subtract one
+              startIndex: item.index - 1,
+              endIndex: item.index
             }
           }
-        ]
-      };
+        }
+      ));
 
       newRequest(false, url, 'POST', (xhrOrError) => {
         if (xhrOrError.xhr) {
@@ -197,7 +195,7 @@ export function deleteRow (sheet, endRange, id) {
           if (xhrOrError.xhr.status !== 200) console.error(xhrOrError.xhr.response)
         }
         else console.error(xhrOrError);
-      }, null, request)
+      }, null, { requests })
     })
     .catch(err => console.error(err));
 }

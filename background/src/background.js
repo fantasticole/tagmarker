@@ -214,7 +214,7 @@ chrome.bookmarks.onRemoved.addListener((id, data) => {
 
     // if there's a url, it's a bookmark (if it exists, delete it)
     if (node.url && storeState.bookmarks[id]) {
-      store.dispatch({ type: 'REMOVE_BOOKMARK', id });
+      store.dispatch({ type: 'REMOVE_BOOKMARKS', ids: id });
     }
     // otherwise, it's a tag (if it exists, delete it)
     else if (storeState.tags[id]) {
@@ -222,13 +222,8 @@ chrome.bookmarks.onRemoved.addListener((id, data) => {
       let toRemove = getChildren(node, { bookmarks: [], tags: [] }),
           { bookmarks, tags } = toRemove;
 
-      bookmarks.forEach(id => {
-        store.dispatch({ type: 'REMOVE_BOOKMARK', id });
-      })
-
-      tags.forEach(id => {
-        store.dispatch({ type: 'REMOVE_TAG', id });
-      })
+      store.dispatch({ type: 'REMOVE_BOOKMARKS', ids: bookmarks });
+      store.dispatch({ type: 'REMOVE_TAGS', ids: tags });
     }
   }, 250)
 });
