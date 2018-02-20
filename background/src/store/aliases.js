@@ -35,25 +35,6 @@ export function addTag (originalAction) {
   }
 }
 
-export function addTagAndBookmark (originalAction) {
-  let { folder, update, bookmark, tagsToAdd } = originalAction;
-
-  return (dispatch, getState) => {
-    let { tags } = getState(),
-        newTag = createTagFromFolder(tags, folder);
-
-    dispatch(createOrUpdateTags(newTag));
-    // update the spreadsheet
-    spreadsheet.addRows('tags', newTag)
-      .then(() => {
-        // update the store
-        if (update) dispatch(updateBookmark({ bookmark }));
-        else dispatch(addBookmark({ bookmark, tagsToAdd }))
-      })
-      .catch((err) => console.error(err));
-  }
-}
-
 export function createTag (title, tags, bookmarkId) {
   let id = `tm-${Math.random().toString(36).substr(2, 9)}`,
       newTag = {
@@ -256,7 +237,6 @@ export function updateTagName (originalAction) {
 export default {
   'ADD_BOOKMARK': addBookmark,
   'ADD_TAG': addTag,
-  'ADD_TAG_AND_BOOKMARK': addTagAndBookmark,
   'REMOVE_BOOKMARK': removeBookmark,
   'REMOVE_TAG': removeTag,
   'UPDATE_BOOKMARK': updateBookmark,
