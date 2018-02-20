@@ -104,6 +104,7 @@ export default class Drawer extends Component {
   }
 
   handleDrawerClose () {
+    Modal.deactivate();
     // if we should close the drawer, send message to do so
     if (this.state.closeDrawer) chrome.runtime.sendMessage({ ref: 'toggle_drawer' });
     // reset the state

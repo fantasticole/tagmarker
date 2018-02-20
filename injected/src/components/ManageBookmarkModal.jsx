@@ -24,8 +24,6 @@ export default class ManageBookmarkModal extends Component {
 
   handleCloseBookmark (id) {
     this.props.closeBookmark(id);
-    // if we're closing the only bookmark, deactivate the modal
-    if (this.props.data.length === 1) this.refs.modal.deactivate();
   }
 
   handleCloseModal () {
@@ -33,10 +31,7 @@ export default class ManageBookmarkModal extends Component {
         bNoun = bCount === 1 ? 'bookmark' : `${bCount} bookmarks`;
 
     Alert(`stop editing ${bNoun}?`, 'confirm close', 'yes, close', 'keep editing').then(isConfirmed => {
-      if (isConfirmed) {
-        this.props.onCloseModal();
-        this.refs.modal.deactivate();
-      }
+      if (isConfirmed) this.props.onCloseModal();
     });
   }
 
