@@ -173,7 +173,7 @@ export function removeTags (originalAction) {
     // update the store
     dispatch(createOrUpdateBookmarks(bookmarksToUpdate));
     // delete each tag from store
-    ids.forEach(id => dispatch({ type: 'DELETE_BOOKMARK', id }));
+    ids.forEach(id => dispatch({ type: 'DELETE_TAG', id }));
   }
 }
 
