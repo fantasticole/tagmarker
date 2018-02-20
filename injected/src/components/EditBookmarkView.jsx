@@ -185,6 +185,7 @@ export default class EditBookmarkView extends Component {
             <p  className='modal__text'>where should this folder live?</p>
             <FolderSelection
               onSelect={(selected) => this.setParent(selected)}
+              parent={tags[parentId]}
               />
           </span>
         ))}
