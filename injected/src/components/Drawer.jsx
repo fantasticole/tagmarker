@@ -61,6 +61,19 @@ export default class Drawer extends Component {
 
         this.setState({ bookmarks, closeDrawer })
       }
+      // if we're being alerted that a bookmark has been removed
+      else if (req.ref === 'remove_bookmark') {
+        let { bookmarks } = this.state,
+            index = bookmarks.findIndex(b => b.bookmark.id === req.id);
+
+        // if it's in our bookmarks array
+        if (index > -1) {
+          // remove it
+          bookmarks.splice(index, 1);
+          // if we have bookmarks, update the state, otherwise, manage the drawer
+          bookmarks.length ? this.setState({ bookmarks }) : this.handleDrawerClose();
+        };
+      }
     })
   }
 
@@ -86,10 +99,8 @@ export default class Drawer extends Component {
     // filter the closed bookmark out of the bookmarks on the state
     let bookmarks = this.state.bookmarks.filter(b => b.id !== id);
 
-    // update the state
-    this.setState({ bookmarks });
-    // if we have no more bookmarks, manage the drawer
-    if (!bookmarks.length) this.handleDrawerClose();
+    // if we have bookmarks, update the state, otherwise, manage the drawer
+    bookmarks.length ? this.setState({ bookmarks }) : this.handleDrawerClose();
   }
 
   handleDrawerClose () {
