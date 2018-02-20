@@ -14,10 +14,10 @@ import ifTrue from '../utils/ifTrue';
  * EditBookmarkView
  *
  * @param {object} bookmark - bookmark object we're managing
+ * @param {function} closeBookmark - function to close bookmark edit view
  * @param {function} manageTagAndBookmark - function to add tag and manage
  * a bookmark
  * @param {function} manageBookmark - function to manage a bookmark
- * @param {function} onDeactivate - function to close bookmark edit view
  * @param {array} selected - selected tags for the bookmark
  * @param {array} suggested - suggested tags for the bookmark
  * @param {object} tags - all tags from store
@@ -46,12 +46,12 @@ export default class EditBookmarkView extends Component {
 
   handleClickCancel () {
     if (this.state.warn) {
-      Alert('are you sure you want to cancel?', null, 'yes, cancel', 'keep editing').then(isConfirmed => {
+      Alert('exit without saving?', 'confirm exit', 'yes, exit', 'keep editing').then(isConfirmed => {
         if (isConfirmed) {
-          this.props.onDeactivate();}
+          this.props.closeBookmark();}
       });
     }
-    else this.props.onDeactivate();
+    else this.props.closeBookmark();
   }
 
   handleClickSubmit () {
@@ -88,14 +88,14 @@ export default class EditBookmarkView extends Component {
 
             // pass that to the manageTagAndBookmark function
             this.props.manageTagAndBookmark(folder, update, newBookmark);
-            this.props.onDeactivate();
+            this.props.closeBookmark();
           }
           // otherwise, create a bookmark in that folder
           else {
             chrome.bookmarks.create({ parentId: folder.id, title, url }, bm => {
               // add the folder and bookmark to the store
               this.props.manageTagAndBookmark(folder, update, bm, tagsToAdd);
-              this.props.onDeactivate();
+              this.props.closeBookmark();
             });
           }
         })
@@ -108,14 +108,14 @@ export default class EditBookmarkView extends Component {
         let newBookmark = Object.assign({}, bookmark, { parentId, title, url });
 
         this.props.manageBookmark(newBookmark);
-        this.props.onDeactivate();
+        this.props.closeBookmark();
       }
       // otherwise
       else {
         // create the bookmark
         chrome.bookmarks.create({ parentId, title, url }, bm => {
           this.props.manageBookmark(bm, tagsToAdd);
-          this.props.onDeactivate();
+          this.props.closeBookmark();
         });
       }
     }

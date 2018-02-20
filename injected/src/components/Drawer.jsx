@@ -20,6 +20,7 @@ export default class Drawer extends Component {
 
     this.state = {
       bookmarks: [],
+      closeDrawer: null,
     }
   }
 
@@ -34,13 +35,16 @@ export default class Drawer extends Component {
             { data, drawerWasOpen, suggestedTags, update } = req,
             bookmarkData = {
               bookmark: data,
+              // if we're updating a bookmark, use its id
+              // otherwise, set the id as a timestamp
+              id: update ? data.id : Date.now(),
               selected: data.tags,
               suggested: suggestedTags,
               update,
             };
 
         // if closeDrawer hasn't been set yet, set it
-        if (!this.state.hasOwnProperty('closeDrawer')) {
+        if (closeDrawer === null) {
           closeDrawer = drawerWasOpen === undefined ? drawerWasOpen : (!drawerWasOpen);
         }
 
@@ -56,10 +60,11 @@ export default class Drawer extends Component {
 
       Modal.render(
         <ManageBookmarkModal
+          closeBookmark={(id) => this.handleCloseBookmark(id)}
           createBookmark={(bookmark, tagsToAdd) => createBookmark(bookmark, tagsToAdd)}
           data={this.state.bookmarks}
           manageTagAndBookmark={(...args) => manageTagAndBookmark(...args)}
-          onCloseModal={() => this.handleModalClose()}
+          onCloseModal={() => this.handleDrawerClose()}
           tags={tags}
           updateBookmark={(bookmark) => updateBookmark(bookmark)}
           />
@@ -67,9 +72,21 @@ export default class Drawer extends Component {
     }
   }
 
-  handleModalClose () {
+  handleCloseBookmark (id) {
+    // filter the closed bookmark out of the bookmarks on the state
+    let bookmarks = this.state.bookmarks.filter(b => b.id !== id);
+
+    // update the state
+    this.setState({ bookmarks });
+    // if we have no more bookmarks, manage the drawer
+    if (!bookmarks.length) this.handleDrawerClose();
+  }
+
+  handleDrawerClose () {
     // if we should close the drawer, send message to do so
     if (this.state.closeDrawer) chrome.runtime.sendMessage({ ref: 'toggle_drawer' });
+    // reset the state
+    this.setState({ bookmarks: [], closeDrawer: null });
   }
 
   render () {
