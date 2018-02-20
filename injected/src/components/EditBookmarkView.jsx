@@ -15,13 +15,11 @@ import ifTrue from '../utils/ifTrue';
  *
  * @param {object} bookmark - bookmark object we're managing
  * @param {function} closeBookmark - function to close bookmark edit view
- * @param {function} manageTagAndBookmark - function to add tag and manage
- * a bookmark
- * @param {function} manageBookmark - function to manage a bookmark
  * @param {array} selected - selected tags for the bookmark
  * @param {array} suggested - suggested tags for the bookmark
  * @param {object} tags - all tags from store
  * @param {bool} update - whether we're updating or creating a bookmark
+ * @param {function} updateBookmark - function to update a bookmark
  */
 export default class EditBookmarkView extends Component {
   constructor (props) {
@@ -86,16 +84,15 @@ export default class EditBookmarkView extends Component {
             // create updated bookmark object to pass along
             let newBookmark = Object.assign({}, bookmark, { parentId: folder.id, title, tags: tagsToAdd, url });
 
-            // pass that to the manageTagAndBookmark function
-            this.props.manageTagAndBookmark(folder, update, newBookmark);
-            this.props.closeBookmark();
+            // update the bookmark in the store
+            this.updateBookmark(newBookmark);
           }
           // otherwise, create a bookmark in that folder
           else {
             chrome.bookmarks.create({ parentId: folder.id, title, url }, bm => {
-              // add the folder and bookmark to the store
-              this.props.manageTagAndBookmark(folder, update, bm, tagsToAdd);
-              this.props.closeBookmark();
+              bm.tags = tagsToAdd;
+              // update the bookmark in the store
+              this.updateBookmark(bm);
             });
           }
         })
@@ -107,15 +104,16 @@ export default class EditBookmarkView extends Component {
         // create updated bookmark object to pass along
         let newBookmark = Object.assign({}, bookmark, { parentId, title, url });
 
-        this.props.manageBookmark(newBookmark);
-        this.props.closeBookmark();
+        // update the bookmark in the store
+        this.updateBookmark(newBookmark);
       }
       // otherwise
       else {
         // create the bookmark
         chrome.bookmarks.create({ parentId, title, url }, bm => {
-          this.props.manageBookmark(bm, tagsToAdd);
-          this.props.closeBookmark();
+          bm.tags = tagsToAdd;
+          // update the bookmark in the store
+          this.updateBookmark(bm);
         });
       }
     }
@@ -154,6 +152,11 @@ export default class EditBookmarkView extends Component {
 
   setSelectedTags (tagsToAdd) {
     this.setState({ tagsToAdd, warn: true, });
+  }
+
+  updateBookmark (bookmark) {
+    this.props.updateBookmark(bookmark);
+    this.props.closeBookmark();
   }
 
   render () {

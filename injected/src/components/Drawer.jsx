@@ -9,9 +9,6 @@ import Modal from './Modal';
 /**
  * Drawer
  *
- * @param {function} manageTagAndBookmark - function to add a tag and manage
- * the bookmark
- * @param {function} createBookmark - function to save a bookmark
  * @param {object} tags - all tags from store
  * @param {function} updateBookmark - function to update a bookmark
  */
@@ -80,14 +77,12 @@ export default class Drawer extends Component {
 
   componentDidUpdate (prevProps, prevState) {
     if (this.state.bookmarks.length) {
-      let { manageTagAndBookmark, createBookmark, tags, updateBookmark } = this.props;
+      let { tags, updateBookmark } = this.props;
 
       Modal.render(
         <ManageBookmarkModal
           closeBookmark={(id) => this.handleCloseBookmark(id)}
-          createBookmark={(bookmark, tagsToAdd) => createBookmark(bookmark, tagsToAdd)}
           data={this.state.bookmarks}
-          manageTagAndBookmark={(...args) => manageTagAndBookmark(...args)}
           onCloseModal={() => this.handleDrawerClose()}
           tags={tags}
           updateBookmark={(bookmark) => updateBookmark(bookmark)}

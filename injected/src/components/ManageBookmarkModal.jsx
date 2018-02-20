@@ -9,9 +9,7 @@ import Modal from './Modal';
  * ManageBookmarkModal
  *
  * @param {function} closeBookmark - function to close single bookmark edit view
- * @param {function} createBookmark - function to save a bookmark
  * @param {object} data - data for bookmark object we're managing
- * @param {function} manageTagAndBookmark - function to add tag and manage
  * a bookmark
  * @param {function} onCloseModal - function to run when modal closes
  * @param {object} tags - all tags from store
@@ -36,21 +34,19 @@ export default class ManageBookmarkModal extends Component {
   }
 
   render () {
-    let { createBookmark, data, tags, updateBookmark } = this.props;
+    let { data, tags, updateBookmark } = this.props;
 
     return (
       <Modal.Modal className='bookmark-modal' onClose={() => this.handleCloseModal()} ref='modal'>
         {data.map(bookmarkData => {
-          let { bookmark, id, selected, suggested, update } = bookmarkData,
-              manageBookmark = update ? updateBookmark : createBookmark;
+          let { bookmark, id, selected, suggested, update } = bookmarkData;
 
           return (
             <EditBookmarkView
               bookmark={bookmark}
               closeBookmark={() => this.handleCloseBookmark(id)}
               key={id}
-              manageTagAndBookmark={(...args) => manageTagAndBookmark(...args)}
-              manageBookmark={(...args) => manageBookmark(...args)}
+              updateBookmark={(bookmark) => updateBookmark(bookmark)}
               selected={selected}
               suggested={suggested}
               tags={tags}
