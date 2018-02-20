@@ -176,7 +176,7 @@ chrome.bookmarks.onMoved.addListener((id, moveInfo) => {
 
   if (type === 'tag') {
     // get tag with updated parents
-    let tag = Object.assign({}, tags[id], { parents: suggestedTags });
+    let tag = Object.assign({}, tags[id], { parentId, parents: suggestedTags });
 
     // update the spreadsheet
     spreadsheet.update(tag, 'tags', Object.keys(tags).length);
