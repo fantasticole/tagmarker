@@ -189,6 +189,7 @@ export function updateBookmark (originalAction) {
         oldBookmark = bookmarks[bookmark.id],
         titleChanged = oldBookmark.title !== bookmark.title,
         urlChanged = oldBookmark.url !== bookmark.url,
+        parentChanged = oldBookmark.parentId !== bookmark.parentId,
         oldTags = oldBookmark.tags,
         // figure out which tags are being added
         tagsToAdd = bookmark.tags.filter(t => (!oldTags.includes(t))),
@@ -215,13 +216,19 @@ export function updateBookmark (originalAction) {
       chrome.bookmarks.update(bookmark.id, { title, url });
     }
 
+    // if we moved the bookmark
+    if (parentChanged) {
+      // update chrome
+      chrome.bookmarks.move(bookmark.id, { parentId: bookmark.parentId });
+    }
+
     bookmark.tags = Array.from(new Set(tagIds));
     // update the spreadsheet
     spreadsheet.update(bookmark, 'bookmarks', Object.keys(bookmarks).length);
     if (tagsToUpdate.length) spreadsheet.update(tagsToUpdate, 'tags', Object.keys(tags).length);
     if (tagsToCreate.length) spreadsheet.addRows('tags', tagsToCreate);
     // update the store
-    dispatch(createOrUpdateTags(allTags));
+    if (allTags.length) dispatch(createOrUpdateTags(allTags));
     return dispatch(createOrUpdateBookmarks(bookmark));
   }
 }
