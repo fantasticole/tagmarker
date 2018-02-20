@@ -3,31 +3,26 @@
 ## To Do
 * Tests
   * components
-  * ~~actions~~
   * aliases
-  * ~~reducers~~
 * Delete tag functionality
-  * ~~Remove from array of tags on bookmark in store~~
-  * ~~Remove bookmark id from tag's bookmarks array in store~~
-  * ~~Check to see if the folder should be deleted as well~~
   * Check to see if/which the folder contents should be deleted as well
-  * ~~Update db~~
-* Listen for moved bookmarks and folders
-  * ask about changing tags
-  * update tag's parents
-* Add backup capability
-  * ~~Store all in google drive~~
-  * Add ability to create/duplicate spreadsheet
-  * Add ability to point extension to chosen spreadsheet
 * Continuity
   * Make sure each browser instance updates when you make a change in one
 * Inform user about spreadsheet
   * add worksheet to beginning with warning about editing data
+* Bugfix: when are two bookmark append being called??
+* Feed data to the drawer
+  * set a flag when a bookmark is added/edited in the extension to stop triggering actions in the background
+  * creating a bookmark from the modal sholdn't open the drawer again
 
 ## Done
+* Tests
+  * actions
+  * reducers
 * ~~Delete bookmark functionality~~
   * ~~Remove from bookmarks object in store~~
   * ~~Check to see if the chrome bookmark should be deleted as well~~
+  * ~~if a bookmark is added and immediately removed, remove it from the ManageBookmarkModal's edit state~~
 * ~~Add tag functionality~~
   * ~~Create/import dropdown/autocomplete with existing tags~~
   * ~~Add to array of tags on bookmark in store~~
@@ -66,6 +61,20 @@
   * ~~Create bookmark in extension for new bookmark~~
   * ~~Create tag in extension for new folder~~
   * ~~Ask for tags for new bookmarks~~
+  * ~~close drawer when modal closes~~
+* ~~Listen for moved bookmarks and folders~~
+  * ~~ask about changing tags~~
+  * ~~update tag's parents~~
+* ~~Add backup capability~~
+  * ~~Store all in google drive~~
+* ~~Delete tag functionality~~
+  * ~~Remove from array of tags on bookmark in store~~
+  * ~~Remove bookmark id from tag's bookmarks array in store~~
+  * ~~Check to see if the folder should be deleted as well~~
+  * ~~Update db~~
+* ~~Move bookmark functionality~~
+  * ~~should move in chrome as well~~
+  * ~~update in update bookmark modal if it was just created~~
 
 ## To Do Next Time
 * Edit bookmark functionality
@@ -83,7 +92,14 @@
 * Toggle tag selection mode
   * ~~narrowing~~
   * concatting
-
+* List actions
+  * export/share list of bookmarks
+  * open all bookmarks in a list
+* Add backup capability
+  * "time machine" of bookmarks in worksheets
+  * ability to point to chosen spreadsheet
+* Edit bookmark functionality
+  * keep select open while choosing tags?
 
 
 
