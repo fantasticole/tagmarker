@@ -377,7 +377,6 @@ export function update (itemsToUpdate, sheet, endRange) {
 
   getRowIndexes(sheet, endRange, itemsToUpdate.map(row => row.id))
     .then(indexes => {
-      console.log({indexes})
       let url = `https://sheets.googleapis.com/v4/spreadsheets/${id}/values:batchUpdate?key=${api_key}`;
       // format data for POST request
       let updates = {

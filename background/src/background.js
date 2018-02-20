@@ -191,6 +191,9 @@ chrome.bookmarks.onMoved.addListener((id, moveInfo) => {
             // get bookmark with updated parentId
             bookmark = Object.assign({}, bookmarks[id], { parentId });
 
+        // update the spreadsheet
+        spreadsheet.update(bookmark, 'bookmarks', Object.keys(bookmarks).length);
+
         // if it's closed, open it
         if (!drawerIsOpen) toggleDrawer(tabId);
         // add bookmark
