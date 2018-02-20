@@ -18,6 +18,10 @@ import Modal from './Modal';
 export default class ManageBookmarkModal extends Component {
   constructor (props) {
     super(props);
+
+    this.state = {
+      edited: false,
+    };
   }
 
   handleCloseBookmark (id) {
@@ -25,12 +29,23 @@ export default class ManageBookmarkModal extends Component {
   }
 
   handleCloseModal () {
-    let bCount = this.props.data.length,
-        bNoun = bCount === 1 ? 'bookmark' : `${bCount} bookmarks`;
+    // check to see if anything has been edited
+    if (this.state.edited) {
+      let bCount = this.props.data.length,
+          bNoun = bCount === 1 ? 'bookmark' : `${bCount} bookmarks`;
 
-    Alert(`stop editing ${bNoun}?`, 'confirm close', 'yes, close', 'keep editing').then(isConfirmed => {
-      if (isConfirmed) this.props.onCloseModal();
-    });
+      // confirm that the modal should close
+      Alert(`stop editing ${bNoun}?`, 'confirm close', 'yes, close', 'keep editing').then(isConfirmed => {
+        if (isConfirmed) this.props.onCloseModal();
+      });
+    }
+    // if not, close the modal
+    else this.props.onCloseModal();
+  }
+
+  handleEdits () {
+    // set a flag to show that edits have been made
+    this.setState({ edited: true });
   }
 
   render () {
@@ -46,6 +61,7 @@ export default class ManageBookmarkModal extends Component {
               bookmark={bookmark}
               closeBookmark={() => this.handleCloseBookmark(id)}
               key={id}
+              onEdit={() => this.handleEdits()}
               updateBookmark={(bookmark) => updateBookmark(bookmark)}
               selected={selected}
               suggested={suggested}

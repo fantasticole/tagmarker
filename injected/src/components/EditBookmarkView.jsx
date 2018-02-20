@@ -15,6 +15,7 @@ import ifTrue from '../utils/ifTrue';
  *
  * @param {object} bookmark - bookmark object we're managing
  * @param {function} closeBookmark - function to close bookmark edit view
+ * @param {function} onEdit - function to alert the parent to edits
  * @param {array} selected - selected tags for the bookmark
  * @param {array} suggested - suggested tags for the bookmark
  * @param {object} tags - all tags from store
@@ -40,6 +41,7 @@ export default class EditBookmarkView extends Component {
 
   handleChange (bookmarkKey, event) {
     this.setState({ [bookmarkKey]: event.target.value, warn: true });
+    this.props.onEdit();
   }
 
   handleClickCancel () {
@@ -134,6 +136,7 @@ export default class EditBookmarkView extends Component {
       this.setState({ creatingFolder: false, warn: true });
       this.setParent(id);
     }
+    this.props.onEdit();
   }
 
   setParent (parentId) {
@@ -152,6 +155,7 @@ export default class EditBookmarkView extends Component {
 
   setSelectedTags (tagsToAdd) {
     this.setState({ tagsToAdd, warn: true, });
+    this.props.onEdit();
   }
 
   updateBookmark (bookmark) {
