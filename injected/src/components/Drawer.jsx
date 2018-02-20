@@ -29,18 +29,21 @@ export default class Drawer extends Component {
         let { data, drawerWasOpen, suggestedTags, update } = req,
             { manageTagAndBookmark, createBookmark, tags, updateBookmark } = this.props,
             manageBookmark = update ? updateBookmark : createBookmark,
-            closeDrawer = drawerWasOpen === undefined ? drawerWasOpen : (!drawerWasOpen);
+            closeDrawer = drawerWasOpen === undefined ? drawerWasOpen : (!drawerWasOpen),
+            bookmarkData = {
+              bookmark: data,
+              selected: data.tags,
+              suggested: suggestedTags,
+              update,
+            };
 
         Modal.render(
           <ManageBookmarkModal
             manageTagAndBookmark={(...args) => manageTagAndBookmark(...args)}
             manageBookmark={(...args) => manageBookmark(...args)}
-            bookmark={data}
+            data={bookmarkData}
             onCloseModal={() => this.handleModalClose(closeDrawer)}
-            selected={data.tags}
-            suggested={suggestedTags}
             tags={tags}
-            update={update}
             />
         );
       }
