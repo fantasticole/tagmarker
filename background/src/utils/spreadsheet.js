@@ -174,16 +174,18 @@ export function deleteRows (sheet, endRange, ids) {
 
 
   getRowIndexes(sheet, endRange, ids)
-    .then(indexes => {
-      let requests = indexes.map(item => (
+    .then(indexData => {
+      // get the indexes in reverse order, so the lower items get deleted first
+      let indexes = indexData.map(data => data.index).sort((a, b) => (b-a));
+      let requests = indexes.map(index => (
         {
           deleteDimension: {
             range: {
               sheetId: spreadsheet[`${sheet}Sheet`],
               dimension: 'ROWS',
               // zero-indexed means we need to subtract one
-              startIndex: item.index - 1,
-              endIndex: item.index
+              startIndex: index - 1,
+              endIndex: index
             }
           }
         }
