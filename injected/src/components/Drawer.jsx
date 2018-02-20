@@ -33,22 +33,32 @@ export default class Drawer extends Component {
         // created bookmarks
         let { bookmarks, closeDrawer } = this.state,
             { data, drawerWasOpen, suggestedTags, update } = req,
+            // see if the bookmark is already in our bookmarks array
+            // (only matters when updating)
+            index = bookmarks.findIndex(b => b.bookmark.id === data.id),
             bookmarkData = {
               bookmark: data,
-              // if we're updating a bookmark, use its id
-              // otherwise, set the id as a timestamp
-              id: update ? data.id : Date.now(),
+              // set the id as a timestamp to be used as a key
+              // also makes sure bookmark updates get displayed
+              id: Date.now(),
               selected: data.tags,
               suggested: suggestedTags,
               update,
             };
+
+        // if we're updating a bookmark and it's already in our array
+        if (update && index > -1) {
+          // merge the new information in
+          bookmarks[index] = Object.assign(bookmarks[index], bookmarkData);
+        }
+        // otherwise, add the new data to the end
+        else bookmarks.push(bookmarkData);
 
         // if closeDrawer hasn't been set yet, set it
         if (closeDrawer === null) {
           closeDrawer = drawerWasOpen === undefined ? drawerWasOpen : (!drawerWasOpen);
         }
 
-        bookmarks.push(bookmarkData);
         this.setState({ bookmarks, closeDrawer })
       }
     })
