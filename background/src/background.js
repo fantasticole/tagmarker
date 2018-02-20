@@ -107,41 +107,38 @@ chrome.commands.onCommand.addListener(command => {
 
 // listen for created bookmarks
 chrome.bookmarks.onCreated.addListener((id, bookmarkOrFolder) => {
-  // wait in case it's being added to the store from the extension
-  setTimeout(() => {
-    let storeState = store.getState();
+  let storeState = store.getState();
 
-    // if we have a url, it's a bookmark
-    if (bookmarkOrFolder.url) {
-      // if the bookmark does not already exist (not created in extension)
-      if (!storeState.bookmarks[id]) {
-        let bookmark = bookmarkOrFolder,
-            tagsToAdd = [ bookmarkOrFolder.parentId, ...storeState.tags[bookmarkOrFolder.parentId].parents ];
+  // if we have a url, it's a bookmark
+  if (bookmarkOrFolder.url) {
+    // if the bookmark does not already exist (not created in extension)
+    if (!storeState.bookmarks[id]) {
+      let bookmark = bookmarkOrFolder,
+          tagsToAdd = [ bookmarkOrFolder.parentId, ...storeState.tags[bookmarkOrFolder.parentId].parents ];
 
-        // add it to the store
-        store.dispatch(addBookmark({ bookmark, tagsToAdd }));
+      // add it to the store
+      store.dispatch(addBookmark({ bookmark, tagsToAdd }));
 
-        // see if the drawer is open
-        checkDrawerStatus()
-          .then((data) => {
-            let { drawerIsOpen, tabId } = data;
+      // see if the drawer is open
+      checkDrawerStatus()
+        .then((data) => {
+          let { drawerIsOpen, tabId } = data;
 
-            // if it's closed, open it
-            if (!drawerIsOpen) toggleDrawer(tabId);
-            // add bookmark
-            sendBookmarkData(drawerIsOpen, bookmark);
-          });
-      }
+          // if it's closed, open it
+          if (!drawerIsOpen) toggleDrawer(tabId);
+          // add bookmark
+          sendBookmarkData(drawerIsOpen, bookmark);
+        });
     }
-    // otherwise, it's a folder
-    else {
-      // if the tag does not already exist (not created in extension)
-      if (!storeState.tags[id]) {
-        // add it to the store
-        store.dispatch(addTag({ folder: bookmarkOrFolder }));
-      }
+  }
+  // otherwise, it's a folder
+  else {
+    // if the tag does not already exist (not created in extension)
+    if (!storeState.tags[id]) {
+      // add it to the store
+      store.dispatch(addTag({ folder: bookmarkOrFolder }));
     }
-  }, 250)
+  }
 });
 
 // listen for changed bookmarks (name or url)
