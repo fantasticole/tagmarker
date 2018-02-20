@@ -84,7 +84,7 @@ export default class ManageBookmarkModal extends Component {
           // if we're updating
           if (update) {
             // create updated bookmark object to pass along
-            let newBookmark = Object.assign({}, bookmark, { parentId, title, tags: tagsToAdd, url });
+            let newBookmark = Object.assign({}, bookmark, { parentId: folder.id, title, tags: tagsToAdd, url });
 
             // pass that to the manageTagAndBookmark function
             this.props.manageTagAndBookmark(folder, update, newBookmark);
