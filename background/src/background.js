@@ -204,6 +204,11 @@ chrome.bookmarks.onMoved.addListener((id, moveInfo) => {
 
 // listen for removed bookmarks
 chrome.bookmarks.onRemoved.addListener((id, data) => {
+  // send to drawer in case it should be removed from the ManageBookmarkModal
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    chrome.tabs.sendMessage(tabs[0].id, { ref: 'remove_bookmark', id });
+  });
+
   // wait in case it's being deleted from the extension
   setTimeout(() => {
     // node includes all children, if any

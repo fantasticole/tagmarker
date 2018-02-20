@@ -43,6 +43,10 @@ Module.Modal = class Modal extends Component {
   }
 }
 
+Module.deactivate = () => {
+  return ReactDOM.unmountComponentAtNode(document.getElementsByClassName('modal-container')[0]);
+};
+
 Module.render = (modal) => {
   return ReactDOM.render(modal, document.getElementsByClassName('modal-container')[0]);
 };
