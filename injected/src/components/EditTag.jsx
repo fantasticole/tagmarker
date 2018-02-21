@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
 import Alert from './Alert';
+import DeleteContents from './DeleteContents';
 import MarqueeWrapper from './MarqueeWrapper';
 
 /**
@@ -16,8 +17,11 @@ export default class EditTag extends Component {
     super(props);
 
     this.state = {
+      allSelected: true,
       isEditing: false,
       title: this.props.tag.title,
+      toDelete: [],
+      parentId: null, // place for folder contents to go if folder is deleted
     }
   }
 
@@ -27,12 +31,25 @@ export default class EditTag extends Component {
       if (isConfirmed) {
         // see if the tag is also a folder
         if (!isNaN(this.props.tag.id)) {
-          // if it is, ask if they want to delete the folder
-          Alert('delete folder and its contents from chrome as well?', 'delete folder', 'delete from chrome', 'keep folder').then(isConfirmed => {
-            // if they want to delete from chrome, let chrome know
-            if (isConfirmed) chrome.bookmarks.removeTree(this.props.tag.id);
-            // send their response to the store
-            this.props.removeTag(this.props.tag.id)
+          // in which case, get the contents
+          chrome.bookmarks.getSubTree(this.props.tag.id, folder => {
+            let toRemove = this.getChildren(folder[0], []),
+                toDelete = toRemove.map(item => item.id);
+
+            // set ids for contents on state to be deleted
+            this.setState({ toDelete })
+
+            // and ask if they want to delete the folder and its contents
+            Alert(<DeleteContents toggleItems={(list) => this.handleToggleItems(list)} toRemove={toRemove} />, 'delete from chrome', 'delete selected', 'keep all').then(isConfirmed => {
+              // if they want to delete from chrome, let chrome know
+              if (isConfirmed) {
+                // TODO: check to see if the parent folder was deleted but any
+                // contents were kept, in which case, choose where to move them
+                // delete selected ids from chrome, which will update the
+                // store from the background
+                this.state.toDelete.forEach(id => chrome.bookmarks.remove(id));
+              }
+            })
           })
         }
         // if not, delete the tag
@@ -55,6 +72,25 @@ export default class EditTag extends Component {
 
   handleClickEdit () {
     this.setState({ isEditing: true });
+  }
+
+  handleToggleItems (toDelete) {
+    this.setState({ toDelete });
+  }
+
+  getChildren(node, arr) {
+    let { id, title } = node;
+
+    // if it has children
+    if (node.children) {
+      // it's a tag
+      arr.push({ id, title, type: 'tag' });
+      // run the function recursively to get it's children
+      node.children.forEach(n => this.getChildren(n, arr));
+    }
+    // otherwise, it's a bookmark
+    else arr.push({ id, title, type: 'bookmark' });
+    return arr;
   }
 
   moveFocusToEnd (e) {
