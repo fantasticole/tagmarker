@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
+import ifTrue from '../utils/ifTrue';
+
 /**
  * DeleteContents
  *
@@ -50,10 +52,12 @@ export default class DeleteContents extends Component {
 
     return (
       <div className='delete__staging'>
-        <div className='delete-staging__header'>
-          <input checked={allSelected} className='delete-staging__checkbox' onChange={() => this.handleToggleAll()} type='checkbox'/>
-          <p className='delete-staging__title'>select all</p>
-        </div>
+        {ifTrue(toRemove.length > 1).render(() => (
+          <div className='delete-staging__header'>
+            <input checked={allSelected} className='delete-staging__checkbox' onChange={() => this.handleToggleAll()} type='checkbox'/>
+            <p className='delete-staging__title'>select all</p>
+          </div>
+        ))}
         <ul className='delete-staging__list'>
           {toRemove.map(item => {
             let { id, title, type } = item,

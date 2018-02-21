@@ -67,12 +67,13 @@
   background-color: $lighter-light;
   padding: 5px;
   margin-top: 5px;
+  border-bottom: 1px dotted $deep-accent;
 }
 
 .delete-staging__title {
   display: inline-block;
   margin: 0;
-  margin-left: 20px;
+  font-size: 14px;
 }
 
 .delete-staging__list {
