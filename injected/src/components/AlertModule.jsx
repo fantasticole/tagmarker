@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 /**
  * AlertModule
  *
- * @param {string} [text] - optional alert text
+ * @param {string} [content] - optional alert content
  * @param {string} [title] - optional alert title
  */
 const Module = {};
@@ -18,9 +18,9 @@ Module.Alert = class Alert extends Component {
     ReactDOM.unmountComponentAtNode(document.getElementsByClassName('alert-container')[0]);
   }
 
-  renderText () {
-    if (this.props.text) {
-      return (<p className='alert__text'>{this.props.text}</p>)
+  renderContent () {
+    if (this.props.content) {
+      return (<div className='alert__content'>{this.props.content}</div>)
     }
   }
   
@@ -34,9 +34,9 @@ Module.Alert = class Alert extends Component {
     return (
       <div className="alert__fill">
         <div className="alert__viewport" ref="viewport">
-          <div className="alert__content">
+          <div className="alert__info">
             {this.renderTitle()}
-            {this.renderText()}
+            {this.renderContent()}
             {this.props.children}
           </div>
         </div>
