@@ -1,22 +1,45 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import classNames from 'classnames';
+
+import FolderSelection from './FolderSelection';
+import Modal from './Modal';
 
 import ifTrue from '../utils/ifTrue';
 
 /**
- * DeleteContents
+ * DeleteContentsModal
  *
- * @param {function} toggleItems - function to toggle selected items
+ * @param {string} folder - id of parent folder in question
  * @param {array} toRemove - list of items staged for removal
  */
-export default class DeleteContents extends Component {
+export default class DeleteContentsModal extends Component {
   constructor (props) {
     super(props);
 
     this.state = {
       allSelected: true,
-      toDelete: [],
+      toDelete: this.props.toRemove.map(item => item.id),
+      parentId: null,
     }
+  }
+
+  handleClickCancel () {
+    this.refs.modal.deactivate();
+  }
+
+  handleClickSubmit () {
+    let { toDelete, parentId } = this.state;
+
+    console.log({toDelete})
+    console.log({parentId})
+    // delete selected ids from chrome, which will update the
+    // store from the background
+    // this.state.toDelete.forEach(id => chrome.bookmarks.remove(id));
+  }
+
+  handleSetParent (parentId) {
+    this.setState({ parentId });
   }
 
   handleToggleAll () {
@@ -25,8 +48,6 @@ export default class DeleteContents extends Component {
 
     // if everything is selected, toDelete should be set to all possible ids
     if (allSelected) toDelete = this.props.toRemove.map(item => item.id);
-    // send the items to delete back to the alert
-    this.props.toggleItems(toDelete);
     // update the state
     this.setState({ allSelected, toDelete });
   }
@@ -39,19 +60,29 @@ export default class DeleteContents extends Component {
     // otherwise, add it in
     else toDelete.push(id);
     this.setState({ allSelected: false, toDelete });
-    this.props.toggleItems(toDelete)
   }
 
   render () {
-    let { toggleItems, toRemove } = this.props,
-        { allSelected, toDelete } = this.state,
-        classNames = {
+    let { folder, toRemove } = this.props,
+        { allSelected, toDelete, parentId } = this.state,
+        deletingParent = toDelete.includes(folder),
+        notDeletingAll = toDelete.length < toRemove.length,
+        // only allow submission if we have everything we need
+        canSubmit = (deletingParent && !notDeletingAll) || parentId,
+        selectClasses = classNames('delete-staging__select', {
+          'visible': (deletingParent && notDeletingAll),
+        }),
+        itemClasses = {
           'bookmark': 'fa fa-bookmark-o',
           'tag': 'fa fa-folder',
         };
 
     return (
-      <div className='delete__staging'>
+      <Modal.Modal className='delete-modal delete__staging' ref='modal'>
+        <h2 className='modal__header'>delete from chrome</h2>
+        <div className={selectClasses}>
+          <FolderSelection onSelect={(selected) => this.handleSetParent(selected)}/>
+        </div>
         {ifTrue(toRemove.length > 1).render(() => (
           <div className='delete-staging__header'>
             <input checked={allSelected} className='delete-staging__checkbox' onChange={() => this.handleToggleAll()} type='checkbox'/>
@@ -72,14 +103,18 @@ export default class DeleteContents extends Component {
                   type='checkbox'
                   />
                 <span>
-                  <i className={classNames[type]}/>
+                  <i className={itemClasses[type]}/>
                   {title}
                 </span>
               </li>
             );
           })}
         </ul>
-      </div>
+        <div className='modal__actions'>
+          <button className='button action-button modal-action__button' disabled={!canSubmit} onClick={() => this.handleClickSubmit()}>delete selected</button>
+          <button className='button action-button modal-action__button' onClick={() => this.handleClickCancel()}>keep all</button>
+        </div>
+      </Modal.Modal>
     );
   }
 }
