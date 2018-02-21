@@ -68,8 +68,13 @@
     transition: width 0.2s ease-in-out;
     overflow: hidden;
   }
-  &:hover:before {
-    width: 20px;
+  &:hover {
+    .tag-name__wrapper {
+      width: calc(100% - 25px);
+    }
+    &:before {
+      width: 20px;
+    }
   }
   .edit-tag__button {
     font-size: 16px;
@@ -89,8 +94,9 @@
   }
   .tag-name__wrapper {
     display: inline-block;
-    width: calc(100% - 20px);
+    width: 100%;
     overflow: hidden;
+    transition: width 0.2s ease-in-out;
   }
 }
 
